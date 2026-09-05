@@ -26,7 +26,9 @@
         "elapsed_seconds": 651.0,
         "conclusion": "success"
       }
-    ]
+    ],
+    "critical_path_seconds": 1041.0,
+    "summed_job_seconds": 2058.0
   },
   "restructured_cold": {
     "run_id": 33990508830,
@@ -126,5 +128,6 @@
   "docs_only_closure_commit": {
     "sha": "36ba587",
     "build_runs_observed": 0
-  }
+  },
+  "warm_linux_cache_collision_corrected_after_measurement": true
 }

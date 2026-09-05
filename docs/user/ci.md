@@ -58,9 +58,20 @@ Reference runtime is separate from hosted CI: the Phase 0 clock benchmark and
 
 The first successful restructured cold run (33990508830, revision a0e44b4)
 completed in **12m41s** from first job start to last job completion, including
-2m41s for the fast gate. This is 4m39s shorter than the old 17m20s slowest job;
+2m41s for the fast gate. This is 4m40s shorter than the old 17m21s end-to-end path (17m20s slowest job);
 resource changes associated with public runners may also contribute, so it
 is not a cache-only causal comparison. The same-revision warm run 33991160147 completed in **5m09s**, with a **58s**
 fast gate. A subsequent correction separates fast/full Ubuntu keys after the
 warm log exposed redundant release compilation. The measured 5m09s predates
 that correction; no additional speedup is claimed without measurement.
+
+| Event | Before (same uncached matrix) | After |
+| --- | --- | --- |
+| Documentation-only push/PR | About 17m21s | Zero build jobs; observed on closure commit 36ba587 |
+| Branch code push without a PR | About 17m21s | Fast only: 58s observed warm; budget 1–3 minutes |
+| Main code push | About 17m21s | 12m41s observed cold; 5m09s observed warm |
+| PR targeting main | About 17m21s per matrix | Estimate 3–7 minutes warm; same full pipeline, not separately PR-measured |
+
+Times run from first job start to last job completion; approval and queue waits
+are excluded. Changed dependencies can invalidate caches. The fast/full cache
+key correction came after these measurements and is not an invented extra saving.

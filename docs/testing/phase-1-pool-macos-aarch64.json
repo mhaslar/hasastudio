@@ -1,0 +1,30 @@
+{
+  "acquire_share_release_cycles": 20000,
+  "adapter": "Apple M4",
+  "after_growth_texture_calls": 6,
+  "after_growth_view_calls": 6,
+  "architecture": "aarch64",
+  "backend": "Metal",
+  "byte_budget_checked": true,
+  "compositor_or_golden_frames_evaluated": false,
+  "driver": "",
+  "driver_info": "",
+  "exhaustion_checked": true,
+  "five_minute_reference_criterion_evaluated": false,
+  "initial_texture_calls": 2,
+  "initial_view_calls": 2,
+  "old_lease_survived_growth": true,
+  "os": "macos",
+  "scope": "Phase 1 real-GPU ownership correctness; not a performance or phase-gate result",
+  "shared_lease_retained": true,
+  "steady_state_additional_texture_calls": 0,
+  "steady_state_additional_view_calls": 0,
+  "worker_threads": 2,
+  "working_format": "Rgba16Float",
+  "source_files_sha256": {
+    "crates/rezie-gpu/src/bin/rezie-pool-check.rs": "448239769c6de4d960105cfa0159e92dc869091641dcb3b919cfa9ab24fc5975",
+    "crates/rezie-gpu/src/lib.rs": "32159787b63357b9501eeccbb22d0502e363a462e585a9681f8fe297fe3b398f",
+    "crates/rezie-gpu/src/pool.rs": "4474647cf68f2a4bbe0074c11fb0cb401d901f4aa264ea44da5e5e7c94acd9d6"
+  },
+  "source_state": "Phase 1 working tree; exact source hashes recorded before commit"
+}
