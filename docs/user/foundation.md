@@ -26,6 +26,10 @@ driver. `cargo xtask dist --smoke` launches the actual packaged application,
 waits for a GUI update with a live engine tick, then closes it and writes
 `target/dist-smoke.txt`. Failure to open a window is a failing smoke test.
 
+On Ubuntu 24.04, the selected X11 backend needs `libxkbcommon-x11-0` at
+runtime as well as `libxkbcommon0`; `libxkbcommon-dev` alone does not install
+the X11 component. CI installs that runtime explicitly (ADR 0020).
+
 Phase 0 uses eframe's wgpu device. Sharing the compositor's device begins in
 Phase 1. FFmpeg, NDI, SRT and CEF are not needed or linked by Foundation.
 

@@ -45,6 +45,11 @@ No Phase 1 work or `00-summary.md` is introduced.
   (including native unwind cleanup), golden inventory, tick correctness,
   packaged GUI launch and artifact result. Hosted reports explicitly leave
   latency unevaluated; they do not replace the idle report above.
+- That run exposed a Linux launch failure after a successful release build:
+  the runner lacked `libxkbcommon-x11.so.0`. ADR 0020 records provisioning
+  the already-selected X11 backend's runtime package, `libxkbcommon-x11-0`.
+  No smoke condition or clock code changed. Follow-up run results are listed
+  in the [acceptance workflow history](https://github.com/mhaslar/hasastudio/actions/workflows/ci.yml).
 - GitHub's repository-runner query returned zero registered self-hosted
   runners. Nightly measurements need a trusted reference machine with both
   `self-hosted` and `rezie-reference` labels and appropriate RT permissions.
@@ -149,7 +154,7 @@ After amendments the occurrences are at lines 1, 21, 23, 27, 497, 630 and 782.
 
 ## Remaining phase gate
 
-Hosted acceptance results are in the linked run above. SPEC §14's nightly
+Hosted acceptance results are in the linked workflow history above. SPEC §14's nightly
 reference benchmark/soak workflow cannot execute until its runner is
 provisioned. The owner's amendment permits the idle local machine to satisfy
 the Phase 0 clock criterion, but does not supply that nightly infrastructure.
