@@ -1,0 +1,30 @@
+{
+  "architecture": "aarch64",
+  "candidate_order_us": [
+    1500,
+    0,
+    5000,
+    500,
+    3000,
+    1000
+  ],
+  "cpu_clock": "clock_gettime(CLOCK_THREAD_CPUTIME_ID)",
+  "host": {
+    "cpu": "Apple M4",
+    "os": "ProductName:\t\tmacOS\nProductVersion:\t\t27.0\nBuildVersion:\t\t26A5416b",
+    "role": "development, never production"
+  },
+  "instrumentation": "two CPU-time queries per finishing-spin segment; total clock-thread CPU also recorded; disabled for ten-minute acceptance",
+  "kind": "slack-calibration-not-acceptance",
+  "native_budget": "computation = max(2 ms, slack + 500 us), constraint = computation + 1 ms at 50 Hz; actual policy/budgets in every report",
+  "os": "macos",
+  "seconds_per_candidate": 60,
+  "selection": "none; inspect the curve and choose the smallest slack comfortably above degradation",
+  "source": {
+    "captured_unix_seconds": 1788636253,
+    "git_revision": "62186795d79dcb9cea06f6c1eeb1bed6a5d3241e",
+    "git_worktree": "",
+    "rustc_vV": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8"
+  },
+  "started_unix_seconds": 1788636253
+}

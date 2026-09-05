@@ -11,13 +11,19 @@ No Phase 1 work or `00-summary.md` is introduced.
 The owner designated Windows 11 / RX 6800 XT as the sole production reference.
 All 69 phase-specific §13 acceptance clauses are tagged, with reference-only
 performance/golden/soak evidence and portable correctness kept separate.
-The existing code at `fa59e28` passed all three hosted targets, including GUI
-launches ([run 33983882843](https://github.com/mhaslar/hasastudio/actions/runs/33983882843)).
+The sweep implementation at `6218679` passed all three hosted targets,
+including CPU-profiling integration tests and GUI launches
+([run 33986748941](https://github.com/mhaslar/hasastudio/actions/runs/33986748941)).
 
-**Blocking:** the owner must run the slack sweep on M4 and on the Windows
-reference, review the lateness/CPU-cost curves, and supply a passing manual
-ten-minute Windows reference clock report using the selected platform value.
-The constants are provisional until those sweeps are recorded in ADR 0021.
+**Blocking:** the Windows reference sweep and passing manual ten-minute clock
+report using the selected platform value are still missing. The owner has
+explicitly deferred Windows testing until later; this does not waive the gate.
+The M4 six-value sweep is now recorded in ADR 0021 with all 18,006 samples,
+quantiles and CPU costs verified. All six trials report exact tick/PTS
+correctness and confirmed Mach priority. At 0.5 ms slack, maximum lateness was
+20.666 µs and spin used 2.338% of one core, versus 7.330% at 1.5 ms. A finer
+manual sweep below 0.5 ms would locate the degradation point before pinning
+the smallest comfortable margin. Runtime constants remain provisional.
 The prior M4 ten-minute result is historical development evidence, not a
 production performance pass under the new policy.
 

@@ -74,7 +74,19 @@ thread CPU clock (Unix) or GetThreadTimes (Windows), not estimated from elapsed
 spin time. Queries add overhead; calibration is not acceptance. Preserve all
 trials and any failed acceptance report. The M4 sweep is developmental;
 Windows reference acceptance is the sole normative Phase 0 timing result.
-Both sweeps and the final Windows result are pending manual execution.
+The owner supplied the M4 sweep from clean revision `6218679` on 2026-09-05:
+[raw reports and metadata](phase-0-slack-sweep-macos-aarch64/metadata.json),
+[full summary](phase-0-slack-sweep-macos-aarch64/summary.csv), and
+[lateness/CPU curve](phase-0-slack-sweep-macos-aarch64/curve.svg).
+All six trials report 3,001 ticks without index/PTS errors and confirmed Mach
+priority. All 18,006 samples were checked against the reported quantiles.
+The 0.5 ms candidate reached a 20.666 µs maximum with 2.338% of one core spent
+spinning; 1.5 ms used 7.330% without a clear latency improvement in this sweep.
+The zero-slack maximum was 4.549125 ms. See ADR 0021 for all four percentiles
+at every value, CPU costs and the interpretation limits. A finer manual M4
+sweep below 0.5 ms is proposed before selecting its final constant.
+The owner deferred Windows testing until later. Its sweep and final ten-minute
+result remain pending; no reference acceptance or phase closure is claimed.
 Instructions: [clock calibration](../user/clock-calibration.md).
 
 From Phase 1, also record the M4 two-input, one-output 1080p50 diagnostic at

@@ -154,10 +154,48 @@ rendering were checked; none of its measurements is calibration evidence.
 
 ### Slack calibration evidence
 
-- M4: previous 1.5 ms pilot/ten-minute report retained as historical development
-  evidence. Multi-value sweep pending; no production acceptance claim.
-- Windows 11 / RX 6800 XT: sweep and ten-minute idle acceptance pending a manual
-  run by the owner. Hosted MMCSS correctness runs do not substitute for this.
+- M4: the owner supplied the six-value manual sweep on 2026-09-05, recorded
+  in [the complete measurement directory](../benchmarks/phase-0-slack-sweep-macos-aarch64/metadata.json).
+  It used clean revision `62186795d79dcb9cea06f6c1eeb1bed6a5d3241e`, Rust
+  1.98.1, Apple M4 and macOS 27.0 (26A5416b). Each trial ran 60 seconds at
+  50 Hz. All six reports contain 3,001 ticks, zero reported index/PTS errors,
+  zero draining-sink drops, 2,999 stalled-sink drops, and confirmed Mach
+  time-constraint scheduling. Recomputing nearest-rank quantiles from all
+  18,006 raw lateness samples agrees with the reports and summary. CPU totals
+  and percentages also agree. These are development calibration measurements;
+  `latency_passed` remains null, not production acceptance.
+- Windows 11 / RX 6800 XT: the owner explicitly deferred testing until later.
+  The sweep and ten-minute idle acceptance remain pending. Hosted MMCSS
+  correctness runs do not substitute for either; Phase 0 remains open.
+
+Lateness is in microseconds. CPU percentages are relative to one core; spin
+CPU seconds are actual measured CPU time over each 60-second trial.
+
+| Slack (ms) | p50 (µs) | p99 (µs) | p99.9 (µs) | Max (µs) | Spin CPU (s) | Spin CPU (%) | Thread CPU (%) |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 0 | 31.875 | 57.291 | 103.583 | 4549.125 | 0.000 | 0.000 | 0.131 |
+| 0.5 | 2.000 | 16.166 | 19.291 | 20.666 | 1.403 | 2.338 | 2.479 |
+| 1 | 2.125 | 16.917 | 18.833 | 20.125 | 2.899 | 4.831 | 4.982 |
+| 1.5 | 2.416 | 16.625 | 18.708 | 23.000 | 4.398 | 7.330 | 7.481 |
+| 3 | 2.375 | 15.333 | 17.375 | 20.000 | 8.900 | 14.833 | 14.981 |
+| 5 | 2.458 | 16.291 | 18.208 | 19.125 | 14.899 | 24.831 | 24.976 |
+
+The [curve](../benchmarks/phase-0-slack-sweep-macos-aarch64/curve.svg) and
+[CSV](../benchmarks/phase-0-slack-sweep-macos-aarch64/summary.csv) preserve the
+comparison. In this sweep, 0.5 ms was the smallest tested positive slack and
+already reached the low-lateness region. Higher slack increased CPU cost
+without a clear latency benefit: 1.5 ms used 7.330% of one core for spin,
+versus 2.338% at 0.5 ms. The zero-slack baseline had a 4.549125 ms maximum.
+One 60-second trial per value cannot establish a long-run maximum or precisely
+locate the degradation point between zero and 0.5 ms.
+
+Keep 0.5 ms as a promising candidate, not a final calibrated constant. Before
+pinning the smallest slack comfortably above degradation, refine the M4 sweep
+at 0, 100, 250, 500, 750 and 1,000 µs (manual command in the calibration guide).
+No runtime constant changes accompany this evidence commit. The existing
+1.5 ms defaults remain explicitly provisional; no Windows value is inferred
+from Metal/Mach measurements. The earlier M4 ten-minute report remains
+historical development evidence at its original 1.5 ms configuration.
 
 ## Revisit when
 
