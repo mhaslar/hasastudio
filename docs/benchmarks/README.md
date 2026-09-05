@@ -92,3 +92,12 @@ Instructions: [clock calibration](../user/clock-calibration.md).
 From Phase 1, also record the M4 two-input, one-output 1080p50 diagnostic at
 every phase gate with no performance threshold. It is explicitly separate
 from production benchmarks, golden references and soak evidence.
+
+## Conditional Phase 0 closure
+
+ADRs 0022–0023 supersede the earlier provisional-Mac/no-closure statements:
+macOS now uses the owner-approved 500 µs value. Finer M4 sampling is optional.
+Phase 0 is conditionally closed, not fully verified. The Windows reference
+sweep and ten-minute benchmark are its sole outstanding item, due at the
+Phase 1 gate. Failure reopens Phase 0 and stops Phase 1 until rezie-rt is fixed.
+See `docs/phases/OUTSTANDING.md`; no Windows value has been inferred from M4.

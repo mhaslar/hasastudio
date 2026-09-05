@@ -1,6 +1,9 @@
 # Phase 0 — implementation and verification progress
 
-**Status: active; the phase gate has not passed.** The GitHub remote is now
+**Status: conditionally closed under ADR 0023; not fully verified.**
+See [00-summary.md](00-summary.md) and the single obligation in
+[OUTSTANDING.md](OUTSTANDING.md). The record below is implementation history.
+ The GitHub remote is now
 attached at `mhaslar/hasastudio`. The owner replaced final-drift-only acceptance
 with idle-machine maximum and percentile lateness bounds. ADRs 0017–0019
 record the criterion, shared realtime boundary, and current stable toolchain.

@@ -29,8 +29,41 @@
     ]
   },
   "restructured_cold": {
-    "run_id": 33990283651,
-    "status": "pending"
+    "run_id": 33990508830,
+    "sha": "a0e44b4b53cb55bd95258413dc084687f48daf49",
+    "status": "success",
+    "jobs": [
+      {
+        "name": "ci-fast / fast",
+        "started_at": "2026-09-05T20:34:24Z",
+        "completed_at": "2026-09-05T20:37:05Z",
+        "elapsed_seconds": 161.0,
+        "conclusion": "success"
+      },
+      {
+        "name": "platforms (ubuntu-24.04)",
+        "started_at": "2026-09-05T20:37:08Z",
+        "completed_at": "2026-09-05T20:40:58Z",
+        "elapsed_seconds": 230.0,
+        "conclusion": "success"
+      },
+      {
+        "name": "platforms (macos-14)",
+        "started_at": "2026-09-05T20:37:12Z",
+        "completed_at": "2026-09-05T20:42:47Z",
+        "elapsed_seconds": 335.0,
+        "conclusion": "success"
+      },
+      {
+        "name": "platforms (windows-2022)",
+        "started_at": "2026-09-05T20:37:08Z",
+        "completed_at": "2026-09-05T20:47:05Z",
+        "elapsed_seconds": 597.0,
+        "conclusion": "success"
+      }
+    ],
+    "critical_path_seconds": 761.0,
+    "summed_job_seconds": 1323.0
   },
   "warm_estimates_minutes": {
     "branch_push": [
@@ -42,5 +75,15 @@
       7
     ]
   },
-  "estimates_are_not_measurements": true
+  "estimates_are_not_measurements": true,
+  "setup_failures": [
+    {
+      "run_id": 33990174090,
+      "reason": "local-only Actions policy; zero jobs"
+    },
+    {
+      "run_id": 33990283651,
+      "reason": "missing fetch-deps prerequisite; matrix skipped"
+    }
+  ]
 }

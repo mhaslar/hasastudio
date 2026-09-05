@@ -55,3 +55,9 @@ An open PR update also checks its branch revision through ci-fast; do not add
 those parallel wall times together or pretend the revisions are identical.
 Reference runtime is separate from hosted CI: the Phase 0 clock benchmark and
 30-minute soak alone require 40 minutes of sampling when actually runnable.
+
+The first successful restructured cold run (33990508830, revision a0e44b4)
+completed in **12m41s** from first job start to last job completion, including
+2m41s for the fast gate. This is 4m39s shorter than the old 17m20s slowest job;
+resource changes associated with public runners may also contribute, so it
+is not a cache-only causal comparison. A same-revision warm run is in progress.
