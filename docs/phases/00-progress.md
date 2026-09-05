@@ -6,6 +6,19 @@ with idle-machine maximum and percentile lateness bounds. ADRs 0017–0019
 record the criterion, shared realtime boundary, and current stable toolchain.
 No Phase 1 work or `00-summary.md` is introduced.
 
+## Conditional closure ruling (ADRs 0022–0024)
+
+The owner selected 500 µs macOS slack and authorized conditional closure with
+exactly one outstanding Windows reference-clock obligation, due at the Phase 1
+gate. Windows/Linux default startup now rejects missing calibration; hosted
+correctness supplies explicit diagnostic slack. The repository is public,
+external contributors all require Actions approval, and CI is split into cached
+fast/full/reference workflows. Local nextest, doctests, Clippy and golden
+inventory pass. The restructured hosted matrix must pass before writing the
+conditional completion summary and advancing the phase marker.
+
+The following platform account predates this conditional-closure ruling.
+
 ## Platform ruling and remaining closure condition (ADR 0021)
 
 The owner designated Windows 11 / RX 6800 XT as the sole production reference.

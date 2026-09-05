@@ -34,6 +34,8 @@ jobs:
         with:
           shared-key: hosted-${{ matrix.os }}
           cache-all-crates: true
+          cache-on-failure: true
+          cache-directories: .deps
           save-if: ${{ github.ref == 'refs/heads/main' }}
       - uses: taiki-e/install-action@7b8d4719ee4aaa279bdf55df38dacb9ebfe12a6c # v2
         with:

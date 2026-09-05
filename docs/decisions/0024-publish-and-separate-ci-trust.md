@@ -109,3 +109,17 @@ reports zero runners, so no runner registration/scope is claimed as complete.
 A scan of all 129 historical file blobs found no private-key or common live
 credential-token patterns; no specific tracked file was identified for exclusion.
 This targeted check is not a guarantee that arbitrary secrets cannot exist.
+
+The first workflow attempt scheduled zero jobs because the repository's
+allowed_actions policy was local_only, including rejection of actions/checkout.
+Use selected actions with only the four exact commit pins in the workflows;
+github_owned_allowed and verified_allowed stay false. This permits the explicitly
+requested cache/nextest setup without blanket third-party access. Keep the
+all_external_contributors approval rule unchanged. Record readback before retry.
+
+The first executable fast run caught an omitted fetch-deps prerequisite: its
+real-dependency verification test failed while the other 18 tests passed. The
+needs gate skipped the entire matrix. Restore fetch-deps before tests, cache
+its hash-reverified .deps files, and retain trusted-main caches on failure.
+No test or acceptance assertion was removed. Local execution already included
+the prerequisite, which explains why this was a clean-run CI setup failure.
