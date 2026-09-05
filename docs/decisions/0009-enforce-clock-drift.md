@@ -1,6 +1,6 @@
 # 0009 — Make the one-frame clock drift bound normative
 
-- **Status:** Accepted
+- **Status:** Superseded by [0017](0017-measure-scheduler-lateness.md)
 - **Date:** 2026-09-05
 - **Phase:** 0
 - **Decided by:** both

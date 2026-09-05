@@ -1,4 +1,5 @@
 //! Phase-aware development, verification and packaging tasks.
+#![forbid(unsafe_code)]
 use anyhow::{Context, Result};
 use std::{
     fs,
@@ -89,20 +90,41 @@ fn golden() -> Result<()> {
     Ok(())
 }
 
-fn measure(seconds: u64, path: &Path) -> Result<()> {
-    tracing::info!(seconds, "starting real clock and isolated-sink measurement");
-    let report = rezie_engine::benchmark::run(seconds)?;
+fn measure(seconds: u64, path: &Path, latency: bool) -> Result<()> {
+    // Build first, then leave the machine quiet before starting measurement.
+    // The measured executable is release-built, not this development xtask.
+    cargo(&[
+        "build",
+        "--release",
+        "--locked",
+        "-p",
+        "rezie-engine",
+        "--bin",
+        "rezie-headless",
+    ])?;
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)?;
     }
-    fs::write(path, serde_json::to_string_pretty(&report)?)?;
-    tracing::info!(passed = report.passed, drift_ns = report.clock.final_lateness_ns, maximum_lateness_ns = report.clock.max_lateness_ns, deadline_misses = report.clock.deadline_misses, report = %path.display(), "measurement complete");
-    anyhow::ensure!(
-        report.passed,
-        "clock/dispatch acceptance failed; inspect '{}'",
-        path.display()
-    );
-    Ok(())
+    if latency {
+        tracing::info!("idle latency measurement: all builds finished; settling for 15 seconds; keep this machine otherwise idle");
+        std::thread::sleep(Duration::from_secs(15));
+    }
+    let binary = root().join("target/release").join(if cfg!(windows) {
+        "rezie-headless.exe"
+    } else {
+        "rezie-headless"
+    });
+    let mut command = Command::new(binary);
+    command
+        .current_dir(root())
+        .arg("--clock-seconds")
+        .arg(seconds.to_string())
+        .arg("--report")
+        .arg(path);
+    if latency {
+        command.arg("--latency");
+    }
+    run(&mut command)
 }
 
 fn dist() -> Result<PathBuf> {
@@ -210,17 +232,21 @@ fn main() -> Result<()> {
             anyhow::ensure!(args.next().is_none(), "Phase 0 has no reference updates; golden --update requires human review in a pixel-producing phase");
             golden()?;
         }
+        "clock-check" => {
+            anyhow::ensure!(args.next().is_none(), "clock-check takes no arguments");
+            measure(10, &root().join("target/clock-correctness.json"), false)?;
+        }
         "bench" => {
             anyhow::ensure!(
                 args.next().is_none(),
                 "bench runs the normative ten-minute measurement"
             );
             let path = root().join(format!(
-                "docs/benchmarks/phase-0-{}-{}.json",
+                "docs/benchmarks/phase-0-idle-{}-{}.json",
                 std::env::consts::OS,
                 std::env::consts::ARCH
             ));
-            measure(600, &path)?;
+            measure(600, &path, true)?;
         }
         "soak" => {
             let minutes = match args.next().as_deref() {
@@ -235,6 +261,7 @@ fn main() -> Result<()> {
             measure(
                 minutes.checked_mul(60).context("soak duration overflow")?,
                 &root().join("target/soak.json"),
+                false,
             )?;
         }
         "dist" => {

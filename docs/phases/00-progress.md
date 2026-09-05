@@ -1,10 +1,48 @@
 # Phase 0 — implementation and verification progress
 
-**Status: active; the phase gate has not passed.** The owner explicitly deferred
-adding a GitHub repository. Windows/Linux execution, three-platform hosted CI
-and reference-machine measurements remain outstanding. No Phase 1 work is
-enabled. `00-summary.md` is reserved for the actual phase completion because
-AGENTS.md treats that filename's existence as evidence of completion.
+**Status: active; the phase gate has not passed.** The GitHub remote is now
+attached at `mhaslar/hasastudio`. The owner replaced final-drift-only acceptance
+with idle-machine maximum and percentile lateness bounds. ADRs 0017–0019
+record the criterion, shared realtime boundary, and current stable toolchain.
+No Phase 1 work or `00-summary.md` is introduced.
+
+## Scheduling correction and idle measurement
+
+- Added `rezie-rt`, with no domain types, for Mach time constraints, Windows
+  MMCSS Pro Audio plus 1 ms timer resolution, Linux FIFO/timerfd/nice fallback,
+  and a generic sleep-then-spin deadline waiter. Thread-affine guards restore
+  prior state on drop/unwind. Phase 6 audio will reuse this crate.
+- Kept crate-level `forbid(unsafe_code)` on engine/core/API/app. The future
+  audio/rundown crates must also forbid unsafe. Only the foreign-interface
+  crate list was extended, by explicit human review.
+- Replaced the unsupported Rust 1.88.0 choice with official current stable
+  **1.98.1**, verified against the 2026-09-03 stable manifest. Edition stays 2021.
+- Full per-tick lateness samples are preallocated before startup, retained in
+  index order and summarized after shutdown. Reports include nearest-rank
+  p50/p99/p99.9/max and actual scheduling status/error codes.
+- Hosted CI checks correctness only. Idle latency checks are explicit and
+  require native priority success (or the permitted elevated Linux fallback).
+- Local formatting, strict clippy, workspace tests, golden inventory and
+  updated packaged macOS launch passed. Windows and Linux realtime modules
+  type-check and pass target-specific clippy; their runtime checks await CI.
+- Initial idle preflight found no compiler/linker processes but substantial
+  unrelated CPU work. No calibration/acceptance run was taken under that
+  load. After the owner paused active work, the one-minute pilot passed.
+- `cargo xtask bench` then completed its release build and 15-second settling
+  delay before the ten-minute idle run (2026-09-05, approximately
+  17:58:17–18:08:17 UTC). No builds/tests ran alongside either measurement.
+  All 30,001 ticks arrived in order with exact PTS; no indices were skipped.
+  Mach time-constraint policy was confirmed. Lateness p50/p99/p99.9/max was
+  **0.001500 / 0.016625 / 0.018250 / 0.036292 ms**; final drift was
+  **0.001167 ms**. The draining sink dropped zero ticks; the stalled sink
+  dropped exactly 29,999. All current local timing bounds passed.
+  Full raw samples are in `docs/benchmarks/phase-0-idle-macos-aarch64.json`.
+- Push and three-platform CI follow measurement, per the owner's requested
+  order. Windows/Linux runtime and bundle acceptance remain unmeasured here.
+
+The implementation and measurements below describe the earlier baseline and
+are retained as history. The final-drift-only result is superseded, not current
+latency acceptance evidence.
 
 ## Built
 
@@ -37,7 +75,7 @@ AGENTS.md treats that filename's existence as evidence of completion.
 - Three-platform GitHub acceptance workflow and a separate nightly workflow
   for a provisioned reference machine. These are prepared, not executed.
 - Git initialized on `main`; first commit `884d92c` contains the spec and
-  ruling ADRs before any implementation code. Remote setup remains deferred.
+  ruling ADRs before any implementation code. The remote was attached after that initial baseline.
 
 ## Local verification
 
@@ -76,10 +114,9 @@ production GUI controls belong to later phases. Shared-device rendering begins
 in Phase 1 under the explicit human-approved shell exception. No placeholder
 later-phase crates or unimplemented commands are introduced.
 
-The owner will add GitHub later. Until then, remote push and passing hosted CI
-on Windows/macOS/Linux cannot be evidenced. The reference-machine nightly
-runner also needs provisioning. These are remaining acceptance gates, not
-successful checks or permission to start Phase 1.
+The local idle scheduling gate passed. Push and three-platform CI are next.
+The reference-machine nightly runner also needs provisioning; local timing
+evidence does not claim performance on that hardware or on Windows/Linux.
 
 ## Surprises and corrections
 
@@ -102,8 +139,9 @@ After amendments the occurrences are at lines 1, 21, 23, 27, 497, 630 and 782.
 
 ## Remaining phase gate
 
-Attach the owner-supplied remote, execute the prepared three-platform CI,
-verify runnable bundles on Windows/Linux and run the reference-machine
-measurements. Review all resulting evidence. Only after the gates pass, write
+Push, execute three-platform CI and verify runnable bundles on Windows/Linux.
+Inspect reference-runner availability separately; timing acceptance permits
+an idle local machine under the owner's amendment. Review all resulting
+evidence. Only after the gates pass, write
 `docs/phases/00-summary.md` with final benchmarks and update the phase marker.
 Do not implement Phase 1 in that completion change.

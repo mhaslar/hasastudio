@@ -118,6 +118,7 @@ rezie/
 │   ├── schema/                 # JSON Schema for project + rundown files
 │   └── user/                   # end-user documentation, written as phases land
 ├── crates/
+│   ├── rezie-rt/               # realtime thread configuration and deadline waiting; no domain types
 │   ├── rezie-core/             # domain model, project state, command bus, clock, scheduler
 │   ├── rezie-gpu/              # wgpu device, frame pool, shaders, compositor graph
 │   ├── rezie-media/            # FFmpeg: demux, decode, encode, mux; source & sink traits
@@ -653,7 +654,22 @@ Each phase ends with: all acceptance criteria passing in CI on Windows, macOS, a
 
 Workspace, `xtask`, CI on three platforms, dependency fetching, `rezie-core` domain types, the clock, the command/event API, the in-process and WebSocket transports, and a headless engine that starts, ticks a clock, and produces timed frame ticks through the sink dispatch path.
 
-**Accepts when:** `cargo test --workspace` passes on all three platforms · the headless engine runs at 50 fps for 10 minutes with measured monotonic-clock drift strictly under one frame (20 ms); this drift bound is normative · the WebSocket harness can connect, send a command, and receive an event · `xtask dist` produces a runnable (empty) application bundle on each platform.
+**Accepts when:** `cargo test --workspace` passes on all three platforms · the clock meets the idle-machine criterion below · the WebSocket harness can connect, send a command, and receive an event · `xtask dist` produces a runnable (empty) application bundle on each platform.
+
+On an otherwise idle machine, over a ten-minute run at the programme
+rate: zero skipped tick indices; final drift under one frame interval;
+maximum tick lateness under one frame interval; p99.9 lateness under
+5 ms. The full lateness distribution (p50/p99/p99.9/max) is recorded
+in the benchmark output, not just the summary statistics.
+
+If maximum lateness under one frame interval proves unachievable on a
+target platform with a correctly prioritised thread, that is an ADR,
+not a relaxation.
+
+Hosted CI asserts tick correctness (zero skipped indices, ordering and exact
+PTS), not latency. Timing acceptance runs only on an otherwise idle local or
+reference machine. Preserve every observed per-tick lateness sample alongside
+the percentile summary so the full distribution can be inspected.
 
 ---
 
@@ -767,7 +783,7 @@ CI runs unit, golden, and integration on every commit across all three platforms
 
 - `rustfmt` default, `clippy -D warnings`, both enforced in CI.
 - Public items in every crate documented. `#![warn(missing_docs)]` on all library crates.
-- No `unsafe` outside `rezie-ndi`, `rezie-media`, `rezie-capture`, and `rezie-html`, where FFI requires it. Every `unsafe` block carries a `// SAFETY:` comment stating the invariant.
+- No `unsafe` outside `rezie-ndi`, `rezie-media`, `rezie-capture`, `rezie-html`, and `rezie-rt`, whose jobs include wrapping foreign interfaces. `rezie-engine`, `rezie-core`, `rezie-api`, `rezie-audio`, `rezie-rundown`, and `rezie-app` use crate-level `#![forbid(unsafe_code)]`. Every `unsafe` block carries a `// SAFETY:` comment stating the invariant.
 - No `unwrap()` or `expect()` on any path reachable from user action. In tests, freely.
 - Errors carry context. `"failed to open input"` is useless; `"failed to open input 'vt_mtb_report' (/media/vt/mtb.mp4): no video stream found"` is not.
 - Commits are conventional-commit formatted and reference the phase: `feat(phase-4): overlay z-ordering`.

@@ -1,17 +1,19 @@
 [workspace]
 resolver = "2"
-members = ["crates/rezie-core", "crates/rezie-api", "crates/rezie-engine", "crates/rezie-app", "xtask"]
+members = ["crates/rezie-rt", "crates/rezie-core", "crates/rezie-api", "crates/rezie-engine", "crates/rezie-app", "xtask"]
 
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
-rust-version = "1.88"
+rust-version = "1.98.1"
 publish = false
 
 [workspace.dependencies]
 rezie-core = { path = "crates/rezie-core" }
 rezie-api = { path = "crates/rezie-api" }
 rezie-engine = { path = "crates/rezie-engine" }
+rezie-rt = { path = "crates/rezie-rt" }
+libc = "0.2"
 anyhow = "1"
 arc-swap = "1.7"
 crossbeam-channel = "=0.5.15"

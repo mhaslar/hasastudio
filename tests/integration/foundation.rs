@@ -117,19 +117,26 @@ async fn listener_rejects_non_loopback_and_shutdown_stops_clock() {
 
 #[test]
 fn clock_runs_and_a_stalled_sink_cannot_interrupt_dispatch() {
-    let report = rezie_engine::benchmark::run(2).unwrap();
+    let report =
+        rezie_engine::benchmark::run(2, rezie_engine::benchmark::MeasurementMode::Correctness)
+            .unwrap();
     assert!(report.passed, "{report:#?}");
     assert_eq!(report.received_ticks, 101);
+    assert_eq!(report.latency_passed, None);
     assert_eq!(report.sinks[1].dropped, 99);
 }
 
 #[test]
-#[ignore = "real ten-minute clock gate; CI and cargo xtask bench run explicitly"]
+#[ignore = "idle local/reference latency gate only; hosted CI runs correctness"]
 fn ten_minute_clock_drift_is_strictly_under_one_frame() {
-    let report = rezie_engine::benchmark::run(600).unwrap();
+    let report =
+        rezie_engine::benchmark::run(600, rezie_engine::benchmark::MeasurementMode::IdleLatency)
+            .unwrap();
     assert!(report.passed, "{report:#?}");
     assert_eq!(report.received_ticks, 30_001);
     assert!(report.clock.final_lateness_ns < 20_000_000);
+    assert!(report.lateness.max_ns < 20_000_000);
+    assert!(report.lateness.p99_9_ns < 5_000_000);
 }
 
 struct HeadlessProcess {

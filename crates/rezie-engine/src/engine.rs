@@ -2,6 +2,7 @@ use crate::{tick_sink, TickConsumer, TickProducer};
 use arc_swap::ArcSwap;
 use rezie_api::{Client, Command, Envelope, Event};
 use rezie_core::{ClockStats, EngineState, FrameRate, FrameTime, OutputId, Project};
+use rezie_rt::{RealtimeThread, SchedulingReport, ThreadBudget};
 use std::{
     sync::{
         atomic::{AtomicBool, AtomicU64, Ordering},
@@ -50,6 +51,7 @@ pub enum EngineError {
 
 #[derive(Default)]
 struct Telemetry {
+    samples: Box<[AtomicU64]>,
     sequence: AtomicU64,
     emitted: AtomicU64,
     max_lateness: AtomicU64,
@@ -75,7 +77,10 @@ impl Telemetry {
     fn record(&self, lateness: u64, period: u64) {
         // Sequential consistency makes the read-side sequence check a coherent snapshot.
         self.sequence.fetch_add(1, Ordering::SeqCst);
-        self.emitted.fetch_add(1, Ordering::SeqCst);
+        let index = self.emitted.fetch_add(1, Ordering::SeqCst);
+        if let Some(sample) = self.samples.get(index as usize) {
+            sample.store(lateness, Ordering::Relaxed);
+        }
         self.max_lateness.fetch_max(lateness, Ordering::SeqCst);
         self.lateness.store(lateness, Ordering::SeqCst);
         if lateness >= period {
@@ -87,7 +92,7 @@ impl Telemetry {
     fn snapshot(&self, rate: FrameRate) -> ClockStats {
         loop {
             let before = self.sequence.load(Ordering::SeqCst);
-            if before % 2 != 0 {
+            if !before.is_multiple_of(2) {
                 std::hint::spin_loop();
                 continue;
             }
@@ -114,6 +119,7 @@ pub struct Engine {
     stop: Arc<AtomicBool>,
     telemetry: Arc<Telemetry>,
     rate: FrameRate,
+    scheduling: SchedulingReport,
     clock: Option<JoinHandle<()>>,
     control: Option<JoinHandle<()>>,
 }
@@ -124,6 +130,11 @@ impl Engine {
         if config.frame_count == Some(0) || config.sinks.is_empty() || config.sinks.len() > 8 {
             return Err(EngineError::Configuration(
                 "require 1–8 tick sinks and a positive frame count".into(),
+            ));
+        }
+        if config.frame_count.is_some_and(|count| count > 5_000_000) {
+            return Err(EngineError::Configuration(
+                "finite clock runs support at most 5,000,000 preallocated samples".into(),
             ));
         }
         FrameRate::new(config.rate.numerator(), config.rate.denominator())
@@ -146,7 +157,12 @@ impl Engine {
             consumers.push(consumer);
         }
         let stop = Arc::new(AtomicBool::new(false));
-        let telemetry = Arc::new(Telemetry::default());
+        let telemetry = Arc::new(Telemetry {
+            samples: (0..config.frame_count.unwrap_or(0))
+                .map(|_| AtomicU64::new(0))
+                .collect(),
+            ..Telemetry::default()
+        });
         let mut project = Project::default();
         project.settings.format.fps = config.rate;
         let state = EngineState {
@@ -177,6 +193,16 @@ impl Engine {
             })?;
         let clock_stop = stop.clone();
         let clock_telemetry = telemetry.clone();
+        let period = rate
+            .pts(1)
+            .map_err(|e| EngineError::Configuration(e.to_string()))?;
+        let computation = Duration::from_millis(2).min(period / 4);
+        let budget = ThreadBudget {
+            period,
+            computation,
+            constraint: (computation + Duration::from_millis(1)).min(period / 2),
+        };
+        let (configured, configuration) = crossbeam_channel::bounded(1);
         // Create the span on the startup thread. The real-time loop never logs or enters spans.
         let clock_span = tracing::info_span!(
             "programme_clock",
@@ -188,12 +214,21 @@ impl Engine {
             .spawn(move || {
                 let _completion = ClockExit(&clock_telemetry);
                 let _span = clock_span.entered();
+                let mut realtime = match RealtimeThread::configure(budget) {
+                    Ok(realtime) => realtime,
+                    Err(error) => {
+                        let _ = configured.try_send(Err(error));
+                        return;
+                    }
+                };
+                let _ = configured.try_send(Ok(realtime.report()));
                 clock_loop(
                     rate,
                     config.frame_count,
                     &clock_stop,
                     &clock_telemetry,
                     &mut producers,
+                    &mut realtime,
                 );
             }) {
             Ok(clock) => clock,
@@ -204,12 +239,27 @@ impl Engine {
                 return Err(error.into());
             }
         };
+        let scheduling = match configuration.recv() {
+            Ok(Ok(report)) => report,
+            result => {
+                stop.store(true, Ordering::Release);
+                let _ = clock.join();
+                let _ = control.join();
+                return Err(EngineError::Configuration(format!(
+                    "realtime thread initialization failed: {result:?}"
+                )));
+            }
+        };
+        if !scheduling.realtime {
+            tracing::warn!(?scheduling, "RT scheduling unavailable; inspect effective timer/nice fallback and OS error codes");
+        }
         Ok((
             Self {
                 client,
                 stop,
                 telemetry,
                 rate,
+                scheduling,
                 clock: Some(clock),
                 control: Some(control),
             },
@@ -232,6 +282,27 @@ impl Engine {
     /// Observe the real clock counters directly, without snapshot publication delay.
     pub fn clock_stats(&self) -> ClockStats {
         self.telemetry.snapshot(self.rate)
+    }
+    /// Native scheduling achieved on the clock thread, reported before its first tick.
+    pub fn scheduling_report(&self) -> SchedulingReport {
+        self.scheduling
+    }
+    /// Copy every measured tick after a finite run ends, in tick-index order.
+    /// Infinite production runs do not allocate a sample buffer.
+    pub fn lateness_samples(&self) -> Result<Vec<u64>, EngineError> {
+        if !self.clock_finished() {
+            return Err(EngineError::Configuration(
+                "lateness samples are available only after the clock ends".into(),
+            ));
+        }
+        let count = self.telemetry.emitted.load(Ordering::Acquire) as usize;
+        Ok(self
+            .telemetry
+            .samples
+            .iter()
+            .take(count)
+            .map(|s| s.load(Ordering::Relaxed))
+            .collect())
     }
     /// Request termination and join both OS threads.
     pub fn shutdown(&mut self) -> Result<(), EngineError> {
@@ -263,6 +334,7 @@ fn clock_loop(
     stop: &AtomicBool,
     telemetry: &Telemetry,
     sinks: &mut [TickProducer],
+    realtime: &mut RealtimeThread,
 ) {
     let origin = Instant::now();
     let mut index = 0_u64;
@@ -279,25 +351,13 @@ fn clock_loop(
             telemetry.failed.store(true, Ordering::Release);
             break;
         };
-        loop {
-            if stop.load(Ordering::Acquire) {
+        match realtime.wait_until(deadline, stop) {
+            Ok(true) => {}
+            Ok(false) => break,
+            Err(_) => {
+                telemetry.failed.store(true, Ordering::Release);
                 break;
             }
-            let now = Instant::now();
-            if now >= deadline {
-                break;
-            }
-            let remaining = deadline - now;
-            if remaining > Duration::from_micros(300) {
-                thread::sleep(
-                    (remaining - Duration::from_micros(200)).min(Duration::from_millis(10)),
-                );
-            } else {
-                std::hint::spin_loop();
-            }
-        }
-        if stop.load(Ordering::Acquire) {
-            break;
         }
         let frame = FrameTime { index, pts };
         for sink in sinks.iter_mut() {

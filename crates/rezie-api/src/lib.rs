@@ -1,5 +1,6 @@
 //! Shared commands/events and bounded in-process and loopback WebSocket transports.
 #![warn(missing_docs)]
+#![forbid(unsafe_code)]
 
 use arc_swap::ArcSwap;
 use crossbeam_channel::{bounded, Receiver, Sender};

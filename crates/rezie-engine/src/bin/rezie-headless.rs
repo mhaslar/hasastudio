@@ -1,4 +1,5 @@
 //! Headless Foundation engine entry point for the integration harness.
+#![forbid(unsafe_code)]
 use anyhow::{Context, Result};
 use rezie_api::WebSocketServer;
 use rezie_engine::{benchmark, logging, Engine, EngineConfig};
@@ -12,6 +13,7 @@ async fn main() -> Result<()> {
     let mut clock_seconds = None;
     let mut report = None;
     let mut ready_file = None;
+    let mut latency = false;
     while let Some(arg) = args.next() {
         match arg.as_str() {
             "--ws" => {
@@ -28,6 +30,7 @@ async fn main() -> Result<()> {
                         .parse::<u64>()?,
                 )
             }
+            "--latency" => latency = true,
             "--report" => report = Some(args.next().context("--report requires a path")?),
             "--ready-file" => {
                 ready_file = Some(args.next().context("--ready-file requires a path")?)
@@ -37,7 +40,12 @@ async fn main() -> Result<()> {
     }
     if let Some(seconds) = clock_seconds {
         anyhow::ensure!(ready_file.is_none(), "--ready-file requires WebSocket mode");
-        let result = tokio::task::spawn_blocking(move || benchmark::run(seconds)).await??;
+        let mode = if latency {
+            benchmark::MeasurementMode::IdleLatency
+        } else {
+            benchmark::MeasurementMode::Correctness
+        };
+        let result = tokio::task::spawn_blocking(move || benchmark::run(seconds, mode)).await??;
         if let Some(path) = report {
             std::fs::write(&path, serde_json::to_string_pretty(&result)?)
                 .with_context(|| format!("write clock report '{path}'"))?;
@@ -46,13 +54,20 @@ async fn main() -> Result<()> {
             passed = result.passed,
             ticks = result.received_ticks,
             drift_ns = result.clock.final_lateness_ns,
-            max_lateness_ns = result.clock.max_lateness_ns,
+            p50_ns = result.lateness.p50_ns,
+            p99_ns = result.lateness.p99_ns,
+            p99_9_ns = result.lateness.p99_9_ns,
+            max_lateness_ns = result.lateness.max_ns,
+            policy = ?result.scheduling,
             "clock measurement complete"
         );
         anyhow::ensure!(result.passed, "clock/dispatch acceptance failed");
         return Ok(());
     }
-    anyhow::ensure!(report.is_none(), "--report requires --clock-seconds");
+    anyhow::ensure!(
+        report.is_none() && !latency,
+        "--report/--latency require --clock-seconds"
+    );
     let (mut engine, mut sinks) = Engine::start(EngineConfig::default())?;
     let server = WebSocketServer::bind(address, engine.client()).await?;
     if let Some(path) = ready_file {

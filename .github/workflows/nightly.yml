@@ -14,7 +14,7 @@ jobs:
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
-      - run: rustup toolchain install 1.88.0 --profile minimal --component rustfmt --component clippy
+      - run: rustup toolchain install 1.98.1 --profile minimal --component rustfmt --component clippy
       - run: cargo xtask fetch-deps
       - run: cargo xtask bench
       - run: cargo xtask soak --minutes 30

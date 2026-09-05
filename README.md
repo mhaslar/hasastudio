@@ -23,7 +23,8 @@ Cargo resolves Rust dependencies separately using the committed lockfile.
 
 ```sh
 cargo xtask ci
-cargo xtask bench                 # real ten-minute 50 fps clock/dispatch gate
+cargo xtask clock-check           # correctness only; suitable for hosted CI
+cargo xtask bench                 # ten-minute latency gate; otherwise idle machine
 cargo xtask dist --smoke          # package, launch, verify GUI + engine update
 ```
 

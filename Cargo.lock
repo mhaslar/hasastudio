@@ -2248,6 +2248,7 @@ dependencies = [
  "futures-util",
  "rezie-api",
  "rezie-core",
+ "rezie-rt",
  "serde",
  "serde_json",
  "thiserror 2.0.20",
@@ -2256,6 +2257,14 @@ dependencies = [
  "tracing",
  "tracing-appender",
  "tracing-subscriber",
+]
+
+[[package]]
+name = "rezie-rt"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "serde",
 ]
 
 [[package]]

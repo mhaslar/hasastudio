@@ -1,35 +1,64 @@
-# Phase 0 clock and dispatch baseline
+# Phase 0 clock measurements
 
-`cargo xtask bench` measures a real ten-minute run, at 50 fps, of the headless
-engine's payload-free tick dispatch. It writes
-`phase-0-<os>-<architecture>.json`. This is the Phase 0 CPU clock/dispatch
-baseline; compositor frame times, encoder throughput and VRAM measurements
-are not applicable until those systems exist. There is no previous-phase
-frame-time baseline to compare against.
+Current acceptance is defined by ADR 0017: on an otherwise idle local or
+reference machine, ten minutes at 50 fps, no skipped indices, final drift and
+maximum lateness below 20 ms, and p99.9 lateness below 5 ms. `cargo xtask bench`
+finishes its release build before a 15-second settling period and measurement.
+The measured executable uses Rust 1.98.1 and the shared rezie-rt native scheduler.
 
-The local macOS run uses Apple M4 / Mac16,12, 10 CPU cores, 24 GiB RAM, macOS
-27.0 build 26A5416b, Rust 1.88.0, Cargo's development profile. It is explicitly
-not the AMD RX 6800 XT reference machine. Builds and checks ran concurrently
-with part of the measurement; timing excursions are retained in the report.
+Reports named `phase-0-idle-<os>-<architecture>.json` contain every per-tick
+lateness sample, in index order, plus nearest-rank p50/p99/p99.9/max, effective
+scheduling policy, privileges/fallback errors, and separate correctness and
+latency outcomes. Samples are preallocated atomic slots written by the clock;
+percentile calculation and file I/O happen after it stops. No samples are
+silently lost in an observer queue.
 
-Expected ticks are indices 0 through 30,000 inclusive (30,001 ticks over
-exactly 600 seconds of programme time). The report records observed clock
-lateness against monotonic deadlines, contiguous consumer delivery, and the
-independent stalled-sink eviction count. Final drift must be strictly below
-20,000,000 ns; diagnostic average fps does not override that bound. Maximum
-lateness and missed deadlines are also reported rather than hidden.
+The macOS developer machine is Apple M4 / Mac16,12, 10 cores, 24 GiB RAM,
+macOS 27.0 build 26A5416b. It is not the AMD RX 6800 XT reference machine.
+A local successful idle run is local evidence, not Windows/Linux latency evidence.
 
-The draining sink must receive all ticks without loss. The deliberately
-stalled sink has capacity two and must report exactly 29,999 evictions. Those
-intentional evictions are not failures of the draining sink or programme clock.
+## Idle result — 2026-09-05
 
-Commit the report with its phase evidence. Hosted CI and reference-machine
-reports remain pending until the owner provides the remote and runner.
+After the owner paused active applications, the 60-second pilot passed with
+confirmed Mach time-constraint scheduling and a 19 microsecond maximum.
+The 1.5 ms finishing slack was retained (ADR 0018).
 
-The 2026-09-05 local ten-minute run passed final drift at **1.151 ms** and
-received all **30,001** ticks. The active sink dropped zero ticks; the stalled
-sink evicted **29,999** as expected. Maximum lateness was **139.018 ms** with
-**22** deadlines at least one frame late. Thus the final accumulated-drift
-criterion passed, but this result does not demonstrate jitter-free scheduling
-under concurrent developer-machine load. Reference-machine testing remains
-required. The raw report preserves all those counters.
+The ten-minute `cargo xtask bench` run followed its completed release build
+and a 15-second settling delay, approximately 17:58:17–18:08:17 UTC. No builds
+or tests ran concurrently. `phase-0-idle-macos-aarch64.json` records all 30,001
+samples and passes the current criterion:
+
+| Measure | Result |
+| --- | ---: |
+| p50 lateness | 0.001500 ms |
+| p99 lateness | 0.016625 ms |
+| p99.9 lateness | 0.018250 ms |
+| Maximum lateness | 0.036292 ms |
+| Final drift | 0.001167 ms |
+| Skipped indices / PTS errors | 0 / 0 |
+| Draining sink drops / stalled sink drops | 0 / 29,999 |
+
+The OS reported Mach time-constraint scheduling with a 20 ms period, 2 ms
+computation budget and 3 ms constraint. This is one successful local run,
+not a guarantee of future latency or other platforms' performance.
+
+## Hosted correctness checks
+
+Hosted CI uses `cargo xtask clock-check`, which checks counts, ordering, exact
+PTS, and queue isolation, without any latency threshold. It records
+`latency_passed: null`. The reference-machine workflow alone runs latency
+acceptance; that runner must be idle and correctly configured for native RT.
+
+## Superseded measurement
+
+`phase-0-macos-aarch64.json` is preserved historical evidence from Rust 1.88.0,
+the unprioritized 0.2 ms finishing-spin implementation, in a development build
+while other compilation/checks overlapped. Its `passed: true` reflected the
+old final-drift-only rule and is **not a pass under current acceptance**.
+Final drift was 1.151 ms, but maximum lateness was 139.018 ms with 22 missed
+deadlines. Concurrent compilation invalidated its measurement conditions;
+it is not treated as the cause of the scheduling defect. The old report has
+no full distribution and cannot supply missing percentile evidence.
+
+These are clock/dispatch measurements; no compositor, encoder or GPU baseline
+is implied. No previous-phase frame-time baseline exists.

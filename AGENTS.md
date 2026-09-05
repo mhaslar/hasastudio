@@ -31,7 +31,9 @@ These break silently and expensively. They are not style preferences.
 
 6. **No `unwrap()` or `expect()` on any path reachable from user action.** In tests, freely.
 
-7. **No `unsafe` outside `rezie-ndi`, `rezie-media`, `rezie-capture`, `rezie-html`.** Every `unsafe` block carries a `// SAFETY:` comment stating the invariant that makes it sound.
+7. **No `unsafe` outside `rezie-ndi`, `rezie-media`, `rezie-capture`, `rezie-html`, `rezie-rt`.** Every `unsafe` block carries a `// SAFETY:` comment stating the invariant that makes it sound.
+
+   `rezie-engine`, `rezie-core`, `rezie-api`, `rezie-audio`, `rezie-rundown`, and `rezie-app` must use crate-level `#![forbid(unsafe_code)]`. The allowed crates own foreign-interface wrappers.
 
 8. **No stubs in merged work.** `todo!()` and `unimplemented!()` are permitted only behind a feature flag for an explicitly deferred later phase, and only with a tracking note in the phase summary.
 
@@ -67,6 +69,7 @@ Before proposing any change as finished: `fmt`, `clippy`, `test --workspace`, an
 ## Crate boundaries
 
 ```
+rezie-rt        realtime thread configuration, safe deadline waiter, platform FFI; no domain types
 rezie-core      domain model, project state, command bus, clock, scheduler.  Depends on nothing else here.
 rezie-gpu       wgpu device, FramePool, shaders, compositor graph
 rezie-media     FFmpeg: demux, decode, encode, mux; source/sink traits

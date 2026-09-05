@@ -9,7 +9,7 @@ types describe later production features but do not activate them.
 
 ## Build and launch
 
-Install Rust through rustup. `rust-toolchain.toml` selects stable 1.88.0 with
+Install Rust through rustup. `rust-toolchain.toml` selects stable 1.98.1 with
 rustfmt and clippy. A platform C linker/SDK is needed by eframe: Xcode command
 line tools on macOS, MSVC build tools on Windows, and a C toolchain plus
 X11/Wayland development packages on Linux. HTTPS dependency fetching uses
@@ -69,21 +69,35 @@ paths and zero image comparisons in Phase 0; `golden` explicitly verifies
 that scope. It does not claim to test GPU pixels. The real tick tests are in
 `tests/integration/foundation.rs`.
 
-`cargo xtask bench` runs for ten minutes and writes a machine-labelled JSON
-report under `docs/benchmarks/`. It checks all 30,001 ticks from index 0 at
-zero seconds through index 30,000 at 600 seconds. PTS must match the absolute
-50 fps timeline. The draining sink must receive every tick in order without
-drops; a deliberately stalled two-entry sink must evict exactly 29,999 old
-ticks. Final observed clock drift must be **strictly less than 20 ms**. The
-report also exposes maximum lateness and deadline misses; average fps is
-diagnostic and cannot override a failing drift result. This is a clock and
-dispatch baseline, not a compositor/GPU benchmark.
+`cargo xtask clock-check` runs correctness only: contiguous indices, exact PTS,
+complete delivery and independent sink drop accounting. Hosted CI uses this
+mode and never asserts latency on shared runners. Its report explicitly has
+`latency_passed: null`.
 
-`cargo xtask soak --minutes 30` exercises the same actual clock and dispatch
-for a longer duration and writes `target/soak.json`. The ten-minute integration
-test is explicitly ignored by the short test suite; CI runs `bench` as a
-separate mandatory step. Neither a deterministic arithmetic test nor a short
-run substitutes for the ten-minute gate.
+`cargo xtask bench` builds the release headless executable first, waits 15
+seconds for builds to settle, then measures ten minutes on an otherwise idle
+machine. Keep other applications/workloads idle for this measurement. It
+writes `docs/benchmarks/phase-0-idle-<os>-<architecture>.json`, including all
+30,001 lateness samples in tick order and nearest-rank p50/p99/p99.9/max.
+Acceptance requires no skipped indices, final drift and maximum lateness
+strictly below one frame interval (20 ms at 50 fps), and p99.9 below 5 ms.
+The report records the achieved native scheduling policy and error codes;
+it cannot pass latency with a denied priority request disguised as success.
+A short pilot does not substitute for the ten-minute acceptance run.
+
+`rezie-rt` is the reusable realtime boundary. macOS uses Mach time-constraint
+scheduling; Windows uses MMCSS Pro Audio and a matched 1 ms timer-resolution
+request; Linux requests SCHED_FIFO priority 10, falling back to monotonic
+timerfd waits and attempted nice -10. If Linux denies RT or nice elevation,
+the startup log and benchmark identify the exact error. Configure appropriate
+CAP_SYS_NICE / RLIMIT_RTPRIO / RLIMIT_NICE permissions for a timing reference
+runner; the program does not silently grant itself privileges. Guards restore
+prior thread state on drop, including unwind. Audio will reuse this in Phase 6.
+
+`cargo xtask soak --minutes 30` checks long-running clock/dispatch correctness
+and writes `target/soak.json`. Latency acceptance is a separate idle benchmark.
+The ignored ten-minute integration test is for idle local/reference use only.
+No hosted test asserts a maximum or percentile lateness bound.
 
 Logs use tracing with a nonblocking rolling file writer. The headless binary
 writes `.logs/`; the GUI writes `rezie-logs` under the OS temporary directory
@@ -106,10 +120,9 @@ phase; absence must leave all non-NDI features functional.
 
 ## Git and CI
 
-The local repository is initialized and the first commit records human
-rulings before implementation. The owner has deferred adding a GitHub remote.
-Workflows are prepared for Windows, macOS and Linux, including ten-minute
-clock measurements and actual packaged GUI launches. They are not evidence
-of passing CI until executed. The nightly reference-machine workflow needs
-a provisioned `self-hosted, rezie-reference` runner. Phase 0 remains active
-until those gates are evidenced; Phase 1 must not begin meanwhile.
+The repository is initialized on `main`; the attached remote is
+`Github-HasaStudio` at `https://github.com/mhaslar/hasastudio.git`. The prepared
+workflow checks Windows/macOS/Linux correctness and launches each packaged
+GUI. Timing runs are isolated to a local idle machine or a provisioned
+`self-hosted, rezie-reference` runner. No repository secrets are required for
+hosted correctness. Phase 0 remains active until all required evidence is in.

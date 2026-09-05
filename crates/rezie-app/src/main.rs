@@ -1,4 +1,5 @@
 //! Empty Foundation GUI shell; all production state belongs to the engine.
+#![forbid(unsafe_code)]
 #![cfg_attr(target_os = "windows", windows_subsystem = "windows")]
 
 use anyhow::{Context, Result};
