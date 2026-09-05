@@ -123,3 +123,22 @@ needs gate skipped the entire matrix. Restore fetch-deps before tests, cache
 its hash-reverified .deps files, and retain trusted-main caches on failure.
 No test or acceptance assertion was removed. Local execution already included
 the prerequisite, which explains why this was a clean-run CI setup failure.
+
+## Measured CI results and cache correction
+
+The successful cold restructured run 33990508830 took 12m41s end to end,
+including its 2m41s fast prerequisite. The same-revision warm run 33991160147
+passed in 5m09s, with a 58s fast gate. The baseline slowest job was 17m20s.
+The docs-only closure commit 36ba587 scheduled no build workflows. Exact job
+timestamps are in docs/ci/timing-evidence.json; these are CI diagnostics, not
+production performance criteria. PR estimates use the same pipeline and exclude
+external approval/queue waits; no PR timing is falsely claimed as measured.
+
+The warm Linux log exposed an immutable-cache collision: fast and full jobs
+shared one exact key, so the fast job's debug-only archive prevented the full
+job from saving its release artifacts. Linux rebuilt wgpu/eframe and took
+4m07s even in the warm run. Give fast Ubuntu its own hosted-fast key, retaining
+the full-platform keys. This preserves complete release caches independently.
+The 5m09s result predates this final cache-key correction; do not label an
+unmeasured further improvement as observed. No extra timing-only run is needed:
+the next required Phase 1 correctness run will validate cache save behavior.

@@ -48,8 +48,8 @@ The restructured hosted matrix passed on Windows, macOS and Linux at `a0e44b4`
 ([run 33990508830](https://github.com/mhaslar/hasastudio/actions/runs/33990508830)),
 including native cleanup/correctness tests and actual packaged GUI launches.
 The cold critical path was 12m41s including the 2m41s fast prerequisite;
-the prior uncached critical path was 17m20s. A separate warm-cache run is
-being recorded in the CI timing evidence. Those timings exclude external
+the prior uncached critical path was 17m20s. The same-revision warm-cache run 33991160147 passed in 5m09s,
+including a 58s fast prerequisite, and is recorded in the CI timing evidence. Those timings exclude external
 approval and queue delays and do not establish reference-machine performance.
 
 The Phase 0 golden command verifies zero compositor paths and no pixel

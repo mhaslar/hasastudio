@@ -15,8 +15,8 @@ production reference remains Windows 11 / RX 6800 XT. See ADR 0024.
 
 All push/PR triggers ignore `docs/**`, `**/*.md` and `docs/decisions/**`.
 Schedules/manual dispatches are intentional requests and are not path-filtered.
-Ref-keyed concurrency cancels superseded runs. Rust caches are shared between
-compatible hosted jobs and isolated from reference caches. No retries are
+Ref-keyed concurrency cancels superseded runs. Fast and full Ubuntu jobs have separate caches so a debug-only cache cannot
+prevent saving release artifacts. All hosted caches are isolated from reference caches. No retries are
 configured for failed tests. nextest does not execute doctests, so the safe
 thread-affinity compile-fail test still uses `cargo test --workspace --doc`.
 
@@ -60,4 +60,7 @@ The first successful restructured cold run (33990508830, revision a0e44b4)
 completed in **12m41s** from first job start to last job completion, including
 2m41s for the fast gate. This is 4m39s shorter than the old 17m20s slowest job;
 resource changes associated with public runners may also contribute, so it
-is not a cache-only causal comparison. A same-revision warm run is in progress.
+is not a cache-only causal comparison. The same-revision warm run 33991160147 completed in **5m09s**, with a **58s**
+fast gate. A subsequent correction separates fast/full Ubuntu keys after the
+warm log exposed redundant release compilation. The measured 5m09s predates
+that correction; no additional speedup is claimed without measurement.

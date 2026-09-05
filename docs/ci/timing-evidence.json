@@ -85,5 +85,46 @@
       "run_id": 33990283651,
       "reason": "missing fetch-deps prerequisite; matrix skipped"
     }
-  ]
+  ],
+  "restructured_warm": {
+    "run_id": 33991160147,
+    "sha": "a0e44b4b53cb55bd95258413dc084687f48daf49",
+    "status": "success",
+    "jobs": [
+      {
+        "name": "ci-fast / fast",
+        "started_at": "2026-09-05T20:47:55Z",
+        "completed_at": "2026-09-05T20:48:53Z",
+        "elapsed_seconds": 58.0,
+        "conclusion": "success"
+      },
+      {
+        "name": "platforms (macos-14)",
+        "started_at": "2026-09-05T20:49:00Z",
+        "completed_at": "2026-09-05T20:50:23Z",
+        "elapsed_seconds": 83.0,
+        "conclusion": "success"
+      },
+      {
+        "name": "platforms (windows-2022)",
+        "started_at": "2026-09-05T20:48:56Z",
+        "completed_at": "2026-09-05T20:51:23Z",
+        "elapsed_seconds": 147.0,
+        "conclusion": "success"
+      },
+      {
+        "name": "platforms (ubuntu-24.04)",
+        "started_at": "2026-09-05T20:48:57Z",
+        "completed_at": "2026-09-05T20:53:04Z",
+        "elapsed_seconds": 247.0,
+        "conclusion": "success"
+      }
+    ],
+    "critical_path_seconds": 309.0,
+    "summed_job_seconds": 535.0
+  },
+  "docs_only_closure_commit": {
+    "sha": "36ba587",
+    "build_runs_observed": 0
+  }
 }
