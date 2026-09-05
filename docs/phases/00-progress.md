@@ -23,8 +23,9 @@ No Phase 1 work or `00-summary.md` is introduced.
 - Hosted CI checks correctness only. Idle latency checks are explicit and
   require native priority success (or the permitted elevated Linux fallback).
 - Local formatting, strict clippy, workspace tests, golden inventory and
-  updated packaged macOS launch passed. Windows and Linux realtime modules
-  type-check and pass target-specific clippy; their runtime checks await CI.
+  updated packaged macOS launch passed: 17 short tests and one compile-fail
+  doctest, with the ten-minute test reserved for idle measurement. Windows
+  and Linux realtime modules also type-check and pass target-specific clippy.
 - Initial idle preflight found no compiler/linker processes but substantial
   unrelated CPU work. No calibration/acceptance run was taken under that
   load. After the owner paused active work, the one-minute pilot passed.
@@ -37,8 +38,17 @@ No Phase 1 work or `00-summary.md` is introduced.
   **0.001167 ms**. The draining sink dropped zero ticks; the stalled sink
   dropped exactly 29,999. All current local timing bounds passed.
   Full raw samples are in `docs/benchmarks/phase-0-idle-macos-aarch64.json`.
-- Push and three-platform CI follow measurement, per the owner's requested
-  order. Windows/Linux runtime and bundle acceptance remain unmeasured here.
+- After measurement, pushed implementation and raw evidence as `d1aac59` to
+  `Github-HasaStudio/main`. GitHub started the
+  [three-platform acceptance run](https://github.com/mhaslar/hasastudio/actions/runs/33983189864).
+  That run records each platform's formatting, strict clippy, workspace tests
+  (including native unwind cleanup), golden inventory, tick correctness,
+  packaged GUI launch and artifact result. Hosted reports explicitly leave
+  latency unevaluated; they do not replace the idle report above.
+- GitHub's repository-runner query returned zero registered self-hosted
+  runners. Nightly measurements need a trusted reference machine with both
+  `self-hosted` and `rezie-reference` labels and appropriate RT permissions.
+  No extra secrets or branch-protection changes were needed for this push.
 
 The implementation and measurements below describe the earlier baseline and
 are retained as history. The final-drift-only result is superseded, not current
@@ -114,8 +124,8 @@ production GUI controls belong to later phases. Shared-device rendering begins
 in Phase 1 under the explicit human-approved shell exception. No placeholder
 later-phase crates or unimplemented commands are introduced.
 
-The local idle scheduling gate passed. Push and three-platform CI are next.
-The reference-machine nightly runner also needs provisioning; local timing
+The local idle scheduling gate passed and the hosted workflow was triggered.
+The reference-machine nightly runner still needs provisioning; local timing
 evidence does not claim performance on that hardware or on Windows/Linux.
 
 ## Surprises and corrections
@@ -139,9 +149,11 @@ After amendments the occurrences are at lines 1, 21, 23, 27, 497, 630 and 782.
 
 ## Remaining phase gate
 
-Push, execute three-platform CI and verify runnable bundles on Windows/Linux.
-Inspect reference-runner availability separately; timing acceptance permits
-an idle local machine under the owner's amendment. Review all resulting
-evidence. Only after the gates pass, write
+Hosted acceptance results are in the linked run above. SPEC §14's nightly
+reference benchmark/soak workflow cannot execute until its runner is
+provisioned. The owner's amendment permits the idle local machine to satisfy
+the Phase 0 clock criterion, but does not supply that nightly infrastructure.
+Keep the phase active and record the missing runner explicitly. Only after
+the remaining gates pass, write
 `docs/phases/00-summary.md` with final benchmarks and update the phase marker.
 Do not implement Phase 1 in that completion change.

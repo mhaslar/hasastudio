@@ -24,6 +24,10 @@ Claim no-op golden tests exercise a compositor or produce signed installers ahea
 
 Adopt option A. This is an implementer choice within the human-approved Phase 0 scope.
 
+ADR 0017 supersedes the hosted ten-minute timing check: hosted CI now runs
+short correctness-only checks, while latency is measured on an idle local or
+reference machine. Nightly reference measurements still require provisioning.
+
 ## Consequences
 
 dist builds release app/headless binaries, creates macOS .app with Info.plist, a Windows portable directory and Linux portable directory with desktop entry. Bundle smoke mode starts the engine and actual eframe event loop and succeeds only after a GUI update. macOS/Linux/Windows CI run normal tests, formatting, clippy, explicit Phase 0 golden inventory, ten-minute timing verification and packaged launch. gen-assets writes only a Phase 0 manifest explaining there are no media assets. golden verifies that manifest and rejects unexpected reference images rather than reporting fictitious frame comparisons; golden --update is not available in Phase 0. bench and soak exercise actual clock/dispatch. Nightly jobs target a self-hosted reference-machine label and remain pending until provisioned.

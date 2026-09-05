@@ -32,6 +32,13 @@ Record available evidence and outstanding gates in a progress document; reserve 
 
 Local commit exists; workflow reviewed and local equivalent checks run. Hosted results explicitly pending.
 
+On 2026-09-05 the owner attached `Github-HasaStudio`, pointing to
+`https://github.com/mhaslar/hasastudio.git`, and explicitly authorized push
+and workflow execution after the idle measurement. Commit `d1aac59` was
+pushed successfully; push-triggered acceptance run `33983189864` started.
+GitHub reported no registered repository self-hosted runners, so the nightly
+`self-hosted` / `rezie-reference` job still needs a provisioned machine.
+
 ## Revisit when
 
 User adds the GitHub repository.
