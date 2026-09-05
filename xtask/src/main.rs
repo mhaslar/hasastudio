@@ -9,6 +9,8 @@ use std::{
 };
 
 mod fetch;
+mod reference;
+mod sweep;
 
 const ASSET_MANIFEST: &str = "{\n  \"phase\": 0,\n  \"pixel_assets\": [],\n  \"reason\": \"Phase 0 dispatches FrameTime only; GPU pixels begin in Phase 1 (ADR 0001).\"\n}\n";
 
@@ -90,7 +92,7 @@ fn golden() -> Result<()> {
     Ok(())
 }
 
-fn measure(seconds: u64, path: &Path, latency: bool) -> Result<()> {
+fn build_headless() -> Result<()> {
     // Build first, then leave the machine quiet before starting measurement.
     // The measured executable is release-built, not this development xtask.
     cargo(&[
@@ -101,13 +103,37 @@ fn measure(seconds: u64, path: &Path, latency: bool) -> Result<()> {
         "rezie-engine",
         "--bin",
         "rezie-headless",
-    ])?;
+    ])
+}
+
+fn settle() {
+    tracing::info!(
+        "all builds finished; settling for 15 seconds; keep this machine otherwise idle"
+    );
+    std::thread::sleep(Duration::from_secs(15));
+}
+
+fn measure(seconds: u64, path: &Path, latency: bool, slack: Option<u64>) -> Result<()> {
+    build_headless()?;
+    if latency {
+        settle();
+    }
+    run_measurement(
+        seconds,
+        path,
+        if latency { Some("--latency") } else { None },
+        slack,
+    )
+}
+
+fn run_measurement(
+    seconds: u64,
+    path: &Path,
+    mode: Option<&str>,
+    slack: Option<u64>,
+) -> Result<()> {
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)?;
-    }
-    if latency {
-        tracing::info!("idle latency measurement: all builds finished; settling for 15 seconds; keep this machine otherwise idle");
-        std::thread::sleep(Duration::from_secs(15));
     }
     let binary = root().join("target/release").join(if cfg!(windows) {
         "rezie-headless.exe"
@@ -121,8 +147,11 @@ fn measure(seconds: u64, path: &Path, latency: bool) -> Result<()> {
         .arg(seconds.to_string())
         .arg("--report")
         .arg(path);
-    if latency {
-        command.arg("--latency");
+    if let Some(mode) = mode {
+        command.arg(mode);
+    }
+    if let Some(slack) = slack {
+        command.arg("--slack-us").arg(slack.to_string());
     }
     run(&mut command)
 }
@@ -234,21 +263,44 @@ fn main() -> Result<()> {
         }
         "clock-check" => {
             anyhow::ensure!(args.next().is_none(), "clock-check takes no arguments");
-            measure(10, &root().join("target/clock-correctness.json"), false)?;
+            measure(
+                10,
+                &root().join("target/clock-correctness.json"),
+                false,
+                None,
+            )?;
         }
         "bench" => {
+            let slack = match args.next().as_deref() {
+                None => None,
+                Some("--slack-us") => Some(
+                    args.next()
+                        .context("--slack-us requires microseconds")?
+                        .parse::<u64>()?,
+                ),
+                Some(other) => anyhow::bail!("unexpected bench option '{other}'"),
+            };
+            anyhow::ensure!(args.next().is_none(), "unexpected bench arguments");
             anyhow::ensure!(
-                args.next().is_none(),
-                "bench runs the normative ten-minute measurement"
+                slack.is_none_or(|s| (0..=5000).contains(&s)),
+                "slack must be 0–5000 microseconds"
             );
             let path = root().join(format!(
                 "docs/benchmarks/phase-0-idle-{}-{}.json",
                 std::env::consts::OS,
                 std::env::consts::ARCH
             ));
-            measure(600, &path, true)?;
+            let host = reference::capture()?;
+            let metadata = serde_json::json!({"host": host, "source": sweep::source_metadata()?, "slack_override_us": slack});
+            fs::write(
+                path.with_extension("host.json"),
+                serde_json::to_string_pretty(&metadata)?,
+            )?;
+            measure(600, &path, true, slack)?;
         }
+        "clock-sweep" => sweep::run(args.collect())?,
         "soak" => {
+            let _host = reference::capture()?;
             let minutes = match args.next().as_deref() {
                 None => 30,
                 Some("--minutes") => args
@@ -262,6 +314,7 @@ fn main() -> Result<()> {
                 minutes.checked_mul(60).context("soak duration overflow")?,
                 &root().join("target/soak.json"),
                 false,
+                None,
             )?;
         }
         "dist" => {

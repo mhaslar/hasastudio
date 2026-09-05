@@ -79,8 +79,8 @@ mode and never asserts latency on shared runners. Its report explicitly has
 `latency_passed: null`.
 
 `cargo xtask bench` builds the release headless executable first, waits 15
-seconds for builds to settle, then measures ten minutes on an otherwise idle
-machine. Keep other applications/workloads idle for this measurement. It
+seconds for builds to settle, then measures ten minutes on the otherwise idle
+Windows 11 / RX 6800 XT reference machine (a manual run is valid). Keep other applications/workloads idle for this measurement. It
 writes `docs/benchmarks/phase-0-idle-<os>-<architecture>.json`, including all
 30,001 lateness samples in tick order and nearest-rank p50/p99/p99.9/max.
 Acceptance requires no skipped indices, final drift and maximum lateness
@@ -93,14 +93,13 @@ A short pilot does not substitute for the ten-minute acceptance run.
 scheduling; Windows uses MMCSS Pro Audio and a matched 1 ms timer-resolution
 request; Linux requests SCHED_FIFO priority 10, falling back to monotonic
 timerfd waits and attempted nice -10. If Linux denies RT or nice elevation,
-the startup log and benchmark identify the exact error. Configure appropriate
-CAP_SYS_NICE / RLIMIT_RTPRIO / RLIMIT_NICE permissions for a timing reference
-runner; the program does not silently grant itself privileges. Guards restore
+the startup log and benchmark identify the exact error. Linux correctness workers may need
+CAP_SYS_NICE / RLIMIT_RTPRIO / RLIMIT_NICE to exercise elevated scheduling; the program does not silently grant itself privileges. Guards restore
 prior thread state on drop, including unwind. Audio will reuse this in Phase 6.
 
 `cargo xtask soak --minutes 30` checks long-running clock/dispatch correctness
 and writes `target/soak.json`. Latency acceptance is a separate idle benchmark.
-The ignored ten-minute integration test is for idle local/reference use only.
+The ignored ten-minute integration test is for the idle production reference only.
 No hosted test asserts a maximum or percentile lateness bound.
 
 Logs use tracing with a nonblocking rolling file writer. The headless binary
@@ -127,6 +126,11 @@ phase; absence must leave all non-NDI features functional.
 The repository is initialized on `main`; the attached remote is
 `Github-HasaStudio` at `https://github.com/mhaslar/hasastudio.git`. The prepared
 workflow checks Windows/macOS/Linux correctness and launches each packaged
-GUI. Timing runs are isolated to a local idle machine or a provisioned
-`self-hosted, rezie-reference` runner. No repository secrets are required for
+GUI. Production timing runs use Windows 11 / RX 6800 XT, manually or on a
+`self-hosted, Windows, rezie-reference` runner. Runner setup does not block
+Phase 0; the manual reference clock result does. No repository secrets are required for
 hosted correctness. Phase 0 remains active until all required evidence is in.
+
+For per-platform slack sweeps, full distributions, measured spin CPU costs
+and exact manual commands, see [clock calibration](clock-calibration.md).
+The M4 is a development/correctness target, never a production target.

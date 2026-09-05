@@ -20,6 +20,10 @@ pub struct EngineConfig {
     pub sinks: Vec<(OutputId, usize)>,
     /// Optional finite run, including tick zero; used by acceptance tests.
     pub frame_count: Option<u64>,
+    /// Exact diagnostic slack override; None uses the platform default.
+    pub clock_slack: Option<Duration>,
+    /// Measure finishing-spin CPU cost; diagnostic runs only.
+    pub profile_clock: bool,
 }
 
 impl Default for EngineConfig {
@@ -28,6 +32,8 @@ impl Default for EngineConfig {
             rate: FrameRate::default(),
             sinks: vec![(OutputId(0), 8)],
             frame_count: None,
+            clock_slack: None,
+            profile_clock: false,
         }
     }
 }
@@ -59,6 +65,12 @@ struct Telemetry {
     misses: AtomicU64,
     done: AtomicBool,
     failed: AtomicBool,
+    spin_cpu: AtomicU64,
+    spin_wall: AtomicU64,
+    spin_entries: AtomicU64,
+    thread_cpu: AtomicU64,
+    thread_wall: AtomicU64,
+    profiled: AtomicBool,
 }
 
 struct ClockExit<'a>(&'a Telemetry);
@@ -139,6 +151,33 @@ impl Engine {
         }
         FrameRate::new(config.rate.numerator(), config.rate.denominator())
             .map_err(|e| EngineError::Configuration(e.to_string()))?;
+        let period = config
+            .rate
+            .pts(1)
+            .map_err(|e| EngineError::Configuration(e.to_string()))?;
+        let slack = config
+            .clock_slack
+            .unwrap_or_else(|| rezie_rt::FINISHING_SLACK.min(period * 3 / 16));
+        if slack >= period {
+            return Err(EngineError::Configuration(
+                "clock slack must be below the programme period".into(),
+            ));
+        }
+        // Retain the proven 2 ms minimum for low-slack trials: a 0.5 ms Mach
+        // budget did not read back as requested in the functional sweep (ADR 0021).
+        let computation = (slack + Duration::from_micros(500))
+            .max(Duration::from_millis(2))
+            .min(period / 3);
+        let budget = ThreadBudget {
+            period,
+            computation,
+            constraint: (computation + Duration::from_millis(1)).min(period / 2),
+        };
+        if slack >= computation {
+            return Err(EngineError::Configuration(format!(
+                "clock slack {slack:?} exceeds the {period:?} period's CPU budget"
+            )));
+        }
         for (i, (id, capacity)) in config.sinks.iter().enumerate() {
             if *capacity > 1_000_000 || config.sinks[..i].iter().any(|(other, _)| other == id) {
                 return Err(EngineError::Configuration(format!(
@@ -193,15 +232,6 @@ impl Engine {
             })?;
         let clock_stop = stop.clone();
         let clock_telemetry = telemetry.clone();
-        let period = rate
-            .pts(1)
-            .map_err(|e| EngineError::Configuration(e.to_string()))?;
-        let computation = Duration::from_millis(2).min(period / 4);
-        let budget = ThreadBudget {
-            period,
-            computation,
-            constraint: (computation + Duration::from_millis(1)).min(period / 2),
-        };
         let (configured, configuration) = crossbeam_channel::bounded(1);
         // Create the span on the startup thread. The real-time loop never logs or enters spans.
         let clock_span = tracing::info_span!(
@@ -214,13 +244,14 @@ impl Engine {
             .spawn(move || {
                 let _completion = ClockExit(&clock_telemetry);
                 let _span = clock_span.entered();
-                let mut realtime = match RealtimeThread::configure(budget) {
-                    Ok(realtime) => realtime,
-                    Err(error) => {
-                        let _ = configured.try_send(Err(error));
-                        return;
-                    }
-                };
+                let mut realtime =
+                    match RealtimeThread::configure_wait(budget, slack, config.profile_clock) {
+                        Ok(realtime) => realtime,
+                        Err(error) => {
+                            let _ = configured.try_send(Err(error));
+                            return;
+                        }
+                    };
                 let _ = configured.try_send(Ok(realtime.report()));
                 clock_loop(
                     rate,
@@ -282,6 +313,20 @@ impl Engine {
     /// Observe the real clock counters directly, without snapshot publication delay.
     pub fn clock_stats(&self) -> ClockStats {
         self.telemetry.snapshot(self.rate)
+    }
+
+    /// Completed diagnostic CPU accounting, never a wall-time estimate of CPU cost.
+    pub fn wait_profile(&self) -> Option<rezie_rt::WaitProfile> {
+        if !self.clock_finished() || !self.telemetry.profiled.load(Ordering::Acquire) {
+            return None;
+        }
+        Some(rezie_rt::WaitProfile {
+            spin_cpu_ns: self.telemetry.spin_cpu.load(Ordering::Relaxed),
+            spin_wall_ns: self.telemetry.spin_wall.load(Ordering::Relaxed),
+            spin_entries: self.telemetry.spin_entries.load(Ordering::Relaxed),
+            thread_cpu_ns: self.telemetry.thread_cpu.load(Ordering::Relaxed),
+            thread_wall_ns: self.telemetry.thread_wall.load(Ordering::Relaxed),
+        })
     }
     /// Native scheduling achieved on the clock thread, reported before its first tick.
     pub fn scheduling_report(&self) -> SchedulingReport {
@@ -373,6 +418,30 @@ fn clock_loop(
             break;
         };
         index = next;
+    }
+    match realtime.finish_profile() {
+        Ok(Some(profile)) => {
+            telemetry
+                .spin_cpu
+                .store(profile.spin_cpu_ns, Ordering::Relaxed);
+            telemetry
+                .spin_wall
+                .store(profile.spin_wall_ns, Ordering::Relaxed);
+            telemetry
+                .spin_entries
+                .store(profile.spin_entries, Ordering::Relaxed);
+            telemetry
+                .thread_cpu
+                .store(profile.thread_cpu_ns, Ordering::Relaxed);
+            telemetry
+                .thread_wall
+                .store(profile.thread_wall_ns, Ordering::Relaxed);
+            telemetry.profiled.store(true, Ordering::Release);
+        }
+        Ok(None) => {}
+        Err(_) => {
+            telemetry.failed.store(true, Ordering::Release);
+        }
     }
     telemetry.done.store(true, Ordering::Release);
 }

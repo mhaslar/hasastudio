@@ -1,7 +1,7 @@
 # Phase 0 clock measurements
 
-Current acceptance is defined by ADR 0017: on an otherwise idle local or
-reference machine, ten minutes at 50 fps, no skipped indices, final drift and
+Current acceptance is defined by ADRs 0017 and 0021: on the otherwise idle
+Windows 11 / RX 6800 XT production reference machine, ten minutes at 50 fps, no skipped indices, final drift and
 maximum lateness below 20 ms, and p99.9 lateness below 5 ms. `cargo xtask bench`
 finishes its release build before a 15-second settling period and measurement.
 The measured executable uses Rust 1.98.1 and the shared rezie-rt native scheduler.
@@ -26,7 +26,8 @@ The 1.5 ms finishing slack was retained (ADR 0018).
 The ten-minute `cargo xtask bench` run followed its completed release build
 and a 15-second settling delay, approximately 17:58:17–18:08:17 UTC. No builds
 or tests ran concurrently. `phase-0-idle-macos-aarch64.json` records all 30,001
-samples and passes the current criterion:
+samples. It passed the then-current local bounds; ADR 0021 now classifies
+this report as historical development evidence, not production acceptance:
 
 | Measure | Result |
 | --- | ---: |
@@ -46,8 +47,9 @@ not a guarantee of future latency or other platforms' performance.
 
 Hosted CI uses `cargo xtask clock-check`, which checks counts, ordering, exact
 PTS, and queue isolation, without any latency threshold. It records
-`latency_passed: null`. The reference-machine workflow alone runs latency
-acceptance; that runner must be idle and correctly configured for native RT.
+`latency_passed: null`. Normative latency acceptance runs manually or through the reference workflow
+on the designated Windows machine, idle with MMCSS and timer resolution
+confirmed. Runner automation is not a Phase 0 closure condition.
 
 ## Superseded measurement
 
@@ -62,3 +64,19 @@ no full distribution and cannot supply missing percentile evidence.
 
 These are clock/dispatch measurements; no compositor, encoder or GPU baseline
 is implied. No previous-phase frame-time baseline exists.
+
+## Manual calibration and production evidence
+
+`cargo xtask clock-sweep` records a separate raw report per slack, metadata,
+CSV summary and SVG curve. The default six 60-second trials cover 0, 0.5, 1,
+1.5, 3 and 5 ms in a fixed non-monotonic order. CPU cost is measured with the
+thread CPU clock (Unix) or GetThreadTimes (Windows), not estimated from elapsed
+spin time. Queries add overhead; calibration is not acceptance. Preserve all
+trials and any failed acceptance report. The M4 sweep is developmental;
+Windows reference acceptance is the sole normative Phase 0 timing result.
+Both sweeps and the final Windows result are pending manual execution.
+Instructions: [clock calibration](../user/clock-calibration.md).
+
+From Phase 1, also record the M4 two-input, one-output 1080p50 diagnostic at
+every phase gate with no performance threshold. It is explicitly separate
+from production benchmarks, golden references and soak evidence.

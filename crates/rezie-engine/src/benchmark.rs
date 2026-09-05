@@ -11,6 +11,8 @@ pub enum MeasurementMode {
     Correctness,
     /// Additionally enforce the human-approved idle latency bounds.
     IdleLatency,
+    /// Sweep diagnostics: full lateness and spin CPU cost, with no acceptance claim.
+    Calibration,
 }
 
 /// All per-tick samples and nearest-rank percentile observations, in nanoseconds.
@@ -73,6 +75,10 @@ pub struct ClockReport {
     pub clock: ClockStats,
     /// Native policy and timer/nice results reported by the measured thread.
     pub scheduling: rezie_rt::SchedulingReport,
+    /// Requested override; None means the compiled platform default was used.
+    pub slack_override_us: Option<u64>,
+    /// Calibration-only CPU profiling; absent in normal correctness/acceptance runs.
+    pub wait_profile: Option<rezie_rt::WaitProfile>,
     /// Every sample and its percentile summary.
     pub lateness: LatenessDistribution,
     /// Independent sink counters after shutdown.
@@ -87,6 +93,19 @@ pub struct ClockReport {
 
 /// Run the actual engine; use IdleLatency only on an otherwise idle local/reference machine.
 pub fn run(seconds: u64, mode: MeasurementMode) -> anyhow::Result<ClockReport> {
+    run_with_slack(seconds, mode, None)
+}
+
+/// Measure an explicit calibration/acceptance slack without changing the compiled default.
+pub fn run_with_slack(
+    seconds: u64,
+    mode: MeasurementMode,
+    slack_us: Option<u64>,
+) -> anyhow::Result<ClockReport> {
+    anyhow::ensure!(
+        slack_us.is_none_or(|s| (0..=5000).contains(&s)),
+        "slack override must be 0–5000 microseconds"
+    );
     anyhow::ensure!(
         (1..=86_400).contains(&seconds),
         "clock measurement must last 1–86400 seconds"
@@ -99,6 +118,8 @@ pub fn run(seconds: u64, mode: MeasurementMode) -> anyhow::Result<ClockReport> {
         rate,
         sinks: vec![(OutputId(0), expected as usize), (OutputId(1), 2)],
         frame_count: Some(expected),
+        clock_slack: slack_us.map(Duration::from_micros),
+        profile_clock: mode == MeasurementMode::Calibration,
     })?;
     let start = Instant::now();
     let mut received = 0_u64;
@@ -137,6 +158,9 @@ pub fn run(seconds: u64, mode: MeasurementMode) -> anyhow::Result<ClockReport> {
             frame.index == expected - 1 && frame.pts == Duration::from_secs(seconds)
         });
     let scheduling = engine.scheduling_report();
+    let wait_profile = engine.wait_profile();
+    let correctness_passed =
+        correctness_passed && (mode != MeasurementMode::Calibration || wait_profile.is_some());
     let frame_interval = rate.pts(1)?;
     let latency_passed = (mode == MeasurementMode::IdleLatency).then(|| {
         scheduling.correctly_prioritized()
@@ -153,6 +177,8 @@ pub fn run(seconds: u64, mode: MeasurementMode) -> anyhow::Result<ClockReport> {
         pts_errors,
         clock,
         scheduling,
+        slack_override_us: slack_us,
+        wait_profile,
         lateness,
         sinks: stats,
         correctness_passed,

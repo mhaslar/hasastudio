@@ -14,6 +14,8 @@ async fn main() -> Result<()> {
     let mut report = None;
     let mut ready_file = None;
     let mut latency = false;
+    let mut calibrate = false;
+    let mut slack_us = None;
     while let Some(arg) = args.next() {
         match arg.as_str() {
             "--ws" => {
@@ -31,6 +33,14 @@ async fn main() -> Result<()> {
                 )
             }
             "--latency" => latency = true,
+            "--calibrate" => calibrate = true,
+            "--slack-us" => {
+                slack_us = Some(
+                    args.next()
+                        .context("--slack-us requires microseconds")?
+                        .parse::<u64>()?,
+                )
+            }
             "--report" => report = Some(args.next().context("--report requires a path")?),
             "--ready-file" => {
                 ready_file = Some(args.next().context("--ready-file requires a path")?)
@@ -40,12 +50,20 @@ async fn main() -> Result<()> {
     }
     if let Some(seconds) = clock_seconds {
         anyhow::ensure!(ready_file.is_none(), "--ready-file requires WebSocket mode");
-        let mode = if latency {
+        anyhow::ensure!(
+            !(latency && calibrate),
+            "--latency and --calibrate are separate measurement modes"
+        );
+        let mode = if calibrate {
+            benchmark::MeasurementMode::Calibration
+        } else if latency {
             benchmark::MeasurementMode::IdleLatency
         } else {
             benchmark::MeasurementMode::Correctness
         };
-        let result = tokio::task::spawn_blocking(move || benchmark::run(seconds, mode)).await??;
+        let result =
+            tokio::task::spawn_blocking(move || benchmark::run_with_slack(seconds, mode, slack_us))
+                .await??;
         if let Some(path) = report {
             std::fs::write(&path, serde_json::to_string_pretty(&result)?)
                 .with_context(|| format!("write clock report '{path}'"))?;
@@ -59,14 +77,15 @@ async fn main() -> Result<()> {
             p99_9_ns = result.lateness.p99_9_ns,
             max_lateness_ns = result.lateness.max_ns,
             policy = ?result.scheduling,
+            wait_profile = ?result.wait_profile,
             "clock measurement complete"
         );
         anyhow::ensure!(result.passed, "clock/dispatch acceptance failed");
         return Ok(());
     }
     anyhow::ensure!(
-        report.is_none() && !latency,
-        "--report/--latency require --clock-seconds"
+        report.is_none() && !latency && !calibrate && slack_us.is_none(),
+        "--report/--latency/--calibrate/--slack-us require --clock-seconds"
     );
     let (mut engine, mut sinks) = Engine::start(EngineConfig::default())?;
     let server = WebSocketServer::bind(address, engine.client()).await?;

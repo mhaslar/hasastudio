@@ -10,7 +10,7 @@ Version 1.0 · Target implementer: Codex (GPT-6) · Human reviewer available for
 
 This specification is **prescriptive**. Where it names a crate, a file path, a type name, or an algorithm, use exactly that. Where it says *implementer's choice*, decide and record the decision in `docs/decisions/NNNN-title.md` (one ADR per decision).
 
-**Build order is mandatory.** Phases in §13 are sequential. Do not begin a phase until the previous phase's acceptance criteria all pass in CI on all three target platforms. Do not implement features from later phases early, even if they seem trivial — the phase gates exist so that regressions are attributable.
+**Build order is mandatory.** Phases in §13 are sequential. Do not begin a phase until the previous phase's acceptance criteria pass on their tagged measurement targets (§13), including correctness CI on all three supported platforms. Do not implement features from later phases early, even if they seem trivial — the phase gates exist so that regressions are attributable.
 
 **Never redesign the architecture.** If a phase reveals that §5–§11 are wrong, stop, write an ADR describing the problem and the proposed change, and request human review. Do not silently deviate.
 
@@ -48,7 +48,9 @@ Explicitly out of scope. Do not implement, do not design around:
 
 | | |
 |---|---|
+| Production reference OS | Windows 11; the sole production machine |
 | Reference GPU | AMD Radeon RX 6800 XT (RDNA2, VCN 3.0, 16 GB) |
+| Development machine | Apple M4 / Metal; light functional work at 1–2 inputs, never production |
 | Reference programme format | 1920×1080p50, BT.709 |
 | Also supported | 3840×2160p50, and 25/30/60 fps variants |
 | Concurrent outputs (v1 target) | 4 |
@@ -59,6 +61,13 @@ Explicitly out of scope. Do not implement, do not design around:
 | Audio | 48 kHz, 32-bit float internally |
 | Latency budget | Relaxed. ≤ 250 ms glass-to-glass on NDI output is acceptable; do not trade correctness or image quality for latency. |
 
+Production performance, benchmarks, soak runs and golden-frame references are
+measured only on the Windows 11 / RX 6800 XT reference machine (ADR 0021).
+Windows, Linux and macOS remain supported build/correctness targets. Hosted
+CI has no performance criteria and no normative compositor/golden evidence.
+The one diagnostic exception is the reduced M4 benchmark at each applicable
+phase gate (§13): it has no performance threshold and is never production evidence.
+
 ### 2.1 Hardware codec implications
 
 The reference GPU is **AMD**. Do not write NVENC-shaped code and abstract it later.
@@ -68,6 +77,15 @@ The reference GPU is **AMD**. Do not write NVENC-shaped code and abstract it lat
 | Windows | D3D11VA | AMF (H.264, HEVC) |
 | Linux | VAAPI | VAAPI (H.264, HEVC) |
 | macOS | VideoToolbox | VideoToolbox (H.264, HEVC) |
+
+AMF on Windows is the primary production H.264/HEVC encode path and the only
+source of encoder performance numbers. From Phase 5 onward, hardware-encode
+acceptance requires AMF on the reference machine. VAAPI/Linux and
+VideoToolbox/macOS are secondary correctness targets, verified by CI on
+suitable hardware; neither carries a performance criterion. A passing
+VideoToolbox test on M4 cannot satisfy production AMF acceptance. The Windows
+reference runner needs AMD Adrenalin drivers (including the AMF runtime) and
+MSVC build tools/Windows SDK.
 
 RDNA2 has **no AV1 encoder**. AV1 decode is available and should be used when present. Decode always has a software fallback, via FFmpeg's own LGPL decoders. Encode software fallback is OpenH264 for H.264 only. There is no software HEVC encoder; HEVC output requires hardware encode and its absence is a clear GUI error, never a silent failure or a silent downgrade.
 
@@ -646,7 +664,32 @@ DeckLink and UVC. The `VideoSource` trait in `rezie-media` must be implementable
 
 ## 13. Phases
 
-Each phase ends with: all acceptance criteria passing in CI on Windows, macOS, and Linux; no `todo!()`; ADRs written for any implementer's-choice decisions; user documentation for the features added.
+Each phase ends with all criteria passing on their explicitly tagged targets;
+no `todo!()`; ADRs for implementer's-choice decisions; and user documentation.
+ADR 0021 assigns the targets below. The tags apply to every acceptance clause;
+a passing test on the wrong hardware does not satisfy a gate.
+
+| Tag | Required measurement target |
+| --- | --- |
+| **[Reference machine]** | The sole production host: Windows 11 / RX 6800 XT, self-hosted runner `self-hosted` + `rezie-reference` (Windows). All normative performance, soak and golden evidence comes from here. |
+| **[Any platform]** | Functional correctness on a suitable supported platform. If the criterion names multiple platforms, verify each one. Device/permission/receiver requirements still apply. This tag never makes M4 a production performance target. |
+| **[CI]** | Build and correctness pipelines across Windows, Linux and macOS. Hosted workers run portable checks. Tests that assert real hardware codecs require equipped CI workers; a skipped hardware test or software fallback does not prove hardware correctness. No hosted performance threshold is permitted. |
+
+The following tagged checks apply at every phase gate as well as its specific criteria:
+
+- **[CI]** Formatting, strict Clippy, unit and portable integration tests, and runnable bundles pass on all three supported platforms.
+- **[Reference machine]** Normative phase benchmarks and phase-required soak measurements are recorded with hardware, OS, driver, backend and workload metadata. No build or other workload overlaps timing measurements. Golden comparisons and approved reference generation run here only, from Phase 1 onward.
+- **[Reference machine]** Every compositor or shader change runs on the production D3D12/Vulkan backends shipped for the reference host before a gate can pass. Verify workgroup limits, texture formats and precision on the real device.
+- **[Any platform]** On **M4/Metal specifically**, affected compositor/shader paths must also pass functional checks. This is necessary, never sufficient for production acceptance.
+- **[Any platform]** On **M4 specifically**, record a reduced diagnostic benchmark at every gate from Phase 1: **2 inputs, 1 output, 1920×1080p50**, using only the current phase's supported media paths. Record frame-time distribution, drops, resource observations and configuration for comparison; **no performance threshold** applies. Phase 0 has no media inputs/output, so this workload is inapplicable and must not be fabricated.
+
+From Phase 1, any hosted lavapipe compositor run is an optional **non-blocking
+smoke check**. It cannot satisfy golden/compositor acceptance and must never
+create or update references. Phase 0's pixel-free golden inventory remains a
+blocking CI correctness check. Numerical signal-quality or logical timing
+checks (for example DSP error tolerances or simulated lookahead) are correctness;
+elapsed-time deadlines, sustained frame rates and real-time soak bounds are
+reference-machine measurements.
 
 ---
 
@@ -654,20 +697,29 @@ Each phase ends with: all acceptance criteria passing in CI on Windows, macOS, a
 
 Workspace, `xtask`, CI on three platforms, dependency fetching, `rezie-core` domain types, the clock, the command/event API, the in-process and WebSocket transports, and a headless engine that starts, ticks a clock, and produces timed frame ticks through the sink dispatch path.
 
-**Accepts when:** `cargo test --workspace` passes on all three platforms · the clock meets the idle-machine criterion below · the WebSocket harness can connect, send a command, and receive an event · `xtask dist` produces a runnable (empty) application bundle on each platform.
+**Accepts when:**
 
-On an otherwise idle machine, over a ten-minute run at the programme
+- **[CI]** `cargo test --workspace` passes on all three platforms.
+- **[Reference machine]** The clock meets the ten-minute idle-machine criterion below.
+- **[CI]** The WebSocket harness connects, sends a command, and receives an event.
+- **[CI]** `xtask dist` produces a runnable empty application bundle on each platform, verified by actual launch.
+
+**[Reference machine]** On the otherwise idle Windows 11 / RX 6800 XT
+production host, over a ten-minute run at the programme
 rate: zero skipped tick indices; final drift under one frame interval;
 maximum tick lateness under one frame interval; p99.9 lateness under
 5 ms. The full lateness distribution (p50/p99/p99.9/max) is recorded
 in the benchmark output, not just the summary statistics.
 
 If maximum lateness under one frame interval proves unachievable on a
-target platform with a correctly prioritised thread, that is an ADR,
+production reference with a correctly prioritised thread, that is an ADR,
 not a relaxation.
 
+Reference runner automation and nightly soak are not Phase 0 closure gates;
+the owner may run and commit the reference clock benchmark manually.
+
 Hosted CI asserts tick correctness (zero skipped indices, ordering and exact
-PTS), not latency. Timing acceptance runs only on an otherwise idle local or
+PTS), not latency. Timing acceptance runs only on the otherwise idle production
 reference machine. Preserve every observed per-tick lateness sample alongside
 the percentile summary so the full distribution can be inspected.
 
@@ -677,7 +729,14 @@ the percentile summary so the full distribution can be inspected.
 
 `rezie-gpu` device, frame pool, working colour space. `rezie-media` file decode (H.264, HEVC, VP9, AV1; MP4, MOV, MKV, TS), image sources, colour source. Hardware decode with software fallback. A single NDI output. A minimal GUI: one preview pane, an input list, add/remove input.
 
-**Accepts when:** a 1080p50 H.264 file decodes and appears in the preview · the same file appears on an NDI output receivable by NDI Studio Monitor · hardware decode is active on all three platforms, verified by an explicit test that asserts the decoder name · killing hardware decode support (via env override) transparently falls back to software · a PNG with alpha renders with correct transparency over a colour source · the frame pool allocates zero times during a 5-minute steady-state run, asserted by a counter.
+**Accepts when:**
+
+- **[Reference machine]** A 1080p50 H.264 file decodes and appears in the preview.
+- **[Any platform]** The same file appears on an NDI output receivable by NDI Studio Monitor.
+- **[CI]** Hardware decode is active on Windows, Linux and macOS, verified on equipped workers by asserting the actual decoder name.
+- **[CI]** Killing hardware decode support via environment override transparently falls back to software; assert the software decoder, independently of hardware-path coverage.
+- **[Reference machine]** A PNG with alpha renders with correct transparency over a colour source.
+- **[Reference machine]** The frame pool allocates zero times during a five-minute steady-state run, asserted by a counter.
 
 ---
 
@@ -685,7 +744,13 @@ the percentile summary so the full distribution can be inspected.
 
 One M/E. Programme and preview buses. Cut, auto-transition, T-bar. Transition types: cut, fade, wipe, slide. FTB. Programme and preview panes in the GUI. Tally.
 
-**Accepts when:** golden-frame tests pass for each transition type at 0%, 25%, 50%, 75%, 100% · a T-bar drag produces a monotonic transition with no frame where the mix ratio goes backwards · an auto-transition of N frames takes exactly N frames · cut during an auto-transition resolves immediately and correctly · tally state is correct in the GUI for every routing combination, tested through the API.
+**Accepts when:**
+
+- **[Reference machine]** Golden-frame tests pass for each transition type at 0%, 25%, 50%, 75% and 100%.
+- **[CI]** A T-bar drag produces a monotonic transition with no frame where the mix ratio goes backwards.
+- **[CI]** An auto-transition of N frames takes exactly N frames.
+- **[CI]** Cut during an auto-transition resolves immediately and correctly.
+- **[CI]** Tally is correct in the GUI for every routing combination, tested through the API.
 
 ---
 
@@ -693,7 +758,13 @@ One M/E. Programme and preview buses. Cut, auto-transition, T-bar. Transition ty
 
 Transform, crop, colour correction, chroma key. Playback: play/pause/stop, in/out points, loop, autoplay, playback rate. Frame rate conversion policy (§7.3). Deinterlacing. Input configuration dialog.
 
-**Accepts when:** golden-frame tests for the chroma keyer against a committed green-screen plate, including spill suppression · a 25 fps source in a 50 fps programme produces exact 2:2 with no timing drift over 10 minutes · a 30 fps source in a 50 fps programme produces the documented judder pattern and no dropped or duplicated frames beyond it · an interlaced 1080i25 source deinterlaces to 1080p50 and passes a golden-frame comparison · seeking to an in-point and playing produces the correct first frame, verified by hash.
+**Accepts when:**
+
+- **[Reference machine]** Golden-frame tests pass for the chroma keyer against a committed green-screen plate, including spill suppression.
+- **[Reference machine]** A 25 fps source in a 50 fps programme produces exact 2:2 with no timing drift over ten minutes.
+- **[Reference machine]** A 30 fps source in a 50 fps programme produces the documented judder pattern and no dropped or duplicated frames beyond it.
+- **[Reference machine]** An interlaced 1080i25 source deinterlaces to 1080p50 and passes a golden-frame comparison.
+- **[Any platform]** Seeking to an in-point and playing produces the correct first frame, verified by hash.
 
 ---
 
@@ -701,7 +772,13 @@ Transform, crop, colour correction, chroma key. Playback: play/pause/stop, in/ou
 
 Ten overlay channels. Per-channel source, geometry, opacity, z-order, transitions. Overlay strip in the GUI with keyboard bindings.
 
-**Accepts when:** all ten channels can be active simultaneously with correct z-ordering, golden-frame verified · an alpha PNG on an overlay channel over a video input composites with no dark fringing (this catches non-linear-light blending — make it an explicit test) · overlay fade in and out are symmetrical and complete in exactly the configured duration · `OverlayOffAll` clears all channels within one frame · warm/cold promotion works for overlay sources, verified by asserting no black frame on enable.
+**Accepts when:**
+
+- **[Reference machine]** All ten overlay channels can be active simultaneously with correct z-ordering, golden-frame verified.
+- **[Reference machine]** An alpha PNG overlay over a video input composites with no dark fringing; explicitly test linear-light blending.
+- **[Reference machine]** Overlay fade in and out are symmetrical and complete in exactly the configured duration.
+- **[Reference machine]** `OverlayOffAll` clears all channels within one frame.
+- **[Reference machine]** Warm/cold promotion works for overlay sources, verified by asserting no black frame on enable.
 
 ---
 
@@ -709,7 +786,15 @@ Ten overlay channels. Per-channel source, geometry, opacity, z-order, transition
 
 Multiple outputs with independent source, overlay mask, and format. NDI, UDP MPEG-TS, SRT, fullscreen window, null. Format conversion. Output configuration UI.
 
-**Accepts when:** four simultaneous 1080p50 outputs run for 30 minutes with zero dropped frames on the reference hardware · one output shows overlays and another, sharing the same M/E, shows none — verified frame-by-frame on both NDI receivers · a UDP MPEG-TS stream plays correctly in VLC and ffplay and analyses clean in `tsduck` · an SRT stream survives 2% simulated packet loss · a deliberately stalled sink (SIGSTOP on a receiver) does not affect the other three outputs' frame timing.
+**Accepts when:**
+
+- **[Reference machine]** Four simultaneous 1080p50 outputs run for 30 minutes with zero dropped frames.
+- **[Reference machine]** Production hardware encode is AMF on Windows for H.264 and HEVC: assert the actual encoder and validate both resulting streams. All encoder performance numbers use this path.
+- **[CI]** Secondary VAAPI/Linux and VideoToolbox/macOS encode paths pass correctness tests on equipped workers, including selected-encoder assertions, output validation and absence/fallback/error behavior; no performance bound applies.
+- **[Reference machine]** One output shows overlays and another sharing the same M/E shows none, verified frame-by-frame on both NDI receivers.
+- **[Any platform]** A UDP MPEG-TS stream plays correctly in VLC and ffplay and analyses clean in `tsduck`.
+- **[Any platform]** An SRT stream survives 2% simulated packet loss.
+- **[Reference machine]** A deliberately stalled receiver does not affect the other three outputs' frame timing; suspend the receiver using the Windows equivalent of `SIGSTOP` on the reference host.
 
 ---
 
@@ -717,7 +802,14 @@ Multiple outputs with independent source, overlay mask, and format. NDI, UDP MPE
 
 Full mixer: buses, routing matrix, per-input DSP chain, AFV, metering, monitoring, drift correction, multichannel, downmix. Audio mixer tab.
 
-**Accepts when:** a 1 kHz sine through the full chain at unity gain measures within 0.1 dB at the bus output · THD+N below −90 dB through gain, EQ (flat), and pan · a source with a 0.1% clock error runs for one hour with no dropout, no click, and buffer depth held within ±1 frame of target · AFV audio follows a 25-frame video dissolve with a matching envelope, verified by sample analysis · mix-minus configured on bus B correctly excludes exactly one source · meters match a reference measurement within 0.5 dB.
+**Accepts when:**
+
+- **[CI]** A 1 kHz sine through the full chain at unity gain measures within 0.1 dB at the bus output.
+- **[CI]** THD+N is below −90 dB through gain, flat EQ and pan.
+- **[Reference machine]** A source with a 0.1% clock error runs for one hour with no dropout, no click, and buffer depth within ±1 frame of target.
+- **[CI]** AFV audio follows a 25-frame video dissolve with a matching envelope, verified by sample analysis.
+- **[CI]** Mix-minus configured on bus B excludes exactly one source.
+- **[CI]** Meters match a reference signal measurement within 0.5 dB.
 
 ---
 
@@ -725,7 +817,14 @@ Full mixer: buses, routing matrix, per-input DSP chain, AFV, metering, monitorin
 
 NDI receive with discovery and bandwidth modes. SRT, RTMP, RTSP ingest. Screen and window capture on all three platforms. Jitter buffering and reconnection.
 
-**Accepts when:** NDI discovery finds sources within 2 seconds and the list stays accurate as sources appear and disappear · an NDI source with alpha preserves it · a network source that disconnects reconnects automatically within 5 seconds without operator action and without disturbing the programme · a source with 50 ms of jitter plays without visible stutter at the default buffer setting · screen capture works on Windows (WGC), macOS (ScreenCaptureKit, including permission handling), and Linux (PipeWire portal, with X11 fallback) · a `Warm` NDI source is confirmed to consume `lowest` bandwidth, asserted via SDK query.
+**Accepts when:**
+
+- **[Reference machine]** NDI discovery finds sources within two seconds and the list stays accurate as sources appear and disappear.
+- **[Reference machine]** An NDI source with alpha preserves it.
+- **[Reference machine]** A disconnected network source reconnects automatically within five seconds without operator action or disturbing the programme.
+- **[Reference machine]** A source with 50 ms of jitter plays without visible stutter at the default buffer setting.
+- **[Any platform]** Screen capture works on **each** supported platform: Windows WGC, macOS ScreenCaptureKit including permission handling, and Linux PipeWire portal with X11 fallback.
+- **[Any platform]** A `Warm` NDI source consumes `lowest` bandwidth, asserted via SDK query.
 
 ---
 
@@ -733,7 +832,13 @@ NDI receive with discovery and bandwidth modes. SRT, RTMP, RTSP ingest. Screen a
 
 Programme and ISO recorders. Fragmented containers. Timecode sidecars. Recording UI with disk space monitoring.
 
-**Accepts when:** a 30-minute programme recording plays correctly and its duration is within one frame of expected · a recording is playable after `kill -9` mid-record · a programme recording and two ISO recordings, started at different times, align frame-exactly using their sidecars · four concurrent 1080p50 ISO recorders plus four outputs sustain on the reference hardware for 30 minutes, or the documented cap is lowered and justified with measurements · disk exhaustion produces a clean stop and a persistent error, never a corrupt file.
+**Accepts when:**
+
+- **[Reference machine]** A 30-minute programme recording plays correctly and its duration is within one frame of expected.
+- **[Any platform]** A recording is playable after forcible process termination mid-record (`kill -9` or the Windows equivalent).
+- **[Any platform]** A programme recording and two ISO recordings started at different times align frame-exactly using their sidecars.
+- **[Reference machine]** Four concurrent 1080p50 ISO recorders plus four outputs sustain for 30 minutes, or the documented cap is lowered and justified with measurements.
+- **[Any platform]** Disk exhaustion produces a clean stop and a persistent error, never a corrupt file.
 
 ---
 
@@ -741,7 +846,16 @@ Programme and ISO recorders. Fragmented containers. Timecode sidecars. Recording
 
 Rundown model, YAML schema and round-trip, scheduler with all timing modes, secondary events, macros, lookahead and pre-roll, collision detection. Rundown tab with projected timeline.
 
-**Accepts when:** a rundown written by hand in a text editor loads, validates, and runs · load → save → load is byte-identical apart from formatting · every schema violation produces an error naming the line and the expectation · a `mode: at, guard: hard` item takes within one frame of its wall-clock time · a `guard: soft` item waits and logs the overrun · secondary events fire at their offsets within one frame, including negative offsets relative to item end · collision detection correctly flags an overrun 10 minutes in advance · a 200-item rundown runs unattended for two hours with no drift accumulation.
+**Accepts when:**
+
+- **[CI]** A rundown written by hand in a text editor loads, validates, and runs.
+- **[CI]** Load → save → load is byte-identical apart from formatting.
+- **[CI]** Every schema violation produces an error naming the line and the expectation.
+- **[Reference machine]** A `mode: at, guard: hard` item takes within one frame of its wall-clock time.
+- **[CI]** A `guard: soft` item waits and logs the overrun.
+- **[Reference machine]** Secondary events fire at their offsets within one frame, including negative offsets relative to item end.
+- **[CI]** Collision detection correctly flags an overrun ten minutes in advance, verified with a controlled timeline.
+- **[Reference machine]** A 200-item rundown runs unattended for two hours with no drift accumulation.
 
 ---
 
@@ -751,7 +865,14 @@ Embedded HTML rendering with alpha, via CEF in a **separate helper process** (`r
 
 This is the largest single subsystem in the project. Budget accordingly. CEF must be a runtime-downloaded dependency, not committed, fetched by `xtask fetch-deps` and hash-verified.
 
-**Accepts when:** a page with `background: transparent` renders with correct alpha over a video source · a CSS-animated page renders smoothly at the programme frame rate · killing the helper process leaves the engine running and shows the source as disconnected, then reconnects on retry · ten HTML sources run concurrently without exhausting the frame pool · memory is stable over a two-hour run with an animated page (leak test) · the helper is correctly sandboxed and cannot access the engine's memory.
+**Accepts when:**
+
+- **[Reference machine]** A page with `background: transparent` renders with correct alpha over a video source.
+- **[Reference machine]** A CSS-animated page renders smoothly at the programme frame rate.
+- **[Any platform]** Killing the helper leaves the engine running and shows the source as disconnected, then reconnects on retry.
+- **[Reference machine]** Ten HTML sources run concurrently without exhausting the frame pool.
+- **[Reference machine]** Memory is stable over a two-hour run with an animated page (leak test).
+- **[CI]** The helper is correctly sandboxed and cannot access the engine's memory, verified on all three platforms.
 
 ---
 
@@ -759,7 +880,14 @@ This is the largest single subsystem in the project. Budget accordingly. CEF mus
 
 M/E 2–4 enabled after performance measurement. Multiview. Project save/load with versioning and migration. Presets. Keyboard binding editor. Second-monitor docking. Settings. Performance instrumentation surfaced in the GUI. User documentation. Installers for all three platforms.
 
-**Accepts when:** a project with 50 inputs, 4 M/Es, 10 overlays, and 4 outputs saves, loads, and reproduces state exactly · a project file from an earlier schema version migrates with a logged report · multiview with 16 tiles holds 12.5 fps without affecting programme timing · the GUI holds 30+ fps under that load · installers are signed where the platform requires it and install cleanly on a machine without a development toolchain · an eight-hour soak test at full configured load shows no memory growth beyond 2% and no dropped programme frames.
+**Accepts when:**
+
+- **[CI]** A project with 50 inputs, four M/Es, ten overlays and four outputs saves, loads, and reproduces state exactly.
+- **[CI]** A project file from an earlier schema version migrates with a logged report.
+- **[Reference machine]** Multiview with 16 tiles holds 12.5 fps without affecting programme timing.
+- **[Reference machine]** The GUI holds 30+ fps under that load.
+- **[Any platform]** Installers on **each** supported platform are signed where required and install cleanly on a machine without a development toolchain.
+- **[Reference machine]** An eight-hour soak at full configured load shows no memory growth beyond 2% and no dropped programme frames.
 
 ---
 
@@ -768,12 +896,26 @@ M/E 2–4 enabled after performance measurement. Multiview. Project save/load wi
 | Level | Scope | Where |
 |---|---|---|
 | Unit | Pure logic: scheduler timing, routing graph acyclicity, DSP coefficients, YAML round-trip | Alongside source |
-| Golden frame | Every compositor path | `tests/golden/` |
+| Golden frame | Every compositor path; normative only on Windows 11 / RX 6800 XT | `tests/golden/`, reference runner |
 | Integration | Engine driven through `rezie-api` over WebSocket; no GUI | `tests/integration/` |
-| Soak | Long-running stability, memory, drift | `xtask soak`, nightly CI |
-| Benchmark | Frame times, encode throughput, GPU/VRAM under defined loads | `xtask bench`, results committed to `docs/benchmarks/` per phase |
+| Soak | Long-running stability, memory, drift; reference machine only | `xtask soak`, reference nightly CI |
+| Benchmark | Production frame times, AMF encode throughput, GPU/VRAM under defined loads; reference machine only | `xtask bench`, results committed to `docs/benchmarks/` per phase |
+| Mac diagnostic | M4, 2 inputs / 1 output / 1080p50, from Phase 1; no performance threshold | Each phase gate; separate non-production report in `docs/benchmarks/` |
 
-CI runs unit, golden, and integration on every commit across all three platforms. Soak and benchmark run nightly on the reference machine.
+CI runs unit and portable integration correctness on every commit across all
+three platforms. Real codec/capture correctness requires suitable equipped
+workers; missing hardware is explicit, not silently replaced with software.
+From Phase 1, normative golden comparisons and all compositor/shader gate
+checks run on the reference machine. M4/Metal functional success is also
+required for affected compositor/shader paths. Optional hosted lavapipe
+compositor smoke is non-blocking and never updates golden references.
+
+Production soak and benchmark runs execute nightly on the Windows 11 /
+RX 6800 XT reference runner (`self-hosted`, `rezie-reference`, Windows).
+The runner needs AMD Adrenalin/AMF, MSVC build tools/Windows SDK and an
+interactive desktop. Serialize runs; finish builds before idle measurements.
+Each applicable phase gate also records the reduced M4 diagnostic specified
+in §13. No performance threshold is evaluated on hosted CI or M4.
 
 **A phase's benchmark numbers are committed.** A later phase that regresses frame time by more than 10% must justify it in an ADR or fix it.
 

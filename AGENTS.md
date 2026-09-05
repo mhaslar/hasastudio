@@ -60,7 +60,13 @@ cargo xtask soak --minutes 30
 cargo xtask dist                  # platform bundle
 ```
 
-Before proposing any change as finished: `fmt`, `clippy`, `test --workspace`, and `golden` must all pass.
+Before proposing any change as finished: `fmt`, `clippy`, and portable
+`test --workspace` checks must pass on all three supported platforms. Phase 0's
+`golden` command checks the pixel-free inventory. From Phase 1, normative
+`golden` comparisons run only on the Windows 11 / RX 6800 XT reference machine.
+Optional hosted lavapipe smoke is non-blocking and never updates references.
+Every compositor/shader change must run on that reference machine and on
+M4/Metal before a phase gate; M4 success is necessary, never sufficient.
 
 `cargo xtask golden --update` overwrites the reference images that are the only defence against silent compositor regressions. Running it because a test failed is how the defence gets deleted. If a golden test fails, either fix the code or explain in your summary exactly why the new output is correct — and then ask before updating.
 
@@ -109,11 +115,12 @@ Adding a workspace dependency requires an ADR. Adding a *native* dependency requ
 
 A phase is complete when **all** of these hold:
 
-- [ ] Every acceptance criterion in `docs/SPEC.md` §13 for that phase passes
+- [ ] Every acceptance criterion in `docs/SPEC.md` §13 passes on its tagged target
 - [ ] CI green on Windows, macOS, and Linux
 - [ ] No `todo!()` / `unimplemented!()` outside deferred feature flags
 - [ ] ADRs written for every implementer's-choice decision taken
-- [ ] `cargo xtask bench` run, results committed to `docs/benchmarks/`
+- [ ] `cargo xtask bench` run on Windows 11 / RX 6800 XT, results committed to `docs/benchmarks/`; a manual run is valid and runner automation does not block Phase 0
+- [ ] From Phase 1: reduced M4 diagnostic (2 inputs, 1 output, 1080p50) recorded at the gate, with no performance threshold
 - [ ] Frame time has not regressed more than 10% versus the previous phase, or the regression is justified in an ADR
 - [ ] User documentation written for the features added, in `docs/user/`
 - [ ] `docs/phases/NN-summary.md` written: what was built, what was deferred and why, what surprised you, what the benchmarks said

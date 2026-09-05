@@ -9,11 +9,24 @@ permissions:
 
 jobs:
   reference:
-    # Provision a trusted RX 6800 XT machine with these labels before enabling.
-    runs-on: [self-hosted, rezie-reference]
+    # Sole production reference: Windows 11 / RX 6800 XT, Adrenalin/AMF,
+    # MSVC build tools and an interactive desktop. Manual Phase 0 runs are valid.
+    runs-on: [self-hosted, Windows, rezie-reference]
+    concurrency:
+      group: rezie-reference
+      cancel-in-progress: false
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
+      - name: Record and verify reference hardware
+        shell: pwsh
+        run: |
+          $os = Get-CimInstance Win32_OperatingSystem
+          $gpu = @(Get-CimInstance Win32_VideoController)
+          if ($os.Caption -notmatch 'Windows 11') { throw 'Reference requires Windows 11' }
+          if (-not ($gpu | Where-Object Name -match 'RX 6800 XT')) { throw 'Reference requires RX 6800 XT' }
+          $os | Select-Object Caption, Version, BuildNumber
+          $gpu | Select-Object Name, DriverVersion
       - run: rustup toolchain install 1.98.1 --profile minimal --component rustfmt --component clippy
       - run: cargo xtask fetch-deps
       - run: cargo xtask bench

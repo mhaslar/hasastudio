@@ -139,6 +139,29 @@ fn ten_minute_clock_drift_is_strictly_under_one_frame() {
     assert!(report.lateness.p99_9_ns < 5_000_000);
 }
 
+#[test]
+fn calibration_retains_samples_and_actual_cpu_cost_without_a_latency_gate() {
+    let report = rezie_engine::benchmark::run_with_slack(
+        1,
+        rezie_engine::benchmark::MeasurementMode::Calibration,
+        Some(500),
+    )
+    .unwrap();
+    assert!(report.correctness_passed);
+    assert_eq!(report.latency_passed, None);
+    assert_eq!(report.scheduling.finishing_slack_ns, 500_000);
+    assert_eq!(report.lateness.samples_ns.len(), 51);
+    let cost = report.wait_profile.unwrap();
+    assert!(cost.thread_wall_ns > 0);
+    assert!(cost.thread_cpu_ns >= cost.spin_cpu_ns);
+    // No minimum spin count: a descheduled hosted runner may miss every spin window.
+    let invalid = Engine::start(EngineConfig {
+        clock_slack: Some(Duration::MAX),
+        ..EngineConfig::default()
+    });
+    assert!(invalid.is_err());
+}
+
 struct HeadlessProcess {
     child: std::process::Child,
     directory: std::path::PathBuf,

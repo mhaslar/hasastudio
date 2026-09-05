@@ -10,6 +10,7 @@ use std::{
     sync::atomic::{AtomicBool, Ordering},
     time::{Duration, Instant},
 };
+mod cpu_time;
 
 #[cfg(target_os = "macos")]
 mod macos;
@@ -26,11 +27,30 @@ use linux as platform;
 #[cfg(not(any(target_os = "macos", target_os = "windows", target_os = "linux")))]
 compile_error!("rezie-rt supports macOS, Windows and Linux only");
 
-/// Finishing slack selected for the scheduling correction, in OS-independent units.
-/// Retained after the idle 60 s Apple M4 pilot at 50 Hz with Mach RT priority:
-/// p99.9 lateness 18.375 us, maximum 19 us (ADR 0018). This calibrates the
-/// combined priority/wait strategy; it does not isolate slack's contribution.
+/// M4 provisional value: prior 1.5 ms pilot max 19 us; multi-value sweep pending (ADR 0021).
+#[cfg(target_os = "macos")]
 pub const FINISHING_SLACK: Duration = Duration::from_micros(1500);
+/// Windows provisional value; production sweep must determine it independently (ADR 0021).
+#[cfg(target_os = "windows")]
+pub const FINISHING_SLACK: Duration = Duration::from_micros(1500);
+/// Linux correctness default; no performance calibration claim (ADR 0021).
+#[cfg(target_os = "linux")]
+pub const FINISHING_SLACK: Duration = Duration::from_micros(1500);
+
+/// Optional diagnostic accounting; all CPU durations are actual thread CPU time.
+#[derive(Debug, Default, Clone, Copy, Serialize, Deserialize)]
+pub struct WaitProfile {
+    /// CPU nanoseconds inside measured finishing-spin segments, including query overhead.
+    pub spin_cpu_ns: u64,
+    /// Wall nanoseconds in finishing-spin segments; may include descheduling.
+    pub spin_wall_ns: u64,
+    /// Number of measured finishing-spin segments.
+    pub spin_entries: u64,
+    /// Total thread CPU time since profiling started, including dispatch and instrumentation.
+    pub thread_cpu_ns: u64,
+    /// Wall duration of the whole profiled interval, denominator for one-core CPU percentages.
+    pub thread_wall_ns: u64,
+}
 
 /// A caller's periodic execution budget, independent of its work type.
 #[derive(Debug, Clone, Copy)]
@@ -88,7 +108,7 @@ pub struct SchedulingReport {
 }
 
 impl SchedulingReport {
-    fn new(budget: ThreadBudget) -> Self {
+    fn new(budget: ThreadBudget, slack: Duration) -> Self {
         Self {
             policy: SchedulingPolicy::Unavailable,
             realtime: false,
@@ -98,7 +118,7 @@ impl SchedulingReport {
             nice_error: None,
             timer_resolution_ms: None,
             timer_error: None,
-            finishing_slack_ns: FINISHING_SLACK.min(budget.computation * 3 / 4).as_nanos() as u64,
+            finishing_slack_ns: slack.as_nanos() as u64,
             period_ns: budget.period.as_nanos() as u64,
             computation_ns: budget.computation.as_nanos() as u64,
             constraint_ns: budget.constraint.as_nanos() as u64,
@@ -127,6 +147,7 @@ impl SchedulingReport {
 pub struct RealtimeThread {
     native: platform::Guard,
     report: SchedulingReport,
+    profile: Option<(u64, Instant, WaitProfile)>,
     _thread_affinity: PhantomData<Rc<()>>,
 }
 
@@ -134,21 +155,42 @@ impl RealtimeThread {
     /// Configure the current thread. Policy denial is reported, not hidden.
     /// Failure to establish resources needed for waiting is returned as an error.
     pub fn configure(budget: ThreadBudget) -> io::Result<Self> {
+        Self::configure_wait(
+            budget,
+            FINISHING_SLACK.min(budget.computation * 3 / 4),
+            false,
+        )
+    }
+
+    /// Configure an exact finishing slack and optional CPU profiling for calibration.
+    /// Profiling adds CPU-clock queries around spin segments; normal callers leave it disabled.
+    pub fn configure_wait(
+        budget: ThreadBudget,
+        slack: Duration,
+        profile: bool,
+    ) -> io::Result<Self> {
         if budget.period > Duration::from_secs(1)
             || budget.computation.is_zero()
             || budget.computation >= budget.constraint
             || budget.constraint > budget.period
+            || slack >= budget.computation
         {
             return Err(io::Error::new(
                 io::ErrorKind::InvalidInput,
-                "realtime budget requires 0 < computation < constraint <= period <= 1 second",
+                "realtime budget requires slack < computation < constraint <= period <= 1 second and computation > 0",
             ));
         }
-        let mut report = SchedulingReport::new(budget);
+        let mut report = SchedulingReport::new(budget, slack);
         let native = platform::Guard::configure(budget, &mut report)?;
+        let profile = if profile {
+            Some((cpu_time::current()?, Instant::now(), WaitProfile::default()))
+        } else {
+            None
+        };
         Ok(Self {
             native,
             report,
+            profile,
             _thread_affinity: PhantomData,
         })
     }
@@ -156,6 +198,17 @@ impl RealtimeThread {
     /// What the OS actually accepted; the caller may log this before starting work.
     pub fn report(&self) -> SchedulingReport {
         self.report
+    }
+
+    /// Finish diagnostic accounting on the owning thread after its work stops.
+    pub fn finish_profile(&self) -> io::Result<Option<WaitProfile>> {
+        self.profile
+            .map(|(start, wall_start, mut value)| {
+                value.thread_cpu_ns = cpu_time::current()?.saturating_sub(start);
+                value.thread_wall_ns = wall_start.elapsed().as_nanos() as u64;
+                Ok(value)
+            })
+            .transpose()
     }
 
     /// Wait to an absolute caller-owned deadline with a bounded finishing spin.
@@ -174,6 +227,26 @@ impl RealtimeThread {
             if remaining > slack {
                 self.native
                     .sleep((remaining - slack).min(Duration::from_millis(20)))?;
+            } else if self.profile.is_some() {
+                let cpu_start = cpu_time::current()?;
+                let wall_start = Instant::now();
+                let reached = loop {
+                    if cancelled.load(Ordering::Acquire) {
+                        break false;
+                    }
+                    if Instant::now() >= deadline {
+                        break true;
+                    }
+                    std::hint::spin_loop();
+                };
+                let wall = wall_start.elapsed().as_nanos() as u64;
+                let cpu = cpu_time::current()?.saturating_sub(cpu_start);
+                if let Some((_, _, profile)) = &mut self.profile {
+                    profile.spin_cpu_ns = profile.spin_cpu_ns.saturating_add(cpu);
+                    profile.spin_wall_ns = profile.spin_wall_ns.saturating_add(wall);
+                    profile.spin_entries += 1;
+                }
+                return Ok(reached);
             } else {
                 std::hint::spin_loop();
             }

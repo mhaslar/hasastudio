@@ -76,6 +76,11 @@ Calibrate that constant using an idle pilot before the ten-minute run, record
 the pilot, and explain the measurement in the code comment. Native timed
 waiting is the prescribed pacing operation, not unrelated media-path I/O.
 
+ADR 0021 supersedes the shared slack choice: defaults are per-platform and
+provisional until the owner supplies both platform sweeps. Calibration adds
+optional spin CPU accounting through existing OS APIs; normal waits retain no
+profiling queries. The generic crate remains free of domain and clock types.
+
 ## Verification
 
 The idle 60-second Apple M4/macOS pilot on 2026-09-05 retained 1.5 ms slack:

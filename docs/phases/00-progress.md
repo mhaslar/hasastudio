@@ -6,6 +6,30 @@ with idle-machine maximum and percentile lateness bounds. ADRs 0017–0019
 record the criterion, shared realtime boundary, and current stable toolchain.
 No Phase 1 work or `00-summary.md` is introduced.
 
+## Platform ruling and remaining closure condition (ADR 0021)
+
+The owner designated Windows 11 / RX 6800 XT as the sole production reference.
+All 69 phase-specific §13 acceptance clauses are tagged, with reference-only
+performance/golden/soak evidence and portable correctness kept separate.
+The existing code at `fa59e28` passed all three hosted targets, including GUI
+launches ([run 33983882843](https://github.com/mhaslar/hasastudio/actions/runs/33983882843)).
+
+**Blocking:** the owner must run the slack sweep on M4 and on the Windows
+reference, review the lateness/CPU-cost curves, and supply a passing manual
+ten-minute Windows reference clock report using the selected platform value.
+The constants are provisional until those sweeps are recorded in ADR 0021.
+The prior M4 ten-minute result is historical development evidence, not a
+production performance pass under the new policy.
+
+**Not blocking:** self-hosted runner provisioning or nightly automation; the
+owner explicitly separated those from Phase 0 acceptance. No Phase 0 reference
+soak is required for closure. The workflow is routed to Windows reference
+hardware and serialized for future unattended runs. A manual reference result
+is valid. See `docs/user/clock-calibration.md` for exact commands and outputs.
+
+The following account predates ADR 0021 and is retained as measurement history.
+
+
 ## Scheduling correction and idle measurement
 
 - Added `rezie-rt`, with no domain types, for Mach time constraints, Windows
@@ -36,7 +60,7 @@ No Phase 1 work or `00-summary.md` is introduced.
   Mach time-constraint policy was confirmed. Lateness p50/p99/p99.9/max was
   **0.001500 / 0.016625 / 0.018250 / 0.036292 ms**; final drift was
   **0.001167 ms**. The draining sink dropped zero ticks; the stalled sink
-  dropped exactly 29,999. All current local timing bounds passed.
+  dropped exactly 29,999. The then-current local timing bounds passed.
   Full raw samples are in `docs/benchmarks/phase-0-idle-macos-aarch64.json`.
 - After measurement, pushed implementation and raw evidence as `d1aac59` to
   `Github-HasaStudio/main`. GitHub started the
@@ -154,11 +178,8 @@ After amendments the occurrences are at lines 1, 21, 23, 27, 497, 630 and 782.
 
 ## Remaining phase gate
 
-Hosted acceptance results are in the linked workflow history above. SPEC §14's nightly
-reference benchmark/soak workflow cannot execute until its runner is
-provisioned. The owner's amendment permits the idle local machine to satisfy
-the Phase 0 clock criterion, but does not supply that nightly infrastructure.
-Keep the phase active and record the missing runner explicitly. Only after
-the remaining gates pass, write
-`docs/phases/00-summary.md` with final benchmarks and update the phase marker.
-Do not implement Phase 1 in that completion change.
+Obtain the manual Windows 11 / RX 6800 XT ten-minute clock result, after the
+platform sweeps identify suitable slack constants. Record the sweep curves,
+CPU costs and chosen values in ADR 0021. Validate and commit the reference JSON,
+then write `00-summary.md` and update the phase marker. Runner automation is
+not a closure condition. Do not implement Phase 1 in the completion change.
