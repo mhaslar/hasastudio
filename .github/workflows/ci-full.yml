@@ -1,0 +1,71 @@
+name: ci-full
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['docs/**', '**/*.md', 'docs/decisions/**']
+  pull_request:
+    branches: [main]
+    paths-ignore: ['docs/**', '**/*.md', 'docs/decisions/**']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-full-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  ci-fast:
+    uses: ./.github/workflows/ci-fast.yml
+    with:
+      full_gate: true
+  platforms:
+    needs: ci-fast
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-14, windows-2022]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - run: rustup toolchain install 1.98.1 --profile minimal --component rustfmt --component clippy
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        with:
+          shared-key: hosted-${{ matrix.os }}
+          cache-all-crates: true
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - uses: taiki-e/install-action@7b8d4719ee4aaa279bdf55df38dacb9ebfe12a6c # v2
+        with:
+          tool: cargo-nextest@0.9.143
+      - name: Linux display dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update -qq && sudo apt-get install -y pkg-config libx11-dev libxkbcommon-dev libxkbcommon-x11-0 libwayland-dev libvulkan1 mesa-vulkan-drivers xvfb
+      - run: cargo xtask fetch-deps
+      - name: Platform-specific Clippy
+        if: runner.os != 'Linux'
+        run: cargo clippy --workspace --all-targets --locked -- -D warnings
+      - name: Platform-specific tests
+        if: runner.os != 'Linux'
+        run: cargo nextest run --workspace --locked
+      - name: Platform-specific doctests
+        if: runner.os != 'Linux'
+        run: cargo test --workspace --doc --locked
+      - name: Tick correctness only, explicit diagnostic slack
+        run: cargo xtask clock-check
+      - name: Package and launch GUI (Linux)
+        if: runner.os == 'Linux'
+        run: xvfb-run -a cargo xtask dist --smoke
+      - name: Package and launch GUI (macOS and Windows)
+        if: runner.os != 'Linux'
+        run: cargo xtask dist --smoke
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: correctness-${{ matrix.os }}
+          path: |
+            target/clock-correctness.json
+            target/dist-smoke.txt
+            .logs/
+          if-no-files-found: warn
+          retention-days: 14

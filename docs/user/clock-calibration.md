@@ -1,8 +1,9 @@
 # Manual Phase 0 clock calibration
 
 The owner runs both sweeps manually. No self-hosted runner is needed. The
-Windows 11 / RX 6800 XT ten-minute result blocks Phase 0 closure; runner
-provisioning and nightly soak automation do not. The M4 sweep informs its
+Windows 11 / RX 6800 XT result is Phase 0's sole conditional-closure obligation,
+due at the Phase 1 gate (OUTSTANDING.md); runner provisioning and nightly soak
+automation are separate. The M4 sweep informs its
 development configuration and never provides production acceptance.
 
 ## Prerequisites and checkout
@@ -142,3 +143,15 @@ git commit -m "test(phase-0): record manual Windows reference clock acceptance"
 Preserve a failed report before repeating anything. If correctly configured
 MMCSS cannot meet the maximum-lateness bound, stop for an ADR and human review;
 do not lower the standard or present a short/hosted/M4 run as a substitute.
+
+## Approved operating values (ADR 0022)
+
+macOS now uses the owner-approved 500 µs value from the recorded M4 sweep.
+Finer sampling is optional. Windows and Linux have no calibrated default and
+normal startup returns a missing-calibration error. Sweep candidates remain
+explicit overrides, so an unset default does not prevent calibration.
+Hosted correctness and GUI smoke use an explicit zero-slack diagnostic value;
+that is never a performance result. The WebSocket harness can run explicitly
+with `rezie-headless --ws 127.0.0.1:9800 --slack-us 0` for correctness.
+If the deferred Windows benchmark fails, Phase 0 reopens and Phase 1 work stops
+until rezie-rt is fixed; the latency bounds are unchanged.

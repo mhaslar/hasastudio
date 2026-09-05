@@ -58,7 +58,12 @@ fn main() -> Result<()> {
     };
     anyhow::ensure!(args.next().is_none(), "unexpected application arguments");
     let _logs = rezie_engine::logging::init(&std::env::temp_dir().join("rezie-logs"))?;
-    let (engine, sinks) = Engine::start(EngineConfig::default())?;
+    let (engine, sinks) = Engine::start(EngineConfig {
+        // Hosted launch checks are explicit diagnostics, never calibration evidence.
+        clock_slack: smoke_marker.as_ref().map(|_| std::time::Duration::ZERO),
+        ..EngineConfig::default()
+    })
+    .inspect_err(|error| tracing::error!(%error, "engine startup failed"))?;
     let client = engine.client();
     let updated = Arc::new(AtomicBool::new(false));
     let app = FoundationApp {

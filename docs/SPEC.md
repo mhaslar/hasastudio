@@ -10,7 +10,7 @@ Version 1.0 · Target implementer: Codex (GPT-6) · Human reviewer available for
 
 This specification is **prescriptive**. Where it names a crate, a file path, a type name, or an algorithm, use exactly that. Where it says *implementer's choice*, decide and record the decision in `docs/decisions/NNNN-title.md` (one ADR per decision).
 
-**Build order is mandatory.** Phases in §13 are sequential. Do not begin a phase until the previous phase's acceptance criteria pass on their tagged measurement targets (§13), including correctness CI on all three supported platforms. Do not implement features from later phases early, even if they seem trivial — the phase gates exist so that regressions are attributable.
+**Build order is mandatory.** Phases in §13 are sequential. Do not begin a phase until the previous phase's acceptance criteria pass on their tagged measurement targets (§13), including correctness CI on all three supported platforms. The sole exception is an explicitly human-approved conditional closure under AGENTS.md and ADR 0023: at most one open obligation, due at the next phase gate, with no further conditional closure while it remains open. Do not implement features from later phases early, even if they seem trivial — the phase gates exist so that regressions are attributable.
 
 **Never redesign the architecture.** If a phase reveals that §5–§11 are wrong, stop, write an ADR describing the problem and the proposed change, and request human review. Do not silently deviate.
 
@@ -699,7 +699,7 @@ Workspace, `xtask`, CI on three platforms, dependency fetching, `rezie-core` dom
 
 **Accepts when:**
 
-- **[CI]** `cargo test --workspace` passes on all three platforms.
+- **[CI]** `cargo nextest run --workspace` and `cargo test --workspace --doc` pass on all three platforms.
 - **[Reference machine]** The clock meets the ten-minute idle-machine criterion below.
 - **[CI]** The WebSocket harness connects, sends a command, and receives an event.
 - **[CI]** `xtask dist` produces a runnable empty application bundle on each platform, verified by actual launch.
@@ -717,6 +717,10 @@ not a relaxation.
 
 Reference runner automation and nightly soak are not Phase 0 closure gates;
 the owner may run and commit the reference clock benchmark manually.
+ADR 0023 authorizes conditional Phase 0 closure with exactly this unpaid
+Windows reference clock benchmark (including its slack sweep), blocked on
+hardware availability and due at the Phase 1 gate. This is not full verification.
+Failure reopens Phase 0 and stops Phase 1 until rezie-rt is fixed.
 
 Hosted CI asserts tick correctness (zero skipped indices, ordering and exact
 PTS), not latency. Timing acceptance runs only on the otherwise idle production
@@ -902,15 +906,21 @@ M/E 2–4 enabled after performance measurement. Multiview. Project save/load wi
 | Benchmark | Production frame times, AMF encode throughput, GPU/VRAM under defined loads; reference machine only | `xtask bench`, results committed to `docs/benchmarks/` per phase |
 | Mac diagnostic | M4, 2 inputs / 1 output / 1080p50, from Phase 1; no performance threshold | Each phase gate; separate non-production report in `docs/benchmarks/` |
 
-CI runs unit and portable integration correctness on every commit across all
-three platforms. Real codec/capture correctness requires suitable equipped
+Ubuntu ci-fast runs formatting, Clippy, nextest and doctests on every code
+push. ci-full runs the three-platform correctness/package matrix after ci-fast
+passes, for PRs targeting main, pushes to main and manual dispatch. Docs-only
+pushes and PRs do not trigger builds. Use caching and ref-keyed cancellation.
+No hosted latency/performance criteria are evaluated. Real codec/capture correctness requires suitable equipped
 workers; missing hardware is explicit, not silently replaced with software.
 From Phase 1, normative golden comparisons and all compositor/shader gate
 checks run on the reference machine. M4/Metal functional success is also
 required for affected compositor/shader paths. Optional hosted lavapipe
 compositor smoke is non-blocking and never updates golden references.
 
-Production soak and benchmark runs execute nightly on the Windows 11 /
+All normative golden, soak and benchmark runs execute in the reference
+workflow on main pushes, nightly schedule and manual dispatch only, never
+pull_request. Require Actions approval for all external contributors and
+repository-only registration of the Windows 11 /
 RX 6800 XT reference runner (`self-hosted`, `rezie-reference`, Windows).
 The runner needs AMD Adrenalin/AMF, MSVC build tools/Windows SDK and an
 interactive desktop. Serialize runs; finish builds before idle measurements.

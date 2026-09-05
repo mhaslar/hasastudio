@@ -1,0 +1,59 @@
+name: reference
+# SECURITY: never add pull_request or pull_request_target. See ADR 0024.
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['docs/**', '**/*.md', 'docs/decisions/**']
+  schedule:
+    - cron: '17 2 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: reference-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  reference:
+    if: ${{ github.repository == 'mhaslar/hasastudio' && github.ref == 'refs/heads/main' }}
+    # Register at repository scope only, not organization/account scope.
+    runs-on: [self-hosted, Windows, rezie-reference]
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Verify reference hardware
+        shell: pwsh
+        run: |
+          $os = Get-CimInstance Win32_OperatingSystem
+          $gpu = @(Get-CimInstance Win32_VideoController)
+          if ($os.Caption -notmatch 'Windows 11') { throw 'Reference requires Windows 11' }
+          if (-not ($gpu | Where-Object Name -match 'RX 6800 XT')) { throw 'Reference requires RX 6800 XT' }
+          $os | Select-Object Caption, Version, BuildNumber
+          $gpu | Select-Object Name, DriverVersion
+      - run: rustup toolchain install 1.98.1 --profile minimal --component rustfmt --component clippy
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        with:
+          prefix-key: rezie-reference-only
+          shared-key: windows-reference
+          cache-all-crates: true
+      - uses: taiki-e/install-action@7b8d4719ee4aaa279bdf55df38dacb9ebfe12a6c # v2
+        with:
+          tool: cargo-nextest@0.9.143
+      - run: cargo xtask fetch-deps
+      - run: cargo xtask gen-assets
+      - run: cargo nextest run --workspace --locked
+      - run: cargo test --workspace --doc --locked
+      - run: cargo xtask golden
+      # Both commands build before settling and sampling; no concurrent build steps.
+      # Until Windows slack is calibrated, bench fails explicitly (OUTSTANDING.md).
+      - run: cargo xtask bench
+      - run: cargo xtask soak --minutes 30
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: reference-evidence
+          path: |
+            docs/benchmarks/**/*.json
+            target/soak.json
+          retention-days: 30

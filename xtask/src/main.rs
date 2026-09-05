@@ -267,7 +267,7 @@ fn main() -> Result<()> {
                 10,
                 &root().join("target/clock-correctness.json"),
                 false,
-                None,
+                Some(0),
             )?;
         }
         "bench" => {
@@ -343,7 +343,8 @@ fn main() -> Result<()> {
                 "-D",
                 "warnings",
             ])?;
-            cargo(&["test", "--workspace", "--locked"])?;
+            cargo(&["nextest", "run", "--workspace", "--locked"])?;
+            cargo(&["test", "--workspace", "--doc", "--locked"])?;
             golden()?;
         }
         _ => anyhow::bail!("unknown xtask '{command}'"),

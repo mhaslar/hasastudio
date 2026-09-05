@@ -20,7 +20,7 @@ pub struct EngineConfig {
     pub sinks: Vec<(OutputId, usize)>,
     /// Optional finite run, including tick zero; used by acceptance tests.
     pub frame_count: Option<u64>,
-    /// Exact diagnostic slack override; None uses the platform default.
+    /// Exact diagnostic slack override; None requires a calibrated platform default.
     pub clock_slack: Option<Duration>,
     /// Measure finishing-spin CPU cost; diagnostic runs only.
     pub profile_clock: bool,
@@ -155,9 +155,17 @@ impl Engine {
             .rate
             .pts(1)
             .map_err(|e| EngineError::Configuration(e.to_string()))?;
-        let slack = config
-            .clock_slack
-            .unwrap_or_else(|| rezie_rt::FINISHING_SLACK.min(period * 3 / 16));
+        let slack = match config.clock_slack {
+            Some(slack) => {
+                tracing::info!(
+                    ?slack,
+                    "explicit diagnostic clock slack; not a calibrated default"
+                );
+                slack
+            }
+            None => rezie_rt::calibrated_slack()
+                .map_err(|e| EngineError::Configuration(e.to_string()))?,
+        };
         if slack >= period {
             return Err(EngineError::Configuration(
                 "clock slack must be below the programme period".into(),

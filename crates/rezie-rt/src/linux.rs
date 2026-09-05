@@ -167,11 +167,15 @@ mod tests {
             let before_policy = unsafe { libc::sched_getscheduler(0) };
             let before_nice = nice_value().unwrap();
             let unwind = std::panic::catch_unwind(|| {
-                let _guard = crate::RealtimeThread::configure(ThreadBudget {
-                    period: Duration::from_millis(20),
-                    computation: Duration::from_millis(2),
-                    constraint: Duration::from_millis(3),
-                })
+                let _guard = crate::RealtimeThread::configure_wait(
+                    ThreadBudget {
+                        period: Duration::from_millis(20),
+                        computation: Duration::from_millis(2),
+                        constraint: Duration::from_millis(3),
+                    },
+                    Duration::ZERO,
+                    false,
+                )
                 .unwrap();
                 panic!("exercise RAII restoration");
             });

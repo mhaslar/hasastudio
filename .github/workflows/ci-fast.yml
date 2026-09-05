@@ -1,0 +1,41 @@
+name: ci-fast
+on:
+  push:
+    paths-ignore: ['docs/**', '**/*.md', 'docs/decisions/**']
+  workflow_call:
+    inputs:
+      full_gate:
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  # Called workflows inherit the caller's workflow name; suffix avoids cancelling it.
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.full_gate && 'gate' || 'push' }}
+  cancel-in-progress: true
+jobs:
+  fast:
+    # ci-full owns the main-push fast check; do not compile the same revision twice.
+    if: ${{ inputs.full_gate || github.ref != 'refs/heads/main' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - run: rustup toolchain install 1.98.1 --profile minimal --component rustfmt --component clippy
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        with:
+          shared-key: hosted-ubuntu-24.04
+          cache-all-crates: true
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - run: cargo fmt --all -- --check
+      - uses: taiki-e/install-action@7b8d4719ee4aaa279bdf55df38dacb9ebfe12a6c # v2
+        with:
+          tool: cargo-nextest@0.9.143
+      - name: Linux build dependencies
+        run: sudo apt-get update -qq && sudo apt-get install -y pkg-config libx11-dev libxkbcommon-dev libwayland-dev
+      - run: cargo clippy --workspace --all-targets --locked -- -D warnings
+      - run: cargo nextest run --workspace --locked
+      - name: Thread-affinity compile-fail doctest (nextest does not run doctests)
+        run: cargo test --workspace --doc --locked

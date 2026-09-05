@@ -80,11 +80,15 @@ mod tests {
             // SAFETY: GetCurrentThread returns a pseudo-handle valid on this calling thread.
             let before = unsafe { GetThreadPriority(GetCurrentThread()) };
             let unwind = std::panic::catch_unwind(|| {
-                let _guard = crate::RealtimeThread::configure(ThreadBudget {
-                    period: Duration::from_millis(20),
-                    computation: Duration::from_millis(2),
-                    constraint: Duration::from_millis(3),
-                })
+                let _guard = crate::RealtimeThread::configure_wait(
+                    ThreadBudget {
+                        period: Duration::from_millis(20),
+                        computation: Duration::from_millis(2),
+                        constraint: Duration::from_millis(3),
+                    },
+                    Duration::ZERO,
+                    false,
+                )
                 .unwrap();
                 panic!("exercise RAII restoration");
             });

@@ -46,7 +46,8 @@ cargo xtask fetch-deps          # native deps (FFmpeg, SRT, CEF); hash-verified.
 cargo xtask gen-assets          # generate tests/assets/ — required before golden tests
 
 cargo build --workspace
-cargo test --workspace
+cargo nextest run --workspace
+cargo test --workspace --doc
 cargo clippy --workspace --all-targets -- -D warnings
 cargo fmt --all
 
@@ -61,7 +62,7 @@ cargo xtask dist                  # platform bundle
 ```
 
 Before proposing any change as finished: `fmt`, `clippy`, and portable
-`test --workspace` checks must pass on all three supported platforms. Phase 0's
+nextest and doctest checks must pass on all three supported platforms. Phase 0's
 `golden` command checks the pixel-free inventory. From Phase 1, normative
 `golden` comparisons run only on the Windows 11 / RX 6800 XT reference machine.
 Optional hosted lavapipe smoke is non-blocking and never updates references.
@@ -127,6 +128,35 @@ A phase is complete when **all** of these hold:
 - [ ] The "Current state" line at the top of this file updated
 
 Do not begin the next phase in the same change as completing one.
+
+### Conditional closure (ADR 0023)
+
+Only explicit human approval permits conditional closure; never infer it.
+Record the unpaid obligation in `docs/phases/OUTSTANDING.md` and say plainly
+in the phase summary that the phase is not fully verified.
+
+- At most **ONE** outstanding item exists at any time. While one is open,
+  no phase may close conditionally. This is a hard cap, not guidance.
+- Phase N+1 cannot close until Phase N's outstanding item is paid.
+  Phase 0's reference-clock item is due at the Phase 1 gate.
+- If the Windows reference measurement fails, Phase 0 reopens and Phase 1
+  work stops until `rezie-rt` is fixed. Never relax the latency criterion.
+
+### Public CI and reference-runner security (ADR 0024)
+
+`ci-fast` performs Ubuntu checks on every code push; `ci-full` gates its
+three-platform matrix behind that fast check for main pushes and PRs targeting
+main. Documentation-only pushes/PRs do not build. Use nextest plus the separate
+compile-fail doctest, caching and ref-keyed cancellation; no hosted latency gate.
+
+The `reference` workflow may run only on trusted main via push, schedule or
+manual dispatch. **Never add a pull_request or pull_request_target trigger.**
+Require Actions approval for **all external contributors**. A fork PR must never
+run on the production machine; do not approve workflow changes introducing
+self-hosted PR execution. Register the reference runner to this repository
+only, never an account or organization. Keep reference caches separate from
+hosted PR caches. All normative goldens, benchmarks and soaks run there.
+
 
 ---
 

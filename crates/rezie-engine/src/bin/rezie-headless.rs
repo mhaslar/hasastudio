@@ -84,10 +84,18 @@ async fn main() -> Result<()> {
         return Ok(());
     }
     anyhow::ensure!(
-        report.is_none() && !latency && !calibrate && slack_us.is_none(),
-        "--report/--latency/--calibrate/--slack-us require --clock-seconds"
+        report.is_none() && !latency && !calibrate,
+        "--report/--latency/--calibrate require --clock-seconds"
     );
-    let (mut engine, mut sinks) = Engine::start(EngineConfig::default())?;
+    anyhow::ensure!(
+        slack_us.is_none_or(|s| s <= 5000),
+        "slack override must be 0–5000 microseconds"
+    );
+    let (mut engine, mut sinks) = Engine::start(EngineConfig {
+        clock_slack: slack_us.map(Duration::from_micros),
+        ..EngineConfig::default()
+    })
+    .inspect_err(|error| tracing::error!(%error, "engine startup failed"))?;
     let server = WebSocketServer::bind(address, engine.client()).await?;
     if let Some(path) = ready_file {
         std::fs::write(&path, server.address().to_string())

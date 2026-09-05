@@ -7,7 +7,7 @@ use tokio_tungstenite::{connect_async, tungstenite::Message};
 
 #[tokio::test]
 async fn websocket_mutation_rejection_and_in_process_state_agree() {
-    let (mut engine, _sinks) = Engine::start(EngineConfig::default()).unwrap();
+    let (mut engine, _sinks) = Engine::start(correctness_config()).unwrap();
     let client = engine.client();
     let server = WebSocketServer::bind("127.0.0.1:0".parse().unwrap(), client.clone())
         .await
@@ -89,7 +89,7 @@ async fn websocket_mutation_rejection_and_in_process_state_agree() {
 
 #[tokio::test]
 async fn listener_rejects_non_loopback_and_shutdown_stops_clock() {
-    let (mut engine, _sinks) = Engine::start(EngineConfig::default()).unwrap();
+    let (mut engine, _sinks) = Engine::start(correctness_config()).unwrap();
     let client = engine.client();
     assert!(
         WebSocketServer::bind("0.0.0.0:0".parse().unwrap(), client.clone())
@@ -117,9 +117,12 @@ async fn listener_rejects_non_loopback_and_shutdown_stops_clock() {
 
 #[test]
 fn clock_runs_and_a_stalled_sink_cannot_interrupt_dispatch() {
-    let report =
-        rezie_engine::benchmark::run(2, rezie_engine::benchmark::MeasurementMode::Correctness)
-            .unwrap();
+    let report = rezie_engine::benchmark::run_with_slack(
+        2,
+        rezie_engine::benchmark::MeasurementMode::Correctness,
+        Some(0),
+    )
+    .unwrap();
     assert!(report.passed, "{report:#?}");
     assert_eq!(report.received_ticks, 101);
     assert_eq!(report.latency_passed, None);
@@ -184,7 +187,7 @@ async fn headless_binary_serves_websocket_and_flushes_shutdown_reply() {
         std::fs::remove_file(&ready).unwrap();
     }
     let child = std::process::Command::new(env!("CARGO_BIN_EXE_rezie-headless"))
-        .args(["--ws", "127.0.0.1:0", "--ready-file"])
+        .args(["--ws", "127.0.0.1:0", "--slack-us", "0", "--ready-file"])
         .arg(&ready)
         .current_dir(&directory)
         .stdout(std::process::Stdio::null())
@@ -245,7 +248,7 @@ async fn headless_binary_serves_websocket_and_flushes_shutdown_reply() {
 
 #[test]
 fn bounded_command_bus_reports_backpressure_without_losing_accepted_work() {
-    let (mut engine, _) = Engine::start(EngineConfig::default()).unwrap();
+    let (mut engine, _) = Engine::start(correctness_config()).unwrap();
     let state = std::sync::Arc::new(arc_swap::ArcSwap::from(engine.client().snapshot()));
     let (client, receiver) = rezie_api::channel(state, 1).unwrap();
     let first = client
@@ -283,4 +286,26 @@ fn bounded_command_bus_reports_backpressure_without_losing_accepted_work() {
         Err(rezie_api::ApiError::Closed)
     ));
     engine.shutdown().unwrap();
+}
+
+// Correctness fixtures select sleep-only explicitly; they do not calibrate a platform.
+fn correctness_config() -> EngineConfig {
+    EngineConfig {
+        clock_slack: Some(Duration::ZERO),
+        ..EngineConfig::default()
+    }
+}
+
+#[test]
+fn normal_start_requires_a_calibrated_platform_value() {
+    let started = Engine::start(EngineConfig::default());
+    if cfg!(target_os = "macos") {
+        let (mut engine, _) = started.unwrap();
+        assert_eq!(engine.scheduling_report().finishing_slack_ns, 500_000);
+        engine.shutdown().unwrap();
+    } else {
+        let error = started.err().expect("uncalibrated startup must fail");
+        assert!(error.to_string().contains("no calibrated realtime slack"));
+        assert!(error.to_string().contains(std::env::consts::OS));
+    }
 }

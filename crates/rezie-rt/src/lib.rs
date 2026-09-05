@@ -27,15 +27,24 @@ use linux as platform;
 #[cfg(not(any(target_os = "macos", target_os = "windows", target_os = "linux")))]
 compile_error!("rezie-rt supports macOS, Windows and Linux only");
 
-/// M4 provisional value: prior 1.5 ms pilot max 19 us; multi-value sweep pending (ADR 0021).
+/// M4: 500 µs used 2.338% of one core for spin with p99.9 19.291 µs;
+/// larger values gave no clear latency benefit in the six-value sweep (ADRs 0021–0022).
 #[cfg(target_os = "macos")]
-pub const FINISHING_SLACK: Duration = Duration::from_micros(1500);
-/// Windows provisional value; production sweep must determine it independently (ADR 0021).
+pub const FINISHING_SLACK: Option<Duration> = Some(Duration::from_micros(500));
+/// Windows has no calibrated value until the RX 6800 XT reference sweep is reviewed.
 #[cfg(target_os = "windows")]
-pub const FINISHING_SLACK: Duration = Duration::from_micros(1500);
-/// Linux correctness default; no performance calibration claim (ADR 0021).
+pub const FINISHING_SLACK: Option<Duration> = None;
+/// Linux has correctness coverage but no calibrated operating value.
 #[cfg(target_os = "linux")]
-pub const FINISHING_SLACK: Duration = Duration::from_micros(1500);
+pub const FINISHING_SLACK: Option<Duration> = None;
+
+/// Return this platform's measured default, or explain the missing calibration.
+pub fn calibrated_slack() -> io::Result<Duration> {
+    FINISHING_SLACK.ok_or_else(|| io::Error::new(
+        io::ErrorKind::NotFound,
+        format!("no calibrated realtime slack for {}; run cargo xtask clock-sweep and record the reviewed platform value (ADR 0022); diagnostics require an explicit slack override", std::env::consts::OS),
+    ))
+}
 
 /// Optional diagnostic accounting; all CPU durations are actual thread CPU time.
 #[derive(Debug, Default, Clone, Copy, Serialize, Deserialize)]
@@ -157,7 +166,7 @@ impl RealtimeThread {
     pub fn configure(budget: ThreadBudget) -> io::Result<Self> {
         Self::configure_wait(
             budget,
-            FINISHING_SLACK.min(budget.computation * 3 / 4),
+            calibrated_slack()?.min(budget.computation * 3 / 4),
             false,
         )
     }
@@ -259,11 +268,15 @@ mod tests {
     use super::*;
     #[test]
     fn deadlines_and_cancellation_have_no_shared_runner_latency_assertions() {
-        let mut guard = RealtimeThread::configure(ThreadBudget {
-            period: Duration::from_millis(20),
-            computation: Duration::from_millis(2),
-            constraint: Duration::from_millis(3),
-        })
+        let mut guard = RealtimeThread::configure_wait(
+            ThreadBudget {
+                period: Duration::from_millis(20),
+                computation: Duration::from_millis(2),
+                constraint: Duration::from_millis(3),
+            },
+            Duration::ZERO,
+            false,
+        )
         .unwrap();
         let cancellation = AtomicBool::new(false);
         let deadline = Instant::now() + Duration::from_millis(5);

@@ -197,6 +197,17 @@ No runtime constant changes accompany this evidence commit. The existing
 from Metal/Mach measurements. The earlier M4 ten-minute report remains
 historical development evidence at its original 1.5 ms configuration.
 
+### Subsequent owner ruling (ADRs 0022–0023)
+
+The owner selected macOS 0.5 ms immediately from this sweep. Finer sampling
+is optional and does not block that choice. Windows remains uncalibrated and
+normal startup must fail explicitly there; no Mac value is inherited. Linux
+also has no calibrated default. Diagnostic tests supply explicit values.
+The owner authorized conditional Phase 0 closure with its single Windows
+reference obligation due at the Phase 1 gate. Earlier no-closure/provisional-Mac
+statements above describe the preceding decision and are superseded to this
+extent only. Production thresholds and measurement targets remain unchanged.
+
 ## Revisit when
 
 Production hardware/OS changes, a second production target is proposed, or
