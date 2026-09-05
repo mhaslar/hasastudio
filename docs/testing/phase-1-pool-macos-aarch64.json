@@ -26,5 +26,6 @@
     "crates/rezie-gpu/src/lib.rs": "32159787b63357b9501eeccbb22d0502e363a462e585a9681f8fe297fe3b398f",
     "crates/rezie-gpu/src/pool.rs": "4474647cf68f2a4bbe0074c11fb0cb401d901f4aa264ea44da5e5e7c94acd9d6"
   },
-  "source_state": "Phase 1 working tree; exact source hashes recorded before commit"
+  "source_state": "Phase 1 working tree; exact source hashes recorded before commit",
+  "verified_source_revision": "573dce5daa4bfd210bf2a4f30fd9899f7db0b3e1"
 }

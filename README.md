@@ -3,31 +3,48 @@
 Cross-platform live production switcher. The normative design is
 [docs/SPEC.md](docs/SPEC.md); contribution rules are in [AGENTS.md](AGENTS.md).
 
-Phase 0 implements the engine/control foundation and an empty application
-window. It emits timed `FrameTime` ticks with no pixel payload. GPU frames,
-media inputs, mixing and output protocols begin in later phases.
+**Phase 1 is in progress.** Phase 0 closed conditionally, not fully verified:
+its [Windows reference clock obligation](docs/phases/OUTSTANDING.md) is due at
+the Phase 1 gate. A failing reference measurement reopens Phase 0 and stops
+Phase 1 until rezie-rt is fixed.
 
-Install the toolchain specified in `rust-toolchain.toml`, then:
+The engine/control foundation and empty GUI work. Phase 1 has begun with a
+native GPU context and reusable Rgba16Float frame leases, tested functionally
+on M4/Metal. The pool is not yet integrated into the engine/GUI; shared-device
+preview, file/image/colour sources and NDI output remain in progress. See
+[Phase 1 progress](docs/phases/01-progress.md).
+
+Install the pinned Rust toolchain and cargo-nextest 0.9.143 (see
+[CI/tooling notes](docs/user/ci.md)), then:
 
 ```sh
 cargo xtask fetch-deps
-cargo xtask gen-assets
 cargo build --workspace --locked
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets --locked -- -D warnings
+cargo nextest run --workspace --locked
+cargo test --workspace --doc --locked
 cargo run -p rezie-app
 ```
 
-No FFmpeg, NDI, SRT or CEF installation is needed for Phase 0. `fetch-deps`
-downloads and verifies the real `crossbeam-channel` archive consumed by this
-workspace. Later entries are gated by the phase marker; NDI is never fetched.
-Cargo resolves Rust dependencies separately using the committed lockfile.
+macOS uses the calibrated 500 µs slack. Normal Windows/Linux startup explicitly
+rejects their missing calibrated defaults; correctness harnesses provide an
+explicit diagnostic value. The reference Windows sweep is still due. Native
+dependency fetching is phase-gated and hash-verified; Phase 1 enables the pinned
+Windows FFmpeg archive, which is not linked by this first GPU slice. NDI SDK is
+never fetched, and CEF is never fetched before Phase 10.
 
 ```sh
-cargo xtask ci
-cargo xtask clock-check           # correctness only; suitable for hosted CI
-cargo xtask clock-sweep           # manual M4/Windows slack calibration with CPU-cost curve
-cargo xtask bench                 # ten-minute gate; idle Windows 11 / RX 6800 XT only
-cargo xtask dist --smoke          # package, launch, verify GUI + engine update
+cargo xtask clock-check           # hosted correctness only, explicit zero slack
+cargo xtask clock-sweep           # manual M4/Windows calibration with CPU cost
+cargo xtask bench                 # reference clock obligation; idle Windows RX 6800 XT
+cargo xtask dist --smoke          # package and launch with explicit diagnostic slack
+cargo run -p rezie-gpu --bin rezie-pool-check -- --output target/pool-check.json
 ```
 
-See [Foundation usage](docs/user/foundation.md) and
-[Phase 0 progress](docs/phases/00-progress.md) for evidence and pending gates.
+Phase 0's `xtask gen-assets`, `golden` and aggregate `ci` commands deliberately
+reject the unfinished Phase 1 media/golden scope; use the portable checks above.
+No Phase 1 golden references or production performance result is claimed.
+
+See [Foundation summary](docs/phases/00-summary.md),
+[CI evidence](docs/user/ci.md), and [GPU pool check](docs/user/frame-pool-check.md).

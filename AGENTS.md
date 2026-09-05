@@ -11,7 +11,7 @@ Working agreement for coding agents in this repository. Read this fully before y
 > **Phase: 1 — Media foundation and first picture**
 > Maintained by hand. Update it when a phase gate passes. Never work ahead of it.
 
-Read `docs/phases/` for what previous phases concluded before starting anything. If `docs/phases/NN-summary.md` exists for the current phase, the phase is complete and this line is stale — say so rather than starting the next phase.
+Read `docs/phases/` for what previous phases concluded before starting anything. If `docs/phases/NN-summary.md` exists and records a closed current phase, this line is stale — say so rather than starting the next phase. Exception: a failed outstanding measurement can explicitly reopen a conditionally closed phase; update its summary status and marker, preserve the historical evidence, and stop the next phase as specified below.
 
 ---
 

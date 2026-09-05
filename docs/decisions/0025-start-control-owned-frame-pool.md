@@ -58,7 +58,8 @@ No CPU pixel/frame representation is introduced. The pool only exposes working
 GPU textures/views; ingest/egress colour conversion and compositing are later
 work within Phase 1. Allocation counters count texture/view creation calls,
 not driver-private memory behavior. Empty/exhausted pools and budget/format
-errors are explicit. No implicit fallback adapter or guessed production result.
+errors are explicit. The real-device checker rejects CPU software adapters; no guessed production
+result is permitted.
 
 ## Verification
 
@@ -66,7 +67,7 @@ Run a real-device functional check on M4: reserve, exhaust, share, release,
 reuse repeatedly without new texture/view calls, and grow while old leases
 remain live. Check actual adapter identity and working texture format. Compile-
 fail doctest prevents moving the allocating owner to another thread. Hosted CI
-runs portable validation only; the reference workflow runs the real-device
+runs portable validation only; the reference gate must run the real-device
 check when hardware exists. This does not satisfy the five-minute reference
 allocation criterion, compositor goldens, decoding, NDI output or the Phase 1
 gate. All remain explicitly open in 01-progress.md.
@@ -75,3 +76,13 @@ gate. All remain explicitly open in 01-progress.md.
 
 Integrating GPU completion into dispatch/sinks, adding ingest/egress staging
 resources, or a device/pool requirement cannot be met on the reference GPU.
+
+## Recorded first-slice evidence
+
+The real Metal check on Apple M4 passed 20,000 two-worker acquire/share/release
+cycles, with two initial textures/views, no additional creation calls during
+reuse, and six cumulative textures/views after explicit control-side growth.
+Old/shared leases and byte-budget rejection were checked. Exact tested source
+hashes match commit 573dce5. The report is in docs/testing and is expressly
+functional-only. Hosted run 33991900133 passed all three platforms; no reference
+GPU, compositor, golden or five-minute performance criterion has been evaluated.

@@ -142,3 +142,9 @@ the full-platform keys. This preserves complete release caches independently.
 The 5m09s result predates this final cache-key correction; do not label an
 unmeasured further improvement as observed. No extra timing-only run is needed:
 the next required Phase 1 correctness run will validate cache save behavior.
+
+The required Phase 1 run 33991900133 passed all three platforms after the cache
+split. GitHub's cache inventory confirms distinct main-ref archives: fast Ubuntu
+670,780,230 bytes and full Ubuntu 1,066,205,326 bytes. The full job saved its
+archive after release packaging, so release artifacts are no longer blocked by
+an existing debug-only exact key. No further warm-time improvement was measured.

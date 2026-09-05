@@ -35,9 +35,11 @@ The raw functional report is in
 [phase-1-pool-macos-aarch64.json](../testing/phase-1-pool-macos-aarch64.json),
 with exact source-file hashes. This is not a runtime benchmark, five-minute
 reference allocation test, pixel readback, decoder test or golden comparison.
-The reference hardware has not run this GPU code. Hosted checks for this new
-slice are pending the first implementation push; no unsupported GPU evidence
-will be inferred from them.
+The reference hardware has not run this GPU code. The source hashes match implementation commit `573dce5`. Hosted formatting,
+Clippy, nextest/doctests and packaged GUI launches passed on Windows, macOS
+and Linux in [run 33991900133](https://github.com/mhaslar/hasastudio/actions/runs/33991900133).
+These are portable correctness results; no hosted GPU or performance evidence
+is inferred from them.
 
 ## Remaining gate work
 

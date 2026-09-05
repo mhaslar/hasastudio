@@ -129,5 +129,13 @@
     "sha": "36ba587",
     "build_runs_observed": 0
   },
-  "warm_linux_cache_collision_corrected_after_measurement": true
+  "warm_linux_cache_collision_corrected_after_measurement": true,
+  "cache_key_fix_verification": {
+    "run_id": 33991900133,
+    "sha": "573dce5daa4bfd210bf2a4f30fd9899f7db0b3e1",
+    "all_hosted_platforms": "success",
+    "fast_ubuntu_cache_bytes": 670780230,
+    "full_ubuntu_cache_bytes": 1066205326,
+    "additional_warm_timing_measured": false
+  }
 }
