@@ -1,0 +1,6 @@
+/target/
+/.deps/
+/dist/
+/.logs/
+*.partial
+.DS_Store

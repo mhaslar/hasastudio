@@ -1,0 +1,36 @@
+{
+  "os": "macos",
+  "architecture": "aarch64",
+  "duration_seconds": 600,
+  "expected_ticks": 30001,
+  "received_ticks": 30001,
+  "clock": {
+    "last_frame": {
+      "index": 30000,
+      "pts": {
+        "secs": 600,
+        "nanos": 0
+      }
+    },
+    "emitted": 30001,
+    "max_lateness_ns": 139018291,
+    "final_lateness_ns": 1150958,
+    "deadline_misses": 22
+  },
+  "sinks": [
+    {
+      "id": 0,
+      "dispatched": 30001,
+      "dropped": 0,
+      "queued": 0
+    },
+    {
+      "id": 1,
+      "dispatched": 30001,
+      "dropped": 29999,
+      "queued": 2
+    }
+  ],
+  "observed_fps": 49.99990408701731,
+  "passed": true
+}

@@ -1,0 +1,5 @@
+{
+  "phase": 0,
+  "pixel_assets": [],
+  "reason": "Phase 0 dispatches FrameTime only; GPU pixels begin in Phase 1 (ADR 0001)."
+}

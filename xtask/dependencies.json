@@ -1,0 +1,24 @@
+{
+  "dependencies": [
+    {
+      "name": "crossbeam-channel",
+      "version": "0.5.15",
+      "from_phase": 0,
+      "platform": "all",
+      "url": "https://static.crates.io/crates/crossbeam-channel/crossbeam-channel-0.5.15.crate",
+      "sha256": "82b8f8f868b36967f9606790d1903570de9ceaf870a7bf9fbbd3016d636a2cb2",
+      "filename": "crossbeam-channel-0.5.15.crate",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "ffmpeg",
+      "version": "7.1.1-57-g1b48158a23",
+      "from_phase": 1,
+      "platform": "windows-x86_64",
+      "url": "https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2025-08-31-13-00/ffmpeg-n7.1.1-57-g1b48158a23-win64-lgpl-shared-7.1.zip",
+      "sha256": "e1b36a261be92f632e8e4d35077a6154520c686dd0bb451508bfefdcd4804f55",
+      "filename": "ffmpeg-n7.1.1-57-g1b48158a23-win64-lgpl-shared-7.1.zip",
+      "license": "LGPL shared; audit bundled notices before Phase 1 linking (ADR 0004)"
+    }
+  ]
+}

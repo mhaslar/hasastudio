@@ -32,6 +32,15 @@ Foundation supports GetState, SetProjectName and Shutdown, with request IDs and 
 
 WebSocket integration tests for mutation, rejection, malformed input and shutdown; in-process tests for matching state/revisions.
 
+The headless binary may write its actual bound address to a harness-only
+`--ready-file` after binding port zero. This avoids choosing a free port and
+then racing another process to bind it. A subprocess integration test connects
+to that address, verifies a correlated reply and shuts down the binary.
+
+Transport failures use `TransportError` with an explicit `may_have_applied`
+flag. A timed-out command must never be represented as an engine rejection
+that falsely promises no mutation occurred.
+
 ## Revisit when
 
 API evolution in subsequent phases.

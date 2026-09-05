@@ -1,0 +1,27 @@
+name: Reference-machine measurements
+on:
+  schedule:
+    - cron: '17 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reference:
+    # Provision a trusted RX 6800 XT machine with these labels before enabling.
+    runs-on: [self-hosted, rezie-reference]
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - run: rustup toolchain install 1.88.0 --profile minimal --component rustfmt --component clippy
+      - run: cargo xtask fetch-deps
+      - run: cargo xtask bench
+      - run: cargo xtask soak --minutes 30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reference-phase-0
+          path: |
+            docs/benchmarks/*.json
+            target/soak.json

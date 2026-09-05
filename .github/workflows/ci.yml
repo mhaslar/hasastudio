@@ -1,0 +1,55 @@
+name: Phase 0 acceptance
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  foundation:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-14, windows-2022]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned Rust
+        run: rustup toolchain install 1.88.0 --profile minimal --component rustfmt --component clippy
+      - name: Linux display and Vulkan software driver
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y pkg-config libx11-dev libxkbcommon-dev libwayland-dev libvulkan1 mesa-vulkan-drivers xvfb
+      - name: Fetch and verify current-phase dependencies
+        run: cargo xtask fetch-deps
+      - name: Generate current-phase assets
+        run: cargo xtask gen-assets
+      - name: Formatting
+        run: cargo fmt --all -- --check
+      - name: Clippy
+        run: cargo clippy --workspace --all-targets --locked -- -D warnings
+      - name: Workspace tests
+        run: cargo test --workspace --locked
+      - name: Golden path inventory
+        run: cargo xtask golden
+      - name: Ten-minute clock and dispatch acceptance
+        run: cargo xtask bench
+      - name: Package and launch GUI (Linux)
+        if: runner.os == 'Linux'
+        run: xvfb-run -a cargo xtask dist --smoke
+      - name: Package and launch GUI (macOS and Windows)
+        if: runner.os != 'Linux'
+        run: cargo xtask dist --smoke
+      - name: Preserve bundle and measured evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-0-${{ matrix.os }}
+          path: |
+            dist/
+            docs/benchmarks/*.json
+            target/dist-smoke.txt
+            .logs/
+          if-no-files-found: warn
