@@ -204,3 +204,22 @@ inferred from approving files or M4 success. Phase 1 remains open; decode and
 fallback, shared-device preview, NDI, allocation and load measurements follow
 in the approved sequence. Phase 4 notes carry the observed precision and
 repeated-blend accumulation follow-up without implementing overlays now.
+
+
+## Reference golden inventory passed
+
+The owner committed the fresh Windows golden run in `e252a0e`. Its
+[audit](../testing/phase-1-golden-windows-x86_64/audit.json) verifies native
+Windows 11 build 26200 / RX 6800 XT / D3D12 execution and all five scenes:
+mean/max ΔE00 zero on both backgrounds, alpha error zero, raw-linear difference
+zero. All 83,525 pixels and ten freshly rendered files match the approved
+reference bytes. Source and manifest hashes resolve with CRLF line endings;
+the embedded and standalone renderer reports agree. An independent raw/PNG
+audit reconstructs the numerical pipeline checks. The corresponding M4 run
+remains a development pass with worst maximum ΔE00 0.00284570.
+
+The colour/alpha golden inventory now passes on both required native targets.
+Phase 1 is still open: this is the control-side diagnostic, not integrated
+preview/decode/NDI or five-minute allocation and real-load timing evidence.
+The slice is ready for its one full CI matrix and PR. Binary Git attributes
+protect the approved image/readback bytes from automatic text conversion.

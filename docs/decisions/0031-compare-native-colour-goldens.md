@@ -80,3 +80,18 @@ and commit its report. Reference approval alone is not this test result.
 New scenes, sampling or overlays expose an inadequate comparator. Any
 reference change requires review; any change to SPEC thresholds requires an ADR
 and human decision. Phase 4 tracks error versus repeated-blend count.
+
+## Native reference result
+
+The owner supplied the fresh Windows run in `e252a0e`, measured implementation
+`c915210`. [The audit](../testing/phase-1-golden-windows-x86_64/audit.json)
+verifies all five renders (83,525 pixels) against the approved files: zero
+mean/max ΔE00, zero alpha difference, zero raw-linear difference. Windows 11
+build 26200, RX 6800 XT / D3D12 and driver 32.0.21045.5002 are recorded. Source
+and reference-manifest hashes match the Windows CRLF checkout. The independent
+renderer audit reconstructs the separate ideal/egress metrics from raw samples.
+This passes this native golden inventory, not the remaining Phase 1 gate.
+
+Git displayed some `.rgba16f.le` files as text. Explicit binary attributes
+protect all raw readbacks and PNGs against newline conversion and text merges;
+no approved file bytes are changed by this protection.

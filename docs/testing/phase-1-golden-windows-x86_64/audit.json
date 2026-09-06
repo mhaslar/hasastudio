@@ -1,0 +1,121 @@
+{
+  "ruling": "PASS: native reference golden comparison verified",
+  "evidence_commit": "e252a0ed00bf58982e1f485c9062c632ff65a9e4",
+  "measured_implementation": "c915210b3e2eb8d88a8f2100cf2f779c3e736cd3",
+  "host": {
+    "cpu": [
+      {
+        "Name": "Intel(R) Core(TM) i5-14600K",
+        "NumberOfCores": 14,
+        "NumberOfLogicalProcessors": 20
+      }
+    ],
+    "gpu": [
+      {
+        "DriverVersion": "32.0.21045.5002",
+        "Name": "AMD Radeon RX 6800 XT"
+      }
+    ],
+    "memory_bytes": 34102353920,
+    "os": {
+      "BuildNumber": "26200",
+      "Caption": "Microsoft Windows 11 Pro",
+      "Version": "10.0.26200"
+    }
+  },
+  "source_and_manifest_line_endings": "CRLF; hashes verified against corresponding LF checkout content",
+  "comparisons": [
+    {
+      "comparison": {
+        "max_alpha_error": 0.0,
+        "max_delta_e00": [
+          0.0,
+          0.0
+        ],
+        "max_raw_linear_error": 0.0,
+        "mean_alpha_error": 0.0,
+        "mean_delta_e00": [
+          0.0,
+          0.0
+        ],
+        "passed": true,
+        "pixels": 16705
+      },
+      "name": "black"
+    },
+    {
+      "comparison": {
+        "max_alpha_error": 0.0,
+        "max_delta_e00": [
+          0.0,
+          0.0
+        ],
+        "max_raw_linear_error": 0.0,
+        "mean_alpha_error": 0.0,
+        "mean_delta_e00": [
+          0.0,
+          0.0
+        ],
+        "passed": true,
+        "pixels": 16705
+      },
+      "name": "white"
+    },
+    {
+      "comparison": {
+        "max_alpha_error": 0.0,
+        "max_delta_e00": [
+          0.0,
+          0.0
+        ],
+        "max_raw_linear_error": 0.0,
+        "mean_alpha_error": 0.0,
+        "mean_delta_e00": [
+          0.0,
+          0.0
+        ],
+        "passed": true,
+        "pixels": 16705
+      },
+      "name": "colour"
+    },
+    {
+      "comparison": {
+        "max_alpha_error": 0.0,
+        "max_delta_e00": [
+          0.0,
+          0.0
+        ],
+        "max_raw_linear_error": 0.0,
+        "mean_alpha_error": 0.0,
+        "mean_delta_e00": [
+          0.0,
+          0.0
+        ],
+        "passed": true,
+        "pixels": 16705
+      },
+      "name": "translucent"
+    },
+    {
+      "comparison": {
+        "max_alpha_error": 0.0,
+        "max_delta_e00": [
+          0.0,
+          0.0
+        ],
+        "max_raw_linear_error": 0.0,
+        "mean_alpha_error": 0.0,
+        "mean_delta_e00": [
+          0.0,
+          0.0
+        ],
+        "passed": true,
+        "pixels": 16705
+      },
+      "name": "transparent"
+    }
+  ],
+  "verification": "Every fresh PNG and raw binary16 file matches the approved bytes exactly, independently confirming zero delta-E, alpha and raw differences. Renderer numerical metrics independently reconstructed in render/audit.json. Host, bounds, input, source hashes and embedded renderer report verified.",
+  "phase_1_complete": false
+}

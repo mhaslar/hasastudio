@@ -127,7 +127,8 @@ recomputed all exported RGBA expectations and checked the linear midpoint and
 hidden-RGB anchors. Inspect the linked Windows images with the band legend.
 The 16-bit images and exact raw readbacks are now audited and proposed with
 new hashes. Final human approval has been received and the ten files are installed. A
-subsequent reference-machine golden comparison remains pending.
+subsequent reference-machine golden comparison has now passed (ADR 0031,
+Windows evidence `e252a0e`). Remaining Phase 1 acceptance still applies.
 
 ## Revisit when
 
