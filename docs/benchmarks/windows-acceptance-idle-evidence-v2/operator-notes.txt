@@ -1,0 +1,1 @@
+Computer was idle during the test with only Microsoft Edge and VS Code open in the background.
