@@ -122,7 +122,7 @@ pub(super) fn run(arguments: Vec<String>) -> Result<()> {
         "candidate_order_us": slacks,
         "started_unix_seconds": SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs(),
         "source": source_metadata()?,
-        "cpu_clock": if cfg!(windows) { "GetThreadTimes: kernel + user, 100 ns units; OS accounting granularity applies" } else { "clock_gettime(CLOCK_THREAD_CPUTIME_ID)" },
+        "cpu_clock": if cfg!(windows) { "GetThreadTimes: kernel + user, 100 ns units NOT resolution; reference totals quantized to 15.625 ms; short spin deltas can be zero; CPU columns not accuracy-equivalent to Unix thread clocks (ADR 0027)" } else { "clock_gettime(CLOCK_THREAD_CPUTIME_ID)" },
         "instrumentation": "two CPU-time queries per finishing-spin segment; total clock-thread CPU also recorded; disabled for ten-minute acceptance",
         "native_budget": "computation = max(2 ms, slack + 500 us), constraint = computation + 1 ms at 50 Hz; actual policy/budgets in every report",
         "selection": "none; inspect the curve and choose the smallest slack comfortably above degradation"

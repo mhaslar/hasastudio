@@ -54,3 +54,33 @@ insufficient. Pay OUTSTANDING.md before this phase can close.
 Phase 0's gen-assets/golden commands still reject Phase 1 explicitly; their
 Phase 1 media/golden implementation is not presented as complete. The manual
 Phase 0 clock sweep/bench remains available independently of that work.
+
+## Sequence once the reference obligation is paid
+
+The reference host is available for manual tests, but v2's unexplained CPU load
+means the clock obligation is not yet paid. No new Phase 1 implementation is
+included in this audit slice. Availability does not waive idle, GPU or codec
+verification, and it does not imply a self-hosted runner is configured.
+
+The golden-reference policy is unchanged: normative goldens originate only on
+Windows 11 / RX 6800 XT, with human review before updating references. M4 is a
+required Metal correctness check, not a source of normative references; hosted
+lavapipe remains optional/non-blocking and never updates them.
+
+After adequate clock evidence, validate the existing GPU context/FramePool on
+RX 6800 XT immediately, including working-format/limit support and the D3D12
+path (and Vulkan where shipped). Then implement the deterministic colour +
+alpha-PNG ingest/composite path and shared-device preview, checking numerical
+colour/alpha expectations before proposing the first reference goldens for
+human review. Do not bless whatever pixels the current renderer produces.
+Bring file decode and explicit hardware/software selection into that validated
+path, testing native Windows decode and fallback early. Add the single NDI
+output with the user-installed SDK and verify it in NDI Studio Monitor. Finish
+reference five-minute steady-state allocation evidence and the reduced M4
+2-input/1-output 1080p50 diagnostic; retain actual decoder assertions on
+appropriately equipped macOS/Linux workers. AMF *encoding* remains Phase 5.
+
+The change in sequencing is earlier production-backend feedback for each small
+slice instead of accumulating Metal-only code and waiting until the gate to
+try Windows. Every shader/compositor slice still needs reference execution and
+M4 checks before the gate; one ready PR/full run per slice remains the rule.

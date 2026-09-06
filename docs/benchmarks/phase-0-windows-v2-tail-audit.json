@@ -1,0 +1,201 @@
+{
+  "tail": [
+    {
+      "index": 2655,
+      "seconds": 53.1,
+      "lateness_us": 89.9
+    },
+    {
+      "index": 5786,
+      "seconds": 115.72,
+      "lateness_us": 25.8
+    },
+    {
+      "index": 6564,
+      "seconds": 131.28,
+      "lateness_us": 27.5
+    },
+    {
+      "index": 6634,
+      "seconds": 132.68,
+      "lateness_us": 46.3
+    },
+    {
+      "index": 6684,
+      "seconds": 133.68,
+      "lateness_us": 31.7
+    },
+    {
+      "index": 6724,
+      "seconds": 134.48,
+      "lateness_us": 28.7
+    },
+    {
+      "index": 6759,
+      "seconds": 135.18,
+      "lateness_us": 29.6
+    },
+    {
+      "index": 6769,
+      "seconds": 135.38,
+      "lateness_us": 30.7
+    },
+    {
+      "index": 6774,
+      "seconds": 135.48,
+      "lateness_us": 30.9
+    },
+    {
+      "index": 6779,
+      "seconds": 135.58,
+      "lateness_us": 28.4
+    },
+    {
+      "index": 6794,
+      "seconds": 135.88,
+      "lateness_us": 30.7
+    },
+    {
+      "index": 6814,
+      "seconds": 136.28,
+      "lateness_us": 27.8
+    },
+    {
+      "index": 6834,
+      "seconds": 136.68,
+      "lateness_us": 37.0
+    },
+    {
+      "index": 18238,
+      "seconds": 364.76,
+      "lateness_us": 78.8
+    },
+    {
+      "index": 18810,
+      "seconds": 376.2,
+      "lateness_us": 102.4
+    },
+    {
+      "index": 21383,
+      "seconds": 427.66,
+      "lateness_us": 128.5
+    },
+    {
+      "index": 23408,
+      "seconds": 468.16,
+      "lateness_us": 122.6
+    },
+    {
+      "index": 25387,
+      "seconds": 507.74,
+      "lateness_us": 35.9
+    },
+    {
+      "index": 25397,
+      "seconds": 507.94,
+      "lateness_us": 31.3
+    },
+    {
+      "index": 25422,
+      "seconds": 508.44,
+      "lateness_us": 28.7
+    },
+    {
+      "index": 25452,
+      "seconds": 509.04,
+      "lateness_us": 31.5
+    },
+    {
+      "index": 25522,
+      "seconds": 510.44,
+      "lateness_us": 33.9
+    },
+    {
+      "index": 25552,
+      "seconds": 511.04,
+      "lateness_us": 49.3
+    },
+    {
+      "index": 25557,
+      "seconds": 511.14,
+      "lateness_us": 36.7
+    },
+    {
+      "index": 25567,
+      "seconds": 511.34,
+      "lateness_us": 28.5
+    },
+    {
+      "index": 25572,
+      "seconds": 511.44,
+      "lateness_us": 28.7
+    },
+    {
+      "index": 25577,
+      "seconds": 511.54,
+      "lateness_us": 30.5
+    },
+    {
+      "index": 25692,
+      "seconds": 513.84,
+      "lateness_us": 27.5
+    },
+    {
+      "index": 25697,
+      "seconds": 513.94,
+      "lateness_us": 29.6
+    },
+    {
+      "index": 25817,
+      "seconds": 516.34,
+      "lateness_us": 32.2
+    }
+  ],
+  "gaps_seconds": [
+    62.62,
+    15.56,
+    1.4,
+    1.0,
+    0.8,
+    0.7,
+    0.2,
+    0.1,
+    0.1,
+    0.3,
+    0.4,
+    0.4,
+    228.08,
+    11.44,
+    51.46,
+    40.5,
+    39.58,
+    0.2,
+    0.5,
+    0.6,
+    1.4,
+    0.6,
+    0.1,
+    0.2,
+    0.1,
+    0.1,
+    2.3,
+    0.1,
+    2.4
+  ],
+  "count_per_minute": [
+    1,
+    1,
+    11,
+    0,
+    0,
+    0,
+    2,
+    2,
+    13,
+    0
+  ],
+  "source_commit": "5282c5f",
+  "source_report": "phase-0-idle-windows-x86_64.json",
+  "threshold_ns": 25500,
+  "ruling": "INADEQUATE idle evidence; numerical bounds met"
+}

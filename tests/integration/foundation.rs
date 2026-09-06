@@ -154,6 +154,24 @@ fn calibration_retains_samples_and_actual_cpu_cost_without_a_latency_gate() {
     assert_eq!(report.latency_passed, None);
     assert_eq!(report.scheduling.finishing_slack_ns, 500_000);
     assert_eq!(report.lateness.samples_ns.len(), 51);
+    let encoded = serde_json::to_value(&report).unwrap();
+    let observed = encoded["observed_ticks"].as_array().unwrap();
+    assert_eq!(observed.len(), 51);
+    for (index, frame) in observed.iter().enumerate() {
+        assert_eq!(frame["index"].as_u64().unwrap(), index as u64);
+        let pts = frame["pts"]["secs"].as_u64().unwrap() * 1_000_000_000
+            + frame["pts"]["nanos"].as_u64().unwrap();
+        assert_eq!(pts, index as u64 * 20_000_000);
+    }
+    // Keep an erroneous observation verbatim: serialization is evidence, not repair.
+    let mut unusual = report.observed_ticks[0];
+    unusual.index = 7;
+    unusual.pts = Duration::from_nanos(123);
+    let mut report = report;
+    report.observed_ticks[0] = unusual;
+    let encoded = serde_json::to_value(&report).unwrap();
+    assert_eq!(encoded["observed_ticks"][0]["index"], 7);
+    assert_eq!(encoded["observed_ticks"][0]["pts"]["nanos"], 123);
     let cost = report.wait_profile.unwrap();
     assert!(cost.thread_wall_ns > 0);
     assert!(cost.thread_cpu_ns >= cost.spin_cpu_ns);

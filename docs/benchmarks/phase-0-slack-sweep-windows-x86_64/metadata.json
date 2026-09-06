@@ -1,0 +1,46 @@
+{
+  "architecture": "x86_64",
+  "candidate_order_us": [
+    1500,
+    0,
+    5000,
+    500,
+    3000,
+    1000
+  ],
+  "cpu_clock": "GetThreadTimes: kernel + user, 100 ns units; OS accounting granularity applies",
+  "host": {
+    "cpu": [
+      {
+        "Name": "Intel(R) Core(TM) i5-14600K",
+        "NumberOfCores": 14,
+        "NumberOfLogicalProcessors": 20
+      }
+    ],
+    "gpu": [
+      {
+        "DriverVersion": "32.0.21045.5002",
+        "Name": "AMD Radeon RX 6800 XT"
+      }
+    ],
+    "memory_bytes": 34102353920,
+    "os": {
+      "BuildNumber": "26200",
+      "Caption": "Microsoft Windows 11 Pro",
+      "Version": "10.0.26200"
+    }
+  },
+  "instrumentation": "two CPU-time queries per finishing-spin segment; total clock-thread CPU also recorded; disabled for ten-minute acceptance",
+  "kind": "slack-calibration-not-acceptance",
+  "native_budget": "computation = max(2 ms, slack + 500 us), constraint = computation + 1 ms at 50 Hz; actual policy/budgets in every report",
+  "os": "windows",
+  "seconds_per_candidate": 60,
+  "selection": "none; inspect the curve and choose the smallest slack comfortably above degradation",
+  "source": {
+    "captured_unix_seconds": 1788680095,
+    "git_revision": "c891d86af63a1f89a96860a84901b5f0e705620c",
+    "git_worktree": "",
+    "rustc_vV": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-pc-windows-msvc\nrelease: 1.98.1\nLLVM version: 22.1.8"
+  },
+  "started_unix_seconds": 1788680095
+}

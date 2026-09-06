@@ -46,10 +46,14 @@ pub fn calibrated_slack() -> io::Result<Duration> {
     ))
 }
 
-/// Optional diagnostic accounting; all CPU durations are actual thread CPU time.
+/// Optional OS CPU accounting, subject to the platform counter's resolution.
+/// Windows GetThreadTimes can quantize short segments to zero; its 100 ns
+/// units do not imply 100 ns accuracy. Do not equate these CPU columns with
+/// Unix thread-clock accuracy or substitute spin wall time (ADR 0027).
 #[derive(Debug, Default, Clone, Copy, Serialize, Deserialize)]
 pub struct WaitProfile {
-    /// CPU nanoseconds inside measured finishing-spin segments, including query overhead.
+    /// Sum of OS CPU-counter deltas around finishing-spin segments, including query overhead.
+    /// Zero may mean unresolved accounting, not absence of spinning.
     pub spin_cpu_ns: u64,
     /// Wall nanoseconds in finishing-spin segments; may include descheduling.
     pub spin_wall_ns: u64,
