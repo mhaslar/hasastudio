@@ -1,17 +1,21 @@
 # Windows clock evidence required after the 2026-09-06 audit
 
-V2 contains the sweep and ten-minute report. Both meet numerical bounds, but
-idle evidence reports about 11% total CPU with incomplete process attribution;
-the notes omit active Task Manager. Phase 0 remains conditionally closed with
-its obligation OPEN. **1,000 µs remains the reviewed Windows rerun candidate**.
+**V2 is accepted; no rerun is required to close Phase 0.** ADR 0028 records
+the owner's revised load-admission rule and pays the obligation. Windows is
+pinned to 1,000 µs. Preserve v2 and the first sweep unchanged.
 
-First diagnose the idle telemetry with the short preflight below; do not repeat
-seventeen minutes blindly. Close Task Manager, pause competing work identified
-by the counters, and retain actual operator notes. The next sweep and acceptance
-must include replayable observed PTS, recorded power configuration, and idle
-telemetry sufficient to reconcile machine load. Keep all v2 files unchanged.
-The PowerShell procedure is for manual execution on the reference machine;
-it has not been executed there by the agent.
+Record background load; absence is not required for a pass with at least 10x
+margin on every positive timing bound. For a failure or a pass with less
+margin, collect idle evidence before ruling in either direction. Exact index
+and PTS correctness are never relaxed. The existing 155.642x maximum and
+196.078x p99.9 margins admit v2 despite the recorded activity.
+
+The following procedure remains available for **future** calibration/regression
+measurements. A short preflight can investigate unexplained CPU load when
+needed; it is not a prerequisite for the already accepted v2 run. Raw counter
+collection and independent observed-PTS verification remain useful. These
+PowerShell instructions are for manual execution, not a claim that the agent
+executed them on Windows.
 
 ## Prepare before allowing the machine to settle
 
@@ -42,7 +46,7 @@ powercfg /getactivescheme
 ```
 
 Stop builds, media, games and other active work, allow updates/indexing to
-settle, and keep the machine otherwise idle throughout measurement. Do not
+settle where practical, and record actual activity throughout measurement. Do not
 change affinity, scheduling code or timer settings to obtain a passing result.
 Record whether remote-control software is running. The lightweight recorder
 below is the only additional diagnostic workload; its own CPU appears in the
@@ -116,9 +120,9 @@ function Invoke-RecordedClockRun {
 
 The per-process `CPU` field is cumulative CPU seconds, not an instantaneous
 percentage. Differences between successive samples show active processes.
-Keep the full record, not just a favorable screenshot or an average. If the
-monitor failed, a substantial competing workload ran, or the plan changed,
-retain that run but do not submit it as idle acceptance.
+Keep the full record, not just a favorable screenshot or an average. If the monitor failed or the plan changed, preserve that information. Do not
+claim idle conditions that were not observed; recorded competing load by itself
+does not invalidate a high-margin pass.
 
 ## Diagnose idleness before the long runs
 
@@ -139,7 +143,8 @@ machine-wide CPU. Match PID and name between samples; process turnover and
 protected processes must be reported, not treated as zero. If raw data disagrees
 with the formatted value, retain both for review rather than picking the lower.
 
-If the unexplained load persists, send this short preflight first. Do not
+For a failing or low-margin run needing idle confirmation, if unexplained
+load persists, send this short preflight first. Do not
 silently disable services or declare the host idle from a threshold. Identify
 and pause actual competing work. If attribution remains incomplete, a separate
 WPR/ETW diagnostic trace can resolve it before the acceptance measurement;
@@ -186,10 +191,10 @@ Expected acceptance files:
   access, interruptions and whether the machine remained idle. Record actual
   observations; do not fill in a boilerplate assertion after a loaded run.
 
-The bounds remain **zero skipped indices; exact PTS; final drift <20 ms;
+The numerical bounds remain **zero skipped indices; exact PTS; final drift <20 ms;
 maximum lateness <20 ms; p99.9 <5 ms** at 50 Hz. Do not interpret sweep
-`passed: true` or `latency_passed: null` as acceptance. If the genuine
-acceptance run fails, stop: Phase 0 reopens and Phase 1 work must stop.
+`passed: true` or `latency_passed: null` as acceptance. If a future run fails or passes with less than tenfold margin, obtain idle
+evidence before ruling on it; preserve all attempts and do not relax a bound.
 
 Commit all raw and host/idle evidence on an evidence branch and submit one PR;
 do not push directly to main. Restore the original power plan using its saved

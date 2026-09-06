@@ -6,6 +6,10 @@
 - **Decided by:** human review
 - **Affects:** SPEC §§0, 2, 13–14, AGENTS.md, phase gates, CI, benchmarks
 
+**Current ruling (ADR 0028): PASS.** Windows v2 pays the Phase 0 obligation;
+Windows slack is pinned to 1,000 µs. Earlier pending/INADEQUATE statements below
+are retained audit history, superseded by the final owner ruling at the end.
+
 ## Context
 
 The production machine is Windows 11 with an RX 6800 XT. The Apple M4 is a
@@ -434,6 +438,59 @@ cycle counters cannot be substituted as nanoseconds.
 
 References: [Microsoft counter semantics](https://learn.microsoft.com/en-us/windows/win32/perfctrs/collecting-performance-data)
 and [raw WMI sampling](https://learn.microsoft.com/en-us/windows/win32/wmisdk/wmi-tasks--performance-monitoring).
+
+### Final owner ruling — PASS, obligation PAID (ADR 0028)
+
+The owner amended SPEC §13: record background load; a reference pass with at
+least 10x margin on every positive timing bound is admissible despite that
+load. For a failure or a pass with less margin, obtain idle evidence before
+ruling in either direction. Zero index errors and exact PTS remain mandatory.
+The thresholds themselves have not changed. The earlier INADEQUATE ruling
+applied the then-current idle requirement; the owner has superseded that
+requirement and accepts v2. **Phase 0 is closed, no longer conditionally closed.**
+
+The 30,001-tick, 600-second Windows report has final drift 0.300 µs,
+maximum lateness 128.500 µs and p99.9 25.500 µs. Relative to 20 ms / 20 ms /
+5 ms bounds, those give margins **66,666.667x / 155.642x / 196.078x**.
+Native scheduling and timer request succeeded; the live harness recorded zero
+index/PTS errors. No missing historical PTS records have been fabricated.
+The accepted source predates PR #3's observed-PTS export, which stays in place
+for future reports. All raw measurements and CPU/load evidence remain intact.
+
+Pin Windows to **1,000 µs**, the smallest tested slack in the low-tail region
+before the clear 500 µs degradation in both Windows sweeps above. macOS remains
+500 µs. Record the [payment in history](https://github.com/mhaslar/hasastudio/blob/ecf07b5/docs/phases/OUTSTANDING.md)
+and remove the discharged ledger. No repeat clock measurement is owed.
+
+The two clusters at **131–137 s** and **508–516 s** are known characteristics
+of this reference measurement, **not defects**. Re-check their count, size,
+spacing and timing distribution in Phase 1 under actual per-tick work. Empty
+ticks have ample measured headroom, but media/compositing will consume it.
+This is Phase 1 validation work, not a new Phase 0 debt item.
+
+The recorder's Get-Process/ConvertTo-Json work and open Task Manager, Edge and
+VS Code are plausible background contributors. The recorded data does not
+fully attribute the load; no attribution is needed for this high-margin pass.
+Task Manager may have been opened to inspect idleness, as the owner explains;
+the difference from the notes is not evidence of misconduct or a reason to
+reject this result. Preserve the telemetry without requiring a new preflight.
+
+**Platform lesson:** Windows wins decisively at ten-minute p50 and p99
+(0.200/0.900 µs versus M4 1.500/16.625 µs, about 18.5x at p99), but loses at
+ten-minute p99.9 (**25.500 versus 18.250 µs**). The owner generalized the
+short sweep's favorable Windows tail into the longer-run comparison; that
+was incorrect and the audit's correction stands. The short sweep was
+misleading about the tail. **Longer runs reveal tail behavior that short
+ones hide**, even while central percentiles improve. This is a measurement
+lesson, not a universal ranking of platforms. The M4 ten-minute run used
+1.5 ms slack; its current 0.5 ms value came from the separately recorded sweep.
+
+PR #3's observed-PTS serialization, 15.625 ms quantization documentation,
+preferred power plan, evidence overwrite protection and restoration of the
+original sweep remain unchanged. Normative golden references still come only
+from Windows/RX 6800 XT and require human review. The approved Phase 1 sequence
+begins with the existing FramePool there, followed by deterministic colour/alpha
+rendering, reviewed goldens, decode/fallback and NDI.
 
 ## Revisit when
 

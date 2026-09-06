@@ -90,6 +90,10 @@ The timing margins are **155.642× maximum**, **196.078× p99.9**, and
 reports MMCSS Pro Audio and a successful 1 ms timer request. Verify normal
 Windows startup selects the pin; run portable checks and one PR full matrix.
 No additional reference clock run is necessary to pay this obligation.
+Local fmt, strict workspace Clippy, 20 nextest checks and two compile-fail
+doctests passed. The normal-start integration test now checks 1,000 µs on
+Windows, 500 µs on macOS and explicit missing calibration on Linux. The PR's
+single full run verifies the Windows branch; local Mac checks do not claim it.
 
 ## Revisit when
 

@@ -53,3 +53,11 @@ The current marker advances only after the conditional closure is recorded.
 
 The Windows reference result is supplied. Success pays the item; failure
 reopens Phase 0 and halts Phase 1 pending correction.
+
+## Subsequent owner ruling — ADR 0028
+
+The Windows v2 result is accepted under SPEC §13's recorded-load / tenfold-margin
+rule. Windows is pinned to 1,000 µs; the Phase 0 obligation is PAID and its
+ledger removed. Phase 0 is closed and Phase 1 resumes. Earlier pending or
+INADEQUATE statements in this ADR are historical. Observed-PTS serialization,
+accounting limitations, preferred power plan and evidence protection remain.

@@ -139,7 +139,7 @@ in the phase summary that the phase is not fully verified.
 - At most **ONE** outstanding item exists at any time. While one is open,
   no phase may close conditionally. This is a hard cap, not guidance.
 - Phase N+1 cannot close until Phase N's outstanding item is paid.
-  Phase 0's reference-clock item is due at the Phase 1 gate.
+  Phase 0's reference-clock item was paid under ADR 0028; no open item remains.
 - If the Windows reference measurement fails, Phase 0 reopens and Phase 1
   work stops until `rezie-rt` is fixed. Never relax the latency criterion.
 

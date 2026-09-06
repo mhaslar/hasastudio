@@ -1,33 +1,38 @@
-# Phase 0 — Foundation (conditionally closed)
+# Phase 0 — Foundation (closed)
 
-**Conditionally closed by explicit owner ruling (ADR 0023), not fully verified.**
-The next phase is Phase 1. Exactly one obligation remains in
-[OUTSTANDING.md](OUTSTANDING.md): the Windows 11 / RX 6800 XT clock benchmark,
-including that platform's slack sweep, blocked on adequate idle evidence and
-**due at the Phase 1 gate**. M4 measurements do not satisfy that obligation.
-If the Windows measurement fails, Phase 0 reopens and Phase 1 work stops until
-rezie-rt is fixed. No further conditional closure is permitted while it is open.
+**Closed — 2026-09-06, under the owner-approved criterion in ADR 0028.**
+The Windows 11 / RX 6800 XT reference-clock obligation is **PAID**. No
+outstanding Phase 0 item remains and Phase 1 resumes. The former conditional
+closure is now complete; its payment is retained in
+[git history](https://github.com/mhaslar/hasastudio/blob/ecf07b5/docs/phases/OUTSTANDING.md).
 
-## Windows evidence review — 2026-09-06
+## Reference acceptance
 
-The committed Windows sweep is internally consistent, but no ten-minute
-Windows report is committed. Power plan and idle evidence are missing. This
-is incomplete evidence, so conditional closure and the single OPEN obligation
-remain unchanged; no Windows default is pinned. At candidate 1 ms, the
-60-second Windows p50/p99/p99.9/max are 0.600/1.300/9.400/30.700 µs, final
-0.400 µs, recorded spin CPU 0.833% and whole-thread CPU 2.500%. All six trials
-confirm successful MMCSS Pro Audio and timeBeginPeriod(1). See the full curve,
-CPU-accounting limits and M4 comparison in [ADR 0021](../decisions/0021-assign-platform-evidence.md#windows-evidence-audit--2026-09-06).
-A successful short calibration trial is not ten-minute acceptance.
+The accepted [Windows v2 ten-minute report](../benchmarks/phase-0-idle-windows-x86_64.json)
+and [sweep](../benchmarks/phase-0-slack-sweep-windows-x86_64-v2/summary.json)
+record 30,001 ticks, zero index/PTS errors, confirmed MMCSS Pro Audio and a
+successful 1 ms timer request. Host metadata identifies Windows 11 build 26200,
+i5-14600K and RX 6800 XT; High Performance and the background-load telemetry
+are retained. Windows finishing slack is **1,000 µs**.
 
-## Windows v2 review — still not fully verified
+| Timing bound | Observed | Limit | Margin |
+| --- | ---: | ---: | ---: |
+| Final drift | 0.300 µs | <20,000 µs | 66,666.667x |
+| Maximum lateness | 128.500 µs | <20,000 µs | 155.642x |
+| p99.9 lateness | 25.500 µs | <5,000 µs | 196.078x |
 
-The ten-minute v2 report meets all numeric bounds: p50/p99/p99.9/max
-0.200/0.900/25.500/128.500 µs, final drift 0.300 µs. Scheduling and High
-Performance are confirmed. Idle evidence remains INADEQUATE: roughly 11%
-reported total CPU is not reconciled with the partially readable per-process
-counters. Thirty samples exceed p99.9, mostly in two clusters. ADR 0021 records
-the full audit. No obligation is paid and no timing bound is relaxed.
+p50/p99 are 0.200/0.900 µs. Every positive timing bound has more than tenfold
+margin, so recorded background load does not invalidate this pass under the
+amended criterion. Earlier audit rulings applied the superseded idle rule;
+[ADR 0021](../decisions/0021-assign-platform-evidence.md) preserves that history,
+both platform curves, CPU costs and the final owner ruling.
+
+Thirty samples exceed p99.9; 24 lie in clusters at 131–137 and 508–516 seconds.
+These are known reference-machine observations, not defects. Re-check them
+under Phase 1 per-tick work. Windows wins decisively at p50/p99 but loses at
+ten-minute p99.9 to M4 (25.5 versus 18.25 µs). Short sweeps hid that tail.
+The accepted report uses the original harness's live PTS checks; no historical
+PTS were invented. Future reports retain each actual observed index/PTS.
 
 ## Built
 
@@ -43,8 +48,9 @@ the full audit. No obligation is paid and no timing bound is relaxed.
   rezie-rt is the only new unsafe-permitted crate; engine/core/API/app forbid
   unsafe. Phase 6 audio will reuse this generic boundary.
 - macOS's default finishing slack is **500 µs**, selected by the owner from
-  the measured curve. Windows/Linux have no calibrated default and return an
-  explicit startup error. Calibration and correctness harnesses pass explicit
+  the measured curve. Windows uses its independently measured **1,000 µs**
+  default. Linux remains uncalibrated and returns an explicit startup error.
+  Calibration and correctness harnesses pass explicit
   diagnostic values; no platform silently inherits Mac tuning.
 - Phase-gated native-dependency manifest and real HTTPS fetch/hash verification,
   exercised against crossbeam-channel 0.5.15. FFmpeg 7.1.1 LGPL is pinned for
@@ -105,8 +111,9 @@ CPU is actual finishing-spin time expressed as a percentage of one core.
 
 Higher slack provided no clear latency benefit in this sweep. The owner chose
 0.5 ms now; finer sampling below it is optional, not a second outstanding item.
-Profiling adds CPU-clock queries; the eventual reference acceptance run disables
-that instrumentation. Raw reports, complete CPU accounting and the curve are
+Profiling adds CPU-clock queries; the accepted reference ten-minute run disables
+that instrumentation. Windows CPU totals exhibit 15.625 ms quantization and
+are not accuracy-equivalent to the M4 CPU columns (ADR 0027). Raw reports, complete CPU accounting and the curve are
 in [the M4 measurement directory](../benchmarks/phase-0-slack-sweep-macos-aarch64/metadata.json)
 and [ADR 0021](../decisions/0021-assign-platform-evidence.md).
 
@@ -120,8 +127,8 @@ Pixels, FramePool, shared GUI/compositor device, file/image/colour sources and
 NDI output begin in Phase 1. Mixes, overlays, DSP, recording, rundown execution,
 HTML and full production controls remain in their specified later phases.
 No CPU frame type, pixel placeholder or later-phase command implementation was
-introduced in Foundation. The reference clock obligation is the sole conditional
-phase debt; absent runner automation is separate infrastructure, not a second item.
+introduced in Foundation. The reference clock obligation is paid; no Foundation
+work is deferred into Phase 1. Absent runner automation is separate infrastructure.
 
 ## Surprises and corrections
 

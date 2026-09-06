@@ -1,8 +1,11 @@
+> Historical progress log. Phase 0 is now closed and its reference obligation
+> paid under ADR 0028; see [the completion summary](00-summary.md).
+
 # Phase 0 — implementation and verification progress
 
-**Status: conditionally closed under ADR 0023; not fully verified.**
-See [00-summary.md](00-summary.md) and the single obligation in
-[OUTSTANDING.md](OUTSTANDING.md). The record below is implementation history.
+**Current status: closed under ADR 0028; reference obligation paid.**
+See [00-summary.md](00-summary.md). The conditional-closure passages below
+are dated implementation history, not current outstanding work.
  The GitHub remote is now
 attached at `mhaslar/hasastudio`. The owner replaced final-drift-only acceptance
 with idle-machine maximum and percentile lateness bounds. ADRs 0017–0019

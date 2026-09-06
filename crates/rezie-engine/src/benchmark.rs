@@ -9,7 +9,8 @@ use std::time::{Duration, Instant};
 pub enum MeasurementMode {
     /// Check tick counts, ordering, PTS and sink isolation only.
     Correctness,
-    /// Additionally enforce the human-approved idle latency bounds.
+    /// Enforce reference timing bounds. The historical variant name is retained;
+    /// evidence admission also uses recorded load and SPEC §13's margin rule.
     IdleLatency,
     /// Sweep diagnostics: full lateness and spin CPU cost, with no acceptance claim.
     Calibration,
@@ -92,11 +93,13 @@ pub struct ClockReport {
     pub correctness_passed: bool,
     /// None in hosted correctness mode; latency is never silently asserted there.
     pub latency_passed: Option<bool>,
-    /// Complete result for the requested mode; pilot durations are not ten-minute acceptance.
+    /// Numerical result for the requested mode; pilots are not ten-minute acceptance.
+    /// A reference failure or pass below tenfold timing margin additionally needs
+    /// idle evidence before a phase ruling (SPEC §13, ADR 0028).
     pub passed: bool,
 }
 
-/// Run the actual engine; use IdleLatency only on an otherwise idle local/reference machine.
+/// Run the actual engine; use IdleLatency on the reference with load recorded.
 pub fn run(seconds: u64, mode: MeasurementMode) -> anyhow::Result<ClockReport> {
     run_with_slack(seconds, mode, None)
 }

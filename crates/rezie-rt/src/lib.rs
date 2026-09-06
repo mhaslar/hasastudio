@@ -31,9 +31,10 @@ compile_error!("rezie-rt supports macOS, Windows and Linux only");
 /// larger values gave no clear latency benefit in the six-value sweep (ADRs 0021–0022).
 #[cfg(target_os = "macos")]
 pub const FINISHING_SLACK: Option<Duration> = Some(Duration::from_micros(500));
-/// Windows has no calibrated value until the RX 6800 XT reference sweep is reviewed.
+/// RX 6800 XT / i5-14600K: 1 ms is the smallest tested low-tail slack;
+/// v2 ten-minute max/p99.9 were 128.5/25.5 µs (ADRs 0021, 0028).
 #[cfg(target_os = "windows")]
-pub const FINISHING_SLACK: Option<Duration> = None;
+pub const FINISHING_SLACK: Option<Duration> = Some(Duration::from_micros(1000));
 /// Linux has correctness coverage but no calibrated operating value.
 #[cfg(target_os = "linux")]
 pub const FINISHING_SLACK: Option<Duration> = None;

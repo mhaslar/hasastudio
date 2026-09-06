@@ -1,6 +1,6 @@
 # Phase 0 clock measurements
 
-Current acceptance is defined by ADRs 0017 and 0021: on the otherwise idle
+Current acceptance is defined by ADRs 0017, 0021 and 0028: on the
 Windows 11 / RX 6800 XT production reference machine, ten minutes at 50 fps, no skipped indices, final drift and
 maximum lateness below 20 ms, and p99.9 lateness below 5 ms. `cargo xtask bench`
 finishes its release build before a 15-second settling period and measurement.
@@ -48,8 +48,9 @@ not a guarantee of future latency or other platforms' performance.
 Hosted CI uses `cargo xtask clock-check`, which checks counts, ordering, exact
 PTS, and queue isolation, without any latency threshold. It records
 `latency_passed: null`. Normative latency acceptance runs manually or through the reference workflow
-on the designated Windows machine, idle with MMCSS and timer resolution
-confirmed. Runner automation is not a Phase 0 closure condition.
+on the designated Windows machine, with load recorded and MMCSS/timer resolution
+confirmed. A high-margin pass is admissible despite load; failure or less than
+10x timing margin requires idle evidence before ruling. Runner automation is not a Phase 0 closure condition.
 
 ## Superseded measurement
 
@@ -83,21 +84,34 @@ priority. All 18,006 samples were checked against the reported quantiles.
 The 0.5 ms candidate reached a 20.666 µs maximum with 2.338% of one core spent
 spinning; 1.5 ms used 7.330% without a clear latency improvement in this sweep.
 The zero-slack maximum was 4.549125 ms. See ADR 0021 for all four percentiles
-at every value, CPU costs and the interpretation limits. A finer manual M4
-sweep below 0.5 ms is proposed before selecting its final constant.
-The owner deferred Windows testing until later. Its sweep and final ten-minute
-result remain pending; no reference acceptance or phase closure is claimed.
+at every value, CPU costs and the interpretation limits. Finer M4 sampling is optional; the owner selected 500 µs.
+Windows now uses 1,000 µs from its independently measured curve and accepted
+v2 ten-minute report. Phase 0 is closed (ADR 0028).
 Instructions: [clock calibration](../user/clock-calibration.md).
 
 From Phase 1, also record the M4 two-input, one-output 1080p50 diagnostic at
 every phase gate with no performance threshold. It is explicitly separate
 from production benchmarks, golden references and soak evidence.
 
-## Conditional Phase 0 closure
+## Accepted Windows reference result and paid obligation
 
-ADRs 0022–0023 supersede the earlier provisional-Mac/no-closure statements:
-macOS now uses the owner-approved 500 µs value. Finer M4 sampling is optional.
-Phase 0 is conditionally closed, not fully verified. The Windows reference
-sweep and ten-minute benchmark are its sole outstanding item, due at the
-Phase 1 gate. Failure reopens Phase 0 and stops Phase 1 until rezie-rt is fixed.
-See `docs/phases/OUTSTANDING.md`; no Windows value has been inferred from M4.
+ADR 0028 supersedes the earlier pending/INADEQUATE rulings. The owner accepts
+[Windows v2](phase-0-idle-windows-x86_64.json) with recorded background load:
+30,001 ticks; zero index/PTS errors; confirmed MMCSS Pro Audio and 1 ms timer;
+p50/p99/p99.9/max **0.200/0.900/25.500/128.500 µs**, final drift **0.300 µs**.
+Maximum and p99.9 margins are **155.642x / 196.078x**, comfortably above 10x.
+The Phase 0 obligation is PAID and the outstanding ledger removed; Phase 1
+resumes. No repeat clock run is owed. Both platform curves remain in ADR 0021.
+
+The clusters at 131–137 and 508–516 seconds are reference observations, not
+defects. Re-check them under real Phase 1 work. The longer run reversed the
+short-sweep tail comparison: Windows wins p50/p99, but its 25.5 µs p99.9 exceeds
+M4's historical 18.25 µs. Do not infer a long-run tail from a short sweep.
+
+Existing files are never overwritten. Future reports support --output and
+retain actual observed index/PTS records; the accepted v2 source predates
+that feature and is not retroactively rewritten. Windows CPU columns exhibit
+15.625 ms quantization and cannot be compared to M4 as equal-accuracy counters.
+
+The v2 tail-audit JSON retains the earlier INADEQUATE label as historical audit
+data. ADR 0028 supersedes that label with PASS; its tail indices are unchanged.

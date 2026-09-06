@@ -22,4 +22,4 @@ buckets on the control side after replacing readers and releasing old frames.
 
 Engine dispatch, shared-device GUI rendering, decoders and NDI output are
 still being implemented in Phase 1. Follow docs/phases/01-progress.md for the
-remaining scope and the outstanding Windows clock obligation.
+remaining scope. The Windows clock obligation is paid under ADR 0028.

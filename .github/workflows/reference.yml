@@ -48,7 +48,7 @@ jobs:
       - run: cargo test --workspace --doc --locked
       - run: cargo xtask golden
       # Both commands build before settling and sampling; no concurrent build steps.
-      # Until Windows slack is calibrated, bench fails explicitly (OUTSTANDING.md).
+      # Windows uses the accepted 1 ms pin; record load and apply SPEC §13 margins.
       # Preserve committed/manual reports and separate every automated attempt.
       - run: cargo xtask bench --output docs/benchmarks/reference-clock-${{ github.run_id }}-${{ github.run_attempt }}.json
       - run: cargo xtask soak --minutes 30
