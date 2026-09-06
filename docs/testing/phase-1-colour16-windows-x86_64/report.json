@@ -1,0 +1,156 @@
+{
+  "adapter": "AMD Radeon RX 6800 XT",
+  "architecture": "x86_64",
+  "backend": "Dx12",
+  "cases": [
+    {
+      "background_srgb_rgba": [
+        0,
+        0,
+        0,
+        255
+      ],
+      "failing_pixels": 0,
+      "first_failure": null,
+      "linear_readback": {
+        "bytes": 133640,
+        "path": "black.rgba16f.le",
+        "pixels": 16705,
+        "sha256": "a340e950f2b9c9981818f916856cb644bb1b15e78c4d9aa25f565cd4439c3811"
+      },
+      "max_linear_absolute_error": 0.00048776070435430086,
+      "max_png16_egress_code_value_error": 1,
+      "max_png16_vs_ideal_code_value_error": 21,
+      "name": "black",
+      "pixels_checked": 16705,
+      "png_file_sha256": "922b774451dd282348bf2189a3729eec66a6459c05a97a411f6eac0bd05b6226",
+      "png_rgba16_be_sha256": "bfed739688809cb5755aa5528342b95fced7d06810eed058dc123183d38079cf"
+    },
+    {
+      "background_srgb_rgba": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "failing_pixels": 0,
+      "first_failure": null,
+      "linear_readback": {
+        "bytes": 133640,
+        "path": "white.rgba16f.le",
+        "pixels": 16705,
+        "sha256": "7648bfe6f3aff2f4ed48e5ffb272a838c7e1a6647d8b17a8083994e3c631fcc8"
+      },
+      "max_linear_absolute_error": 0.00048776070435430086,
+      "max_png16_egress_code_value_error": 1,
+      "max_png16_vs_ideal_code_value_error": 193,
+      "name": "white",
+      "pixels_checked": 16705,
+      "png_file_sha256": "8d342cc99c62ffb07f21f63ed5283955287cfa1766144a608c2a3714a6da8bd0",
+      "png_rgba16_be_sha256": "97cdd3761d9622b7493e7ec2a1749dfd18277e61468896a5bd58af00d1764474"
+    },
+    {
+      "background_srgb_rgba": [
+        31,
+        153,
+        219,
+        255
+      ],
+      "failing_pixels": 0,
+      "first_failure": null,
+      "linear_readback": {
+        "bytes": 133640,
+        "path": "colour.rgba16f.le",
+        "pixels": 16705,
+        "sha256": "579524da9d52cb7350ffba327d5ac4514e2ee4c2671b37dcfd231ebdacb9ec97"
+      },
+      "max_linear_absolute_error": 0.0009466618154896356,
+      "max_png16_egress_code_value_error": 1,
+      "max_png16_vs_ideal_code_value_error": 142,
+      "name": "colour",
+      "pixels_checked": 16705,
+      "png_file_sha256": "accaff5593703989a761118615b14cd9776f951a36f7f04ab8b029e6141058fb",
+      "png_rgba16_be_sha256": "38c6ac0a4612808156f7f7d0baa3921eede17b89bae7ca3c32e3f62ef2a97064"
+    },
+    {
+      "background_srgb_rgba": [
+        31,
+        153,
+        219,
+        96
+      ],
+      "failing_pixels": 0,
+      "first_failure": null,
+      "linear_readback": {
+        "bytes": 133640,
+        "path": "translucent.rgba16f.le",
+        "pixels": 16705,
+        "sha256": "5b211e8325c83e4c02ae6f0e86e4e99ce4e82f06cd83927d8c7007623a9e3bf0"
+      },
+      "max_linear_absolute_error": 0.0009596906673597916,
+      "max_png16_egress_code_value_error": 1,
+      "max_png16_vs_ideal_code_value_error": 63,
+      "name": "translucent",
+      "pixels_checked": 16705,
+      "png_file_sha256": "cf05555cff70bcfbea84be16f0536e18059260813df21bcef835c47bf353af3a",
+      "png_rgba16_be_sha256": "272d1a4ee3592e6878ed444410f7f4e62c6e2836741525066f5239985016bf62"
+    },
+    {
+      "background_srgb_rgba": [
+        255,
+        0,
+        255,
+        0
+      ],
+      "failing_pixels": 0,
+      "first_failure": null,
+      "linear_readback": {
+        "bytes": 133640,
+        "path": "transparent.rgba16f.le",
+        "pixels": 16705,
+        "sha256": "20d7aa9361df4af02cd19b923a4a7a20b8a0fe95d704ac9e238aa8fab2eec5a8"
+      },
+      "max_linear_absolute_error": 0.00048776070435430086,
+      "max_png16_egress_code_value_error": 1,
+      "max_png16_vs_ideal_code_value_error": 32,
+      "name": "transparent",
+      "pixels_checked": 16705,
+      "png_file_sha256": "10f2160ddfadfffce2f7233da283e5874fcc7eb6b3ba68a46bf3b6bf3bb49117",
+      "png_rgba16_be_sha256": "dd9b37b7a6ad131e2982344996f55e75df84e1bc04417d8d85e8da29e4b3d645"
+    }
+  ],
+  "checker_source_sha256": "793c6f40c6ac7bfaf15278d88bfcd909dd71d11d92827fba4afa61ca137b141e",
+  "driver": "32.0.21045.5002",
+  "driver_info": "",
+  "five_minute_allocation_criterion_evaluated": false,
+  "golden_references_updated": false,
+  "height": 65,
+  "input_bit_depth": 8,
+  "input_rgba_sha256": "47f24b377b54f5ea21902be325f7121f26ea3bcef70b9357e255a38e70dd3dad",
+  "linear_absolute_error_limit": 0.002,
+  "linear_readback_layout": {
+    "byte_order": "little-endian",
+    "bytes_per_pixel": 8,
+    "channels": "RGBA",
+    "format": "IEEE 754 binary16",
+    "order": "row-major, top-to-bottom, left-to-right",
+    "padding_bytes": 0,
+    "row_stride_bytes": 2056
+  },
+  "os": "windows",
+  "output_bit_depth": 16,
+  "passed": true,
+  "performance_measured": false,
+  "png16_egress_code_value_error_limit": 2,
+  "probe_source_sha256": "d678b10f90148de8c98df5a6ba437ca3603c7fa6f2b086f3bf004ac98ab876cd",
+  "schema_version": 2,
+  "scope": "Phase 1 native-GPU numerical PNG alpha diagnostic; not approved goldens or phase acceptance",
+  "shader_sha256": "03e7ac6dda1b033753c4ffba969ee5c7633f826a44f53ecd29e1bb64e2d847ca",
+  "width": 257,
+  "workgroup_size": [
+    8,
+    8,
+    1
+  ],
+  "working_format": "Rgba16Float linear BT.709 premultiplied"
+}
