@@ -8,6 +8,18 @@ including that platform's slack sweep, blocked on hardware availability and
 If the Windows measurement fails, Phase 0 reopens and Phase 1 work stops until
 rezie-rt is fixed. No further conditional closure is permitted while it is open.
 
+## Windows evidence review — 2026-09-06
+
+The committed Windows sweep is internally consistent, but no ten-minute
+Windows report is committed. Power plan and idle evidence are missing. This
+is incomplete evidence, so conditional closure and the single OPEN obligation
+remain unchanged; no Windows default is pinned. At candidate 1 ms, the
+60-second Windows p50/p99/p99.9/max are 0.600/1.300/9.400/30.700 µs, final
+0.400 µs, recorded spin CPU 0.833% and whole-thread CPU 2.500%. All six trials
+confirm successful MMCSS Pro Audio and timeBeginPeriod(1). See the full curve,
+CPU-accounting limits and M4 comparison in [ADR 0021](../decisions/0021-assign-platform-evidence.md#windows-evidence-audit--2026-09-06).
+A successful short calibration trial is not ten-minute acceptance.
+
 ## Built
 
 - Rust 1.98.1 / edition 2021 workspace: rezie-core, rezie-api, rezie-engine,

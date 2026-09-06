@@ -1,11 +1,8 @@
 name: ci-full
 on:
-  push:
-    branches: [main]
-    paths-ignore: ['docs/**', '**/*.md', 'docs/decisions/**']
   pull_request:
     branches: [main]
-    paths-ignore: ['docs/**', '**/*.md', 'docs/decisions/**']
+    # Required checks must be emitted for docs-only PRs; ci-fast skips their builds.
   workflow_dispatch:
 permissions:
   contents: read
@@ -19,6 +16,7 @@ jobs:
       full_gate: true
   platforms:
     needs: ci-fast
+    if: needs.ci-fast.outputs.build == 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -36,7 +34,7 @@ jobs:
           cache-all-crates: true
           cache-on-failure: true
           cache-directories: .deps
-          save-if: ${{ github.ref == 'refs/heads/main' }}
+          save-if: ${{ github.event_name == 'pull_request' || github.ref == 'refs/heads/main' }}
       - uses: taiki-e/install-action@7b8d4719ee4aaa279bdf55df38dacb9ebfe12a6c # v2
         with:
           tool: cargo-nextest@0.9.143
@@ -71,3 +69,24 @@ jobs:
             .logs/
           if-no-files-found: warn
           retention-days: 14
+  full-gate:
+    name: full-gate
+    needs: [ci-fast, platforms]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      # No checkout, build or cache: this job only evaluates completed job results.
+      - name: Require successful checks or a confirmed documentation-only PR
+        env:
+          FAST_RESULT: ${{ needs.ci-fast.result }}
+          BUILD: ${{ needs.ci-fast.outputs.build }}
+          PLATFORMS_RESULT: ${{ needs.platforms.result }}
+        run: |
+          test "$FAST_RESULT" = success
+          if [ "$BUILD" = true ]; then
+            test "$PLATFORMS_RESULT" = success
+          else
+            test "$BUILD" = false
+            test "$PLATFORMS_RESULT" = skipped
+          fi

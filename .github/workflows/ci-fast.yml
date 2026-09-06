@@ -3,6 +3,10 @@ on:
   push:
     paths-ignore: ['docs/**', '**/*.md', 'docs/decisions/**']
   workflow_call:
+    outputs:
+      build:
+        description: Whether this revision needs code checks and the platform matrix
+        value: ${{ jobs.fast.outputs.build }}
     inputs:
       full_gate:
         type: boolean
@@ -15,16 +19,39 @@ concurrency:
   cancel-in-progress: true
 jobs:
   fast:
-    # ci-full owns the main-push fast check; do not compile the same revision twice.
-    if: ${{ inputs.full_gate || github.ref != 'refs/heads/main' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    outputs:
+      build: ${{ steps.scope.outputs.build }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
+          fetch-depth: 0
+      - name: Classify the complete PR diff; dispatch and pushes always check code
+        id: scope
+        shell: python
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          import os, subprocess
+          build = True
+          if os.environ['EVENT_NAME'] == 'pull_request':
+              base, head = os.environ['BASE_SHA'], os.environ['HEAD_SHA']
+              # --no-renames checks both deleted and added paths of a move.
+              paths = subprocess.check_output([
+                  'git', 'diff', '--no-renames', '--name-only', '-z',
+                  base + '...' + head, '--'
+              ]).split(b'\0')
+              build = any(p and not (p.startswith(b'docs/') or p.endswith(b'.md')) for p in paths)
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('build=' + str(build).lower() + '\n')
       - run: rustup toolchain install 1.98.1 --profile minimal --component rustfmt --component clippy
+        if: steps.scope.outputs.build == 'true'
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        if: steps.scope.outputs.build == 'true'
         with:
           shared-key: hosted-fast-ubuntu-24.04
           cache-all-crates: true
@@ -32,13 +59,20 @@ jobs:
           cache-directories: .deps
           save-if: ${{ github.ref == 'refs/heads/main' }}
       - run: cargo fmt --all -- --check
+        if: steps.scope.outputs.build == 'true'
       - uses: taiki-e/install-action@7b8d4719ee4aaa279bdf55df38dacb9ebfe12a6c # v2
+        if: steps.scope.outputs.build == 'true'
         with:
           tool: cargo-nextest@0.9.143
       - name: Linux build dependencies
+        if: steps.scope.outputs.build == 'true'
         run: sudo apt-get update -qq && sudo apt-get install -y pkg-config libx11-dev libxkbcommon-dev libwayland-dev
       - run: cargo xtask fetch-deps
+        if: steps.scope.outputs.build == 'true'
       - run: cargo clippy --workspace --all-targets --locked -- -D warnings
+        if: steps.scope.outputs.build == 'true'
       - run: cargo nextest run --workspace --locked
+        if: steps.scope.outputs.build == 'true'
       - name: Thread-affinity compile-fail doctest (nextest does not run doctests)
+        if: steps.scope.outputs.build == 'true'
         run: cargo test --workspace --doc --locked

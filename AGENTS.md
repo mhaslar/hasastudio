@@ -118,6 +118,7 @@ A phase is complete when **all** of these hold:
 
 - [ ] Every acceptance criterion in `docs/SPEC.md` §13 passes on its tagged target
 - [ ] CI green on Windows, macOS, and Linux
+- [ ] At most one ci-full run per phase slice under normal circumstances. If another is needed, stop and explain what changed or what is wrong with the workflow.
 - [ ] No `todo!()` / `unimplemented!()` outside deferred feature flags
 - [ ] ADRs written for every implementer's-choice decision taken
 - [ ] `cargo xtask bench` run on Windows 11 / RX 6800 XT, results committed to `docs/benchmarks/`; a manual run is valid and runner automation does not block Phase 0
@@ -144,9 +145,17 @@ in the phase summary that the phase is not fully verified.
 
 ### Public CI and reference-runner security (ADR 0024)
 
-`ci-fast` performs Ubuntu checks on every code push; `ci-full` gates its
-three-platform matrix behind that fast check for main pushes and PRs targeting
-main. Documentation-only pushes/PRs do not build. Use nextest plus the separate
+Work on a branch per phase slice. Finish branch/local checks before opening
+one ready PR; let ci-full validate it once, then merge. Never push slices
+directly to main. Main requires an up-to-date PR and the Actions full-gate
+check, including for administrators. If main moves after validation, update
+and revalidate the PR; explain this exceptional additional run.
+
+`ci-fast` performs Ubuntu checks on every code push, including main; `ci-full`
+gates its three-platform matrix behind that fast check only for PRs targeting
+main or explicit workflow_dispatch. It has no push trigger. Documentation-only
+pushes do not run workflows; documentation-only PRs emit a lightweight required
+gate and skip every build (ADR 0026). Use nextest plus the separate
 compile-fail doctest, caching and ref-keyed cancellation; no hosted latency gate.
 
 The `reference` workflow may run only on trusted main via push, schedule or
