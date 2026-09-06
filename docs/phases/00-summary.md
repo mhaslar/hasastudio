@@ -3,7 +3,7 @@
 **Conditionally closed by explicit owner ruling (ADR 0023), not fully verified.**
 The next phase is Phase 1. Exactly one obligation remains in
 [OUTSTANDING.md](OUTSTANDING.md): the Windows 11 / RX 6800 XT clock benchmark,
-including that platform's slack sweep, blocked on hardware availability and
+including that platform's slack sweep, blocked on adequate idle evidence and
 **due at the Phase 1 gate**. M4 measurements do not satisfy that obligation.
 If the Windows measurement fails, Phase 0 reopens and Phase 1 work stops until
 rezie-rt is fixed. No further conditional closure is permitted while it is open.
@@ -19,6 +19,15 @@ remain unchanged; no Windows default is pinned. At candidate 1 ms, the
 confirm successful MMCSS Pro Audio and timeBeginPeriod(1). See the full curve,
 CPU-accounting limits and M4 comparison in [ADR 0021](../decisions/0021-assign-platform-evidence.md#windows-evidence-audit--2026-09-06).
 A successful short calibration trial is not ten-minute acceptance.
+
+## Windows v2 review — still not fully verified
+
+The ten-minute v2 report meets all numeric bounds: p50/p99/p99.9/max
+0.200/0.900/25.500/128.500 µs, final drift 0.300 µs. Scheduling and High
+Performance are confirmed. Idle evidence remains INADEQUATE: roughly 11%
+reported total CPU is not reconciled with the partially readable per-process
+counters. Thirty samples exceed p99.9, mostly in two clusters. ADR 0021 records
+the full audit. No obligation is paid and no timing bound is relaxed.
 
 ## Built
 

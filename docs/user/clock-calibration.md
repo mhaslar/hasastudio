@@ -6,9 +6,10 @@ due at the Phase 1 gate (OUTSTANDING.md); runner provisioning and nightly soak
 automation are separate. The M4 sweep informs its
 development configuration and never provides production acceptance.
 
-The 2026-09-06 Windows audit found only a short sweep, with no power-plan or
-idle evidence and no ten-minute report. Follow the [recorded Windows rerun
-procedure](windows-clock-rerun.md) to supply the missing evidence; 1,000 µs is
+The first Windows audit found only a short sweep. V2 now contains the
+ten-minute report and High Performance records, but its approximately 11%
+reported total CPU is not reconciled by the incomplete process telemetry. Follow the [recorded Windows rerun
+procedure](windows-clock-rerun.md) to supply adequate idle evidence and observed PTS; 1,000 µs is
 an explicit candidate override, not a pinned Windows default.
 
 ## Prerequisites and checkout

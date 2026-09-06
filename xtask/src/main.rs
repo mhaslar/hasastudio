@@ -271,25 +271,39 @@ fn main() -> Result<()> {
             )?;
         }
         "bench" => {
-            let slack = match args.next().as_deref() {
-                None => None,
-                Some("--slack-us") => Some(
-                    args.next()
-                        .context("--slack-us requires microseconds")?
-                        .parse::<u64>()?,
-                ),
-                Some(other) => anyhow::bail!("unexpected bench option '{other}'"),
-            };
-            anyhow::ensure!(args.next().is_none(), "unexpected bench arguments");
-            anyhow::ensure!(
-                slack.is_none_or(|s| (0..=5000).contains(&s)),
-                "slack must be 0–5000 microseconds"
-            );
-            let path = root().join(format!(
+            let mut slack = None;
+            let mut path = root().join(format!(
                 "docs/benchmarks/phase-0-idle-{}-{}.json",
                 std::env::consts::OS,
                 std::env::consts::ARCH
             ));
+            while let Some(arg) = args.next() {
+                match arg.as_str() {
+                    "--slack-us" => {
+                        slack = Some(
+                            args.next()
+                                .context("--slack-us requires microseconds")?
+                                .parse::<u64>()?,
+                        );
+                    }
+                    "--output" => {
+                        path = root().join(args.next().context("--output requires a JSON path")?);
+                    }
+                    other => anyhow::bail!("unexpected bench option '{other}'"),
+                }
+            }
+            anyhow::ensure!(
+                slack.is_none_or(|s| s <= 5000),
+                "slack must be 0–5000 microseconds"
+            );
+            anyhow::ensure!(
+                path.extension().is_some_and(|x| x == "json"),
+                "bench output must have a .json extension"
+            );
+            anyhow::ensure!(
+                !path.exists() && !path.with_extension("host.json").exists(),
+                "preserve existing evidence; select a fresh --output JSON path"
+            );
             let host = reference::capture()?;
             let metadata = serde_json::json!({"host": host, "source": sweep::source_metadata()?, "slack_override_us": slack});
             fs::write(

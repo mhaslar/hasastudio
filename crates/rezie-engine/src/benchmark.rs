@@ -1,6 +1,6 @@
 //! Separate deterministic tick correctness from idle-machine scheduling acceptance.
 use crate::{Engine, EngineConfig};
-use rezie_core::{ClockStats, FrameRate, OutputId, SinkStats};
+use rezie_core::{ClockStats, FrameRate, FrameTime, OutputId, SinkStats};
 use serde::{Deserialize, Serialize};
 use std::time::{Duration, Instant};
 
@@ -67,6 +67,11 @@ pub struct ClockReport {
     pub expected_ticks: u64,
     /// Observed consumer count.
     pub received_ticks: u64,
+    /// Actual frames received through the draining sink, in receive order.
+    /// Legacy reports lack these records and deserialize as empty; never infer
+    /// observed PTS from expected indices when reading those reports.
+    #[serde(default)]
+    pub observed_ticks: Vec<FrameTime>,
     /// Missing, duplicated or out-of-order tick observations.
     pub index_errors: u64,
     /// Ticks whose PTS disagreed with their exact rational deadline.
@@ -114,6 +119,7 @@ pub fn run_with_slack(
     let expected = seconds * 50 + 1;
     // The correctness consumer can retain the entire finite run if a noisy CI
     // runner deschedules the harness. This prevents a latency gate by accident.
+    let mut observed_ticks = Vec::with_capacity(expected as usize);
     let (mut engine, mut sinks) = Engine::start(EngineConfig {
         rate,
         sinks: vec![(OutputId(0), expected as usize), (OutputId(1), 2)],
@@ -130,6 +136,7 @@ pub fn run_with_slack(
         while let Some(frame) = sinks[0].pop() {
             index_errors += u64::from(frame.index != received);
             pts_errors += u64::from(frame.pts != rate.pts(frame.index)?);
+            observed_ticks.push(frame);
             received += 1;
         }
         if finished {
@@ -149,6 +156,7 @@ pub fn run_with_slack(
         && pts_errors == 0
         && !engine.clock_failed()
         && received == expected
+        && observed_ticks.len() == expected as usize
         && clock.emitted == expected
         && lateness.samples_ns.len() == expected as usize
         && stats[0].dropped == 0
@@ -173,6 +181,7 @@ pub fn run_with_slack(
         duration_seconds: seconds,
         expected_ticks: expected,
         received_ticks: received,
+        observed_ticks,
         index_errors,
         pts_errors,
         clock,

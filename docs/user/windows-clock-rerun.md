@@ -1,21 +1,21 @@
 # Windows clock evidence required after the 2026-09-06 audit
 
-The committed six-value sweep is internally consistent. It is not a ten-minute
-run and contains no power-plan or idle evidence. Keep it unchanged. Phase 0's
-obligation remains OPEN. No Windows slack is pinned. **1,000 µs is the reviewed
-candidate override for the next measurement**, subject to the repeated curve.
+V2 contains the sweep and ten-minute report. Both meet numerical bounds, but
+idle evidence reports about 11% total CPU with incomplete process attribution;
+the notes omit active Task Manager. Phase 0 remains conditionally closed with
+its obligation OPEN. **1,000 µs remains the reviewed Windows rerun candidate**.
 
-If the ten-minute JSON already exists on the reference machine, first preserve
-and send it together with its `.host.json` and any contemporaneous power/idle
-record. Do not reconstruct missing metadata as if it had been captured then.
-A complete original record could avoid repeating that measurement. Otherwise,
-repeat the sweep and ten-minute acceptance as below, approximately 17 minutes
-of measurement plus setup. These PowerShell commands are provided for manual
-execution; they have not been executed on the Windows machine by the agent.
+First diagnose the idle telemetry with the short preflight below; do not repeat
+seventeen minutes blindly. Close Task Manager, pause competing work identified
+by the counters, and retain actual operator notes. The next sweep and acceptance
+must include replayable observed PTS, recorded power configuration, and idle
+telemetry sufficient to reconcile machine load. Keep all v2 files unchanged.
+The PowerShell procedure is for manual execution on the reference machine;
+it has not been executed there by the agent.
 
 ## Prepare before allowing the machine to settle
 
-Use native x64 Developer PowerShell on Windows 11 / RX 6800 XT. Check out the
+Use an elevated (Administrator) native x64 Developer PowerShell on Windows 11 / RX 6800 XT. Check out the
 merged audit/CI slice through a fast-forward pull and finish builds first:
 
 ```powershell
@@ -28,20 +28,17 @@ cargo build -p xtask
 if ($LASTEXITCODE -ne 0) { throw 'xtask build failed' }
 ```
 
-Record the existing power plan. Select **High Performance** for this run using
-Windows Power Options, or `powercfg /setactive SCHEME_MIN`. Do not proceed if
-that selection fails or the plan is unavailable; report it instead. Preserve
-the original plan GUID so you can restore it afterward. Balanced results must
-be labeled Balanced and are not accepted here as equivalent idle calibration.
-The processor settings dump below includes core-parking configuration; a plan
-name alone does not document custom settings.
+Record the active plan. **High Performance is preferred, not mandatory**.
+If available, select it in Power Options; if selecting it is unsupported, keep
+and record the actual scheme. A recorded plan plus adequate idle telemetry is
+the requirement. Balanced is not an automatic failure, and no absent setting
+invalidates a run. Do not infer idleness or CPU frequency from the plan name.
+If you change it, record the original GUID and restore it afterward.
 
 ```powershell
 powercfg /getactivescheme
-# After recording the original GUID:
-powercfg /setactive SCHEME_MIN
-if ($LASTEXITCODE -ne 0) { throw 'Could not select High Performance' }
-powercfg /getactivescheme
+# Optional, only if available; selection failure is not a benchmark failure:
+# powercfg /setactive SCHEME_MIN
 ```
 
 Stop builds, media, games and other active work, allow updates/indexing to
@@ -72,7 +69,8 @@ function Invoke-RecordedClockRun {
         powercfg /getactivescheme | Out-File "$evidence/power-plan-before.txt"
         if ($LASTEXITCODE -ne 0) { throw 'Power-plan capture failed' }
         powercfg /qh SCHEME_CURRENT SUB_PROCESSOR | Out-File "$evidence/processor-power-before.txt"
-        if ($LASTEXITCODE -ne 0) { throw 'Processor power capture failed' }
+        # Some hardware does not expose these settings; record the outcome, do not fail.
+        $LASTEXITCODE | Set-Content "$evidence/processor-power-query-exit.txt"
         $job = Start-Job -ArgumentList $evidence,$stopFile -ScriptBlock {
             param($directory,$stop)
             $ErrorActionPreference = 'Stop'
@@ -82,6 +80,11 @@ function Invoke-RecordedClockRun {
                     total = @(Get-CimInstance Win32_PerfFormattedData_PerfOS_Processor |
                         Where-Object Name -eq '_Total' |
                         Select-Object Name,PercentProcessorTime,PercentDPCTime,PercentInterruptTime)
+                    raw_total = @(Get-CimInstance Win32_PerfRawData_PerfOS_Processor |
+                        Where-Object Name -eq '_Total' |
+                        Select-Object Name,PercentProcessorTime,Timestamp_Sys100NS)
+                    raw_processes = @(Get-CimInstance Win32_PerfRawData_PerfProc_Process |
+                        Select-Object Name,IDProcess,PercentProcessorTime,Timestamp_Sys100NS)
                     processes = @(Get-Process | Select-Object Id,ProcessName,CPU)
                 }
                 $record | ConvertTo-Json -Depth 6 -Compress |
@@ -117,13 +120,38 @@ Keep the full record, not just a favorable screenshot or an average. If the
 monitor failed, a substantial competing workload ran, or the plan changed,
 retain that run but do not submit it as idle acceptance.
 
+## Diagnose idleness before the long runs
+
+With the recorder function above loaded, run only a short preflight:
+
+```powershell
+Invoke-RecordedClockRun 'docs/benchmarks/windows-idle-preflight-v3' {
+    Start-Sleep -Seconds 60
+}
+```
+
+Compare the formatted total CPU values with successive raw total counters:
+`100 * (1 - delta(PercentProcessorTime) / delta(Timestamp_Sys100NS))`.
+Process counters use `100 * delta(PercentProcessorTime) / delta(Timestamp_Sys100NS)`
+and are percentages of one core; sum individual process instances, excluding
+Idle and _Total, then divide by the 20 logical processors when comparing to
+machine-wide CPU. Match PID and name between samples; process turnover and
+protected processes must be reported, not treated as zero. If raw data disagrees
+with the formatted value, retain both for review rather than picking the lower.
+
+If the unexplained load persists, send this short preflight first. Do not
+silently disable services or declare the host idle from a threshold. Identify
+and pause actual competing work. If attribution remains incomplete, a separate
+WPR/ETW diagnostic trace can resolve it before the acceptance measurement;
+such tracing adds overhead and is not itself idle acceptance.
+
 ## Repeat the same sweep, then the unprofiled acceptance run
 
 Use a new output directory so the original sweep cannot be overwritten:
 
 ```powershell
-Invoke-RecordedClockRun 'docs/benchmarks/windows-sweep-idle-evidence-v2' {
-    cargo xtask clock-sweep --output docs/benchmarks/phase-0-slack-sweep-windows-x86_64-v2
+Invoke-RecordedClockRun 'docs/benchmarks/windows-sweep-idle-evidence-v3' {
+    cargo xtask clock-sweep --output docs/benchmarks/phase-0-slack-sweep-windows-x86_64-v3
     if ($LASTEXITCODE -ne 0) { throw 'Sweep failed; preserve its output' }
 }
 ```
@@ -134,29 +162,25 @@ the explicitly reviewed candidate below. If it changes materially, send the
 sweep first; do not guess a new pin. Leave other applications idle between runs.
 The instrumentation overhead and CPU-accounting caveat remain disclosed.
 
-The bench output path is fixed. If an earlier Windows acceptance JSON or host
-sidecar exists, preserve both under a separate clearly named directory before
-running; do not overwrite or discard them.
+Use the new explicit output path to keep v2 intact. Existing report/host
+files are rejected, including failed evidence: select another fresh path for
+any further attempt.
 
 ```powershell
-if ((Test-Path docs/benchmarks/phase-0-idle-windows-x86_64.json) -or
-    (Test-Path docs/benchmarks/phase-0-idle-windows-x86_64.host.json)) {
-    throw 'Preserve existing acceptance files before running again'
-}
-Invoke-RecordedClockRun 'docs/benchmarks/windows-acceptance-idle-evidence-v2' {
-    cargo xtask bench --slack-us 1000
+Invoke-RecordedClockRun 'docs/benchmarks/windows-acceptance-idle-evidence-v3' {
+    cargo xtask bench --slack-us 1000 --output docs/benchmarks/phase-0-idle-windows-x86_64-v3.json
     if ($LASTEXITCODE -ne 0) { throw 'Acceptance failed; preserve its output' }
 }
 ```
 
 Expected acceptance files:
 
-- `docs/benchmarks/phase-0-idle-windows-x86_64.json`: 600 seconds, 30,001
-  samples, zero index/PTS errors, `wait_profile: null`, applied 1,000 µs slack,
+- `docs/benchmarks/phase-0-idle-windows-x86_64-v3.json`: 600 seconds, 30,001
+  samples and 30,001 actual `observed_ticks` index/PTS records, zero index/PTS errors, `wait_profile: null`, applied 1,000 µs slack,
   MMCSS Pro Audio confirmed, successful 1 ms timer request, full distribution.
-- `docs/benchmarks/phase-0-idle-windows-x86_64.host.json`: source/toolchain,
+- `docs/benchmarks/phase-0-idle-windows-x86_64-v3.host.json`: source/toolchain,
   Windows build, CPU, GPU and driver metadata.
-- Both `*-idle-evidence-v2/` directories: power settings before/after,
+- Both `*-idle-evidence-v3/` directories: power settings before/after,
   timestamps, complete utilization record, monitor outcome. Add a short
   `operator-notes.txt` in each describing foreground applications, remote
   access, interruptions and whether the machine remained idle. Record actual
@@ -170,3 +194,29 @@ acceptance run fails, stop: Phase 0 reopens and Phase 1 work must stop.
 Commit all raw and host/idle evidence on an evidence branch and submit one PR;
 do not push directly to main. Restore the original power plan using its saved
 GUID when finished. No self-hosted runner is required for these manual runs.
+
+## Independently verify individual PTS
+
+The new `observed_ticks` array stores the actual received FrameTime values in
+receive order. These are not expected values reconstructed during export.
+Legacy files lack this field; do not retrofit them. For a 600-second 50 Hz
+report, this standalone Python check uses no Rust/harness PTS implementation:
+
+```python
+import json
+from pathlib import Path
+r = json.loads(Path("docs/benchmarks/phase-0-idle-windows-x86_64-v3.json").read_text())
+frames = r["observed_ticks"]
+assert r["duration_seconds"] == 600
+assert len(frames) == len(r["lateness"]["samples_ns"]) == 30001
+for i, frame in enumerate(frames):
+    assert frame["index"] == i
+    assert 0 <= frame["pts"]["nanos"] < 1_000_000_000
+    actual_ns = frame["pts"]["secs"] * 1_000_000_000 + frame["pts"]["nanos"]
+    assert actual_ns == i * 20_000_000
+```
+
+This verifies index/PTS correctness, not native scheduling, idleness or latency;
+those remain separate audit requirements. Windows spin CPU columns are
+quantized OS accounting, not comparable in accuracy to the M4 thread clock.
+See ADR 0027; zero recorded spin CPU must never be described as free spinning.

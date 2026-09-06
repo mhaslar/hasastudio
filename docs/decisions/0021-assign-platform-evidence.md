@@ -292,6 +292,149 @@ strictly below 20 ms, p99.9 strictly below 5 ms, and confirmed native scheduling
 A genuine failed acceptance run reopens Phase 0 and stops Phase 1; missing
 measurement is not relabeled a scheduler defect.
 
+### Windows v2 audit — numerical pass, INADEQUATE idle evidence
+
+The owner supplied commit `5282c5f`, merged as `d030d76`, measured from
+`da52572` / Rust 1.98.1 on the same Windows build 26200, i5-14600K and RX
+6800 XT (driver 32.0.21045.5002). Source status reports only evidence-file
+changes/deletions, not runtime source changes. The old Windows sweep removed
+by the v2 evidence commit is restored byte-for-byte from `20a1759`; historical
+measurements and links must survive replacement runs.
+
+**Ruling: INADEQUATE**, not a numerical timing failure. The sole Phase 0
+obligation remains OPEN; Phase 0 is still conditionally closed and Windows
+slack stays unset. No Phase 1 implementation resumes in this slice.
+
+[The 600-second report](../benchmarks/phase-0-idle-windows-x86_64.json) has
+30,001 raw lateness samples. Expected, received and emitted counts agree,
+index/PTS error counters are zero, the final frame is index 30,000 / PTS
+600 seconds, and sink drops are 0 / 29,999. Recomputed nearest-rank
+p50/p99/p99.9/max are **0.200 / 0.900 / 25.500 / 128.500 µs**; final drift
+is **0.300 µs**, with no 20 ms deadline misses. These meet every unchanged
+numeric bound. Profiling is disabled. Raw individual PTS were not serialized
+by that revision: the existing PTS claim rests on the live harness checks.
+New reports retain actual received PTS under ADR 0027; never backfill v2.
+
+All six v2 sweep reports independently validate at 3,001 samples each, with
+matching percentiles/counts/final sample, zero index/PTS errors and matching
+CPU summaries. Every sweep and acceptance thread reports MmcssProAudio,
+realtime true, no realtime error, timer_resolution_ms 1, no timer error, and
+the requested slack. Those fields require successful native API application.
+The 1 ms acceptance override uses the same 2/3 ms computation/constraint
+budget as its sweep. No threshold has been relaxed.
+
+#### Power and idle evidence
+
+Both [sweep](../benchmarks/windows-sweep-idle-evidence-v2/operator-notes.txt)
+and [acceptance](../benchmarks/windows-acceptance-idle-evidence-v2/operator-notes.txt)
+power-plan records show GUID `8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c`
+(High Performance / Vysoký výkon) before and after. The owner confirms it
+remained active throughout. A specific plan is now preferred, not mandatory:
+any recorded plan is admissible if idle evidence supports the run. An
+unavailable power setting is not grounds for failure.
+
+The completed monitors retained 79 sweep and 122 acceptance snapshots, at
+roughly five-second intervals (maximum gaps 11.52 / 10.56 seconds). Across
+the complete monitor windows, formatted total CPU averages **10.91% / 11.23%**,
+peaking at **23% / 24%**. In the approximate actual acceptance window it is
+still **11.19%**, not just startup activity. Microsoft defines total Processor
+Time as average usage across processors; these are machine percentages, not
+one-core percentages. The sampled integers are not a continuous utilization
+trace, and the current collector stores no raw counters to independently
+check its formatted CPU figures.
+
+Observed per-process CPU deltas over the monitor windows include:
+
+| Process group | Sweep CPU seconds | Acceptance CPU seconds |
+| --- | ---: | ---: |
+| Taskmgr | 27.469 | 42.297 |
+| Code | 10.297 | 15.281 |
+| rezie-headless | 25.750 | 33.141 |
+| powershell | 2.141 | 3.281 |
+| msedge | 0.797 | 0.859 |
+
+The notes say only Edge and VS Code were open in the background; Task Manager
+is also active throughout. This is a discrepancy, not proof that the operator
+was actively using it. About 169 process CPU fields are null in the first
+acceptance snapshot, including System, MsMpEng/Defender and dwm. Readable
+process deltas cannot account for the reported total CPU load. Null is not
+zero. This record neither proves an otherwise idle host nor identifies the
+missing competing workload. It would be wrong to assume all 11% is harmless
+OS activity or the monitor, or to diagnose a specific service from this data.
+
+Record raw total CPU and per-process performance counters in an elevated
+monitor before rerunning; reconcile the load, close Task Manager and pause
+identified competing work. A short preflight diagnoses telemetry/background
+load first; it is not a new latency threshold. Repeat the sweep and acceptance
+with fresh paths and observed PTS only when idle operation is supportable.
+[Exact commands](../user/windows-clock-rerun.md) retain all prior evidence.
+
+#### Windows v2 curve alongside the M4 curve above
+
+Lateness is µs; CPU percentages are of one core and have the Windows accounting
+limitations below. Each row is one 60-second profiled trial, not acceptance.
+
+| Slack (ms) | p50 | p99 | p99.9 | Max | Spin CPU (s) | Spin CPU (%) | Thread CPU (%) |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 0 | 301.900 | 588.900 | 757.100 | 967.900 | 0.000000 | 0.000 | 0.000 |
+| 0.5 | 0.400 | 95.400 | 253.100 | 408.500 | 0.000000 | 0.000 | 0.312 |
+| 1 | 0.500 | 1.200 | 4.800 | 6.000 | 0.546875 | 0.911 | 3.203 |
+| 1.5 | 0.500 | 1.200 | 3.500 | 27.600 | 1.656250 | 2.760 | 5.781 |
+| 3 | 0.500 | 1.400 | 19.600 | 24.000 | 6.140625 | 10.234 | 14.271 |
+| 5 | 0.500 | 1.400 | 7.200 | 66.400 | 12.109375 | 20.182 | 22.812 |
+
+Both Windows sweeps put 1,000 µs in the low-tail region before degradation at
+500 µs. Retain it as the reviewed rerun candidate, not a pin under inadequate
+idle evidence. The expectation that Windows must be weaker because of timer
+granularity was wrong for these observed short-trial results: at 1 ms Windows
+v2 p50/p99/p99.9 are 0.5/1.2/4.8 µs versus M4 at 0.5 ms 2.000/16.166/19.291 µs.
+Windows wins all three there, with **13.5× lower p99**, roughly an order of
+magnitude. However, the ten-minute Windows p99.9 **25.5 µs is higher than M4's
+historical 18.25 µs** (M4 at 1.5 ms). Windows ten-minute p50/p99 0.2/0.9 µs
+are better than M4 1.5/16.625 µs (18.5× at p99), but it is false to claim a
+Windows advantage across all three ten-minute percentiles. Preserve the
+run-length/slack/idleness differences instead of generalizing the short sweep.
+
+#### Tail structure
+
+Exactly **30 samples strictly exceed the 25.5 µs p99.9**, with 31 at or above
+it. They occupy these programme-time regions:
+
+- 11 in 131.28–136.68 s, including a burst around 135–137 s.
+- 13 in 507.74–516.34 s, including a burst around 511 s.
+- Six others at 53.10, 115.72, 364.76, 376.20, 427.66 and 468.16 s.
+
+Per-minute counts are **1, 1, 11, 0, 0, 0, 2, 2, 13, 0**. Maximum lateness
+128.5 µs occurs at index 21,383 / 427.66 s. Tail-event gaps span 0.1–228.08 s.
+Within the bursts, several gaps are 0.1 s or its multiples, but there is no
+single stable run-wide period. Two bursts cannot identify a periodic service;
+this is clustered behavior, not evidence for purely independent random noise.
+Five-second CPU sampling and the absence of an exact recorded tick-origin UTC
+prevent confident event-to-process attribution. No ETW/scheduler trace exists.
+
+Relative to the v2 1 ms short trial, p99.9 rises **4.8→25.5 µs** and max
+**6.0→128.5 µs**; the tail appears in the longer observation while p99 improves
+1.2→0.9 µs. It does not monotonically thicken through the run: minutes 3 and 9
+have elevated tails, with quiet intervals between and afterward. The older
+1 ms trial's 9.4/30.7 µs tail is also lower than the ten-minute tail. All are
+comfortably within the numeric bounds, but cannot promise Phase 1 headroom
+once decode/composite work and GPU contention exist. The tail event indices
+and raw values are retained in [the audit data](../benchmarks/phase-0-windows-v2-tail-audit.json).
+
+#### CPU accounting conclusion
+
+Across both Windows sweeps, all nonzero spin/whole-thread CPU totals are
+multiples of 15.625 ms. The v2 500 µs trial reports zero spin CPU despite 2,789
+spin entries and 684.7486 ms spin wall time. GetThreadTimes units are 100 ns;
+this host's accounting resolution is much coarser. There is no honest numeric
+conversion that recovers the missing per-segment attribution. Keep those raw
+columns, label them quantized and not accuracy-equivalent to M4, and do not
+replace them with elapsed wall time. ADR 0027 documents the API limit and why
+cycle counters cannot be substituted as nanoseconds.
+
+References: [Microsoft counter semantics](https://learn.microsoft.com/en-us/windows/win32/perfctrs/collecting-performance-data)
+and [raw WMI sampling](https://learn.microsoft.com/en-us/windows/win32/wmisdk/wmi-tasks--performance-monitoring).
+
 ## Revisit when
 
 Production hardware/OS changes, a second production target is proposed, or
