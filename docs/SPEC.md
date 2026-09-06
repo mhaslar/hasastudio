@@ -908,8 +908,13 @@ M/E 2–4 enabled after performance measurement. Multiview. Project save/load wi
 
 Ubuntu ci-fast runs formatting, Clippy, nextest and doctests on every code
 push. ci-full runs the three-platform correctness/package matrix after ci-fast
-passes, for PRs targeting main, pushes to main and manual dispatch. Docs-only
-pushes and PRs do not trigger builds. Use caching and ref-keyed cancellation.
+passes, for PRs targeting main and manual dispatch only; no main-push full run.
+Develop each phase slice on a branch and normally run ci-full once on its ready
+PR before merging. Protect main with required up-to-date PRs and the Actions
+full-gate check. If main changes after validation, update and revalidate the PR;
+explain that exceptional additional run. Docs-only pushes and PRs do not trigger
+builds; PRs emit a lightweight required gate so path filtering cannot leave them
+pending. Use caching and ref-keyed cancellation (ADR 0026).
 No hosted latency/performance criteria are evaluated. Real codec/capture correctness requires suitable equipped
 workers; missing hardware is explicit, not silently replaced with software.
 From Phase 1, normative golden comparisons and all compositor/shader gate

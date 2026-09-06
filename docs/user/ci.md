@@ -1,24 +1,43 @@
 # CI and reference execution
 
 The repository is public. Standard hosted runners run correctness only; the
-production reference remains Windows 11 / RX 6800 XT. See ADR 0024.
+production reference remains Windows 11 / RX 6800 XT. See ADRs 0024 and 0026.
 
 - `ci-fast`: Ubuntu formatting, Clippy, nextest and compile-fail doctests on
-  every code push. On main, `ci-full` calls it and the standalone event starts
-  no redundant runner. Branch HEAD and PR merge revisions are distinct checks.
-- `ci-full`: PRs targeting main, main pushes and manual dispatch. Its three
+  every code push, including main. Branch HEAD and PR merge revisions are distinct checks.
+- `ci-full`: PRs targeting main and manual dispatch only. No push trigger. Its three
   platform jobs require the fast job. Ubuntu reuses the completed Rust checks;
   Windows/macOS check platform-specific Rust paths. All three launch the package.
 - `reference`: trusted main push, nightly schedule and manual main dispatch.
   All normative golden comparisons, benchmarks and soaks belong here. No PR
   trigger exists, and manual dispatch to a non-main ref is rejected by the job.
 
-All push/PR triggers ignore `docs/**`, `**/*.md` and `docs/decisions/**`.
+ci-fast and reference push triggers ignore `docs/**`, `**/*.md` and
+`docs/decisions/**`. ci-full applies these exclusions inside its fast job so
+required checks complete for docs-only PRs: classification and full-gate run,
+all Rust builds and matrix jobs are skipped. A workflow-level path filter
+would leave the protected branch's required check pending indefinitely.
 Schedules/manual dispatches are intentional requests and are not path-filtered.
 Ref-keyed concurrency cancels superseded runs. Fast and full Ubuntu jobs have separate caches so a debug-only cache cannot
 prevent saving release artifacts. All hosted caches are isolated from reference caches. No retries are
 configured for failed tests. nextest does not execute doctests, so the safe
 thread-affinity compile-fail test still uses `cargo test --workspace --doc`.
+
+## One PR per slice
+
+Work on a slice branch and finish local/ci-fast checks before opening the PR.
+Normally run ci-full once per slice, then merge; main's push runs only ci-fast
+and reference, subject to their path filters. Manual dispatch remains available
+to the owner. If another full run is needed, stop and explain it. In particular,
+main moving after validation requires updating and revalidating the PR so an
+untested integration cannot merge. Do not bypass checks to save a run.
+
+Main requires PRs and the Actions `full-gate` check against up-to-date main,
+with administrator enforcement and force-push/deletion disabled. No separate
+human review count is imposed. Existing external-contributor Actions approval
+is unchanged. Matrix caches may save in PR scope (isolated by GitHub from
+trusted main); reference cache keys remain separate. Result-only gate jobs
+have nothing to compile/cache.
 
 ## Repository settings and runner provisioning
 
@@ -38,7 +57,7 @@ reference jobs can remain queued; this is not a successful measurement.
 The uncalibrated Windows default also causes a clear benchmark failure until
 its manual sweep selects the value. Follow `clock-calibration.md` first.
 
-## Wall-clock comparison
+## Historical wall-clock comparison (before ADR 0026)
 
 The prior uncached matrix's measured job durations were 6m07s on macOS,
 10m51s on Linux and 17m20s on Windows (run 33986748941). Main, branch and
@@ -75,3 +94,12 @@ that correction; no additional speedup is claimed without measurement.
 Times run from first job start to last job completion; approval and queue waits
 are excluded. Changed dependencies can invalidate caches. The fast/full cache
 key correction came after these measurements and is not an invented extra saving.
+
+## Current event cost after ADR 0026
+
+A code slice now has fast checks on branch pushes, one full run on its ready
+PR, and only the fast hosted gate after merge. Main no longer runs a second
+full matrix. Existing 58s fast / 5m09s full warm measurements are historical
+estimates for these paths, not newly measured timings of this change. Docs-only
+PRs run only classification and result jobs; no build jobs run. Do not trigger
+extra matrices to obtain a new timing comparison. Reference remains independent.

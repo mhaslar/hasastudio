@@ -148,3 +148,12 @@ split. GitHub's cache inventory confirms distinct main-ref archives: fast Ubuntu
 670,780,230 bytes and full Ubuntu 1,066,205,326 bytes. The full job saved its
 archive after release packaging, so release artifacts are no longer blocked by
 an existing debug-only exact key. No further warm-time improvement was measured.
+
+## Subsequent owner ruling — ADR 0026
+
+As of 2026-09-06, ci-full runs on PRs targeting main and manual dispatch only,
+with no main-push trigger. Branch slices, one normal full run per ready PR and
+strict main protection replace direct main pushes. Documentation exclusions
+are evaluated inside the PR gate so required checks cannot stay pending.
+ci-fast again checks main pushes; reference triggers/security remain unchanged.
+The earlier main-push timing results above remain historical evidence.

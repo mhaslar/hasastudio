@@ -208,6 +208,90 @@ reference obligation due at the Phase 1 gate. Earlier no-closure/provisional-Mac
 statements above describe the preceding decision and are superseded to this
 extent only. Production thresholds and measurement targets remain unchanged.
 
+### Windows evidence audit — 2026-09-06
+
+Commit `20a1759627a918d4a91b5fb5123db0a5450dc5d3` contains the
+[six Windows trials](../benchmarks/phase-0-slack-sweep-windows-x86_64/metadata.json),
+measured at clean `c891d86` with Rust 1.98.1. A fresh remote fetch confirms
+there is **no committed ten-minute Windows report or host sidecar**. This is
+**incomplete evidence**, not acceptance and not a demonstrated latency failure.
+Phase 0 remains conditionally closed; its single obligation stays OPEN. No
+Windows slack is pinned and no Phase 1 implementation accompanies this audit.
+
+Each trial contains 3,001 lateness samples (18,006 total), in the recorder's
+index-addressed order for indices 0–3,000. Independently recomputed nearest-rank
+p50/p99/p99.9/max, last-sample drift, maximum/deadline-miss counters, CPU totals
+and CPU percentages agree with the reports and summary. Counts agree across
+expected/received/emitted/samples. The final FrameTime is index 3,000 / PTS
+60 seconds. The harness reports zero index and exact-rational-PTS errors,
+zero draining-sink drops and 2,999 stalled-sink drops in every trial.
+Individual observed FrameTime records are not serialized: ordering/exact PTS
+are checked live by the harness, rather than independently replayable from
+these JSON files. Raw lateness is not a sorted percentile-only export.
+
+Every measured thread reports `policy: MmcssProAudio`, `realtime: true`,
+`realtime_error: null`, `timer_resolution_ms: 1`, `timer_error: null`. The source
+at the recorded revision sets these fields only after a non-null
+AvSetMmThreadCharacteristicsW("Pro Audio") handle and a successful
+(timeBeginPeriod(1) == 0) request. The guard retains both until after sampling.
+This confirms successful API application from recorded status, not an inference
+from low lateness or a claim of independently probed physical timer precision.
+
+Host metadata identifies Windows 11 Pro 10.0.26200 (build 26200), Intel
+Core i5-14600K (14 cores / 20 logical processors), RX 6800 XT driver
+32.0.21045.5002 and 34,102,353,920 bytes of memory. **Power plan is unknown**:
+neither Balanced nor High Performance is recorded. There is no contemporaneous
+idle/utilization record or operator idle statement. A clean worktree and the
+tool's settling delay do not prove idle operation. The original metadata
+collector did not collect these fields; do not invent them retrospectively.
+
+Windows lateness below is in microseconds. CPU is measured per 60-second
+trial and percentages refer to one core; these are calibration observations,
+not ten-minute acceptance. `latency_passed` is null in all six files.
+
+| Slack (ms) | p50 (µs) | p99 (µs) | p99.9 (µs) | Max (µs) | Final (µs) | Spin CPU (s) | Spin CPU (%) | Thread CPU (%) |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 0 | 319.600 | 635.400 | 785.900 | 996.500 | 105.300 | 0.000000 | 0.000 | 0.104 |
+| 0.5 | 0.600 | 126.500 | 212.800 | 366.700 | 0.800 | 0.000000 | 0.000 | 1.484 |
+| 1 | 0.600 | 1.300 | 9.400 | 30.700 | 0.400 | 0.500000 | 0.833 | 2.500 |
+| 1.5 | 0.700 | 2.800 | 45.500 | 57.100 | 0.900 | 1.156250 | 1.927 | 5.260 |
+| 3 | 0.700 | 2.400 | 13.700 | 23.700 | 0.700 | 5.750000 | 9.583 | 12.109 |
+| 5 | 0.700 | 1.800 | 10.200 | 41.500 | 0.500 | 12.000000 | 20.000 | 23.099 |
+
+The smallest tested Windows value in the low-tail region is **1 ms**, a
+candidate for a documented idle rerun, not a calibrated default. At 0.5 ms,
+p99.9/max rise to 212.8/366.7 µs from 9.4/30.7 µs at 1 ms. Larger slack has
+no consistent tail benefit (the 1.5 ms trial is worse than 1 ms). All short
+trials happen to be below 5 ms / 20 ms; this does not establish ten-minute
+acceptance or justify choosing the sleep-only baseline.
+
+The Windows 0.5 ms trial reports **zero spin CPU** despite 2,621 finishing-spin
+entries and 573.6806 ms of spin wall time. GetThreadTimes returns units of
+100 ns but has OS accounting granularity; summing short per-segment differences
+can lose CPU attribution. Treat 0% as the recorded counter result, not free
+spinning. Whole-thread CPU is 1.484% there and 2.500% at 1 ms. At 1 ms the
+spin counter reports 0.833% (0.5 CPU seconds); do not claim it is directly as
+accurate as the M4's thread-clock measurement. Preserve both counters.
+
+For a like-duration comparison, M4 at its selected 0.5 ms gives
+p50/p99/p99.9/max 2.000/16.166/19.291/20.666 µs and 2.338% spin / 2.479%
+whole-thread CPU. Windows at candidate 1 ms gives
+0.600/1.300/9.400/30.700 µs and recorded 0.833% spin / 2.500% whole-thread CPU.
+These short trials differ in host, scheduling and accounting; Windows idle and
+power-plan evidence is missing. The historical M4 ten-minute run at **1.5 ms**
+has p50/p99/p99.9/max 1.500/16.625/18.250/36.292 µs, final 1.167 µs;
+**there is no Windows ten-minute number to place beside it**.
+
+Repeat the Windows six-value sweep with recorded power configuration and idle
+telemetry, then collect the ten-minute unprofiled run at the reviewed **1,000 µs
+candidate override** if the repeated curve still supports it. Keep original
+files unchanged. Exact commands and expected evidence are in
+[the rerun guide](../user/windows-clock-rerun.md). The unchanged gate requires
+30,001 ticks with zero skipped indices/exact PTS, final drift and max lateness
+strictly below 20 ms, p99.9 strictly below 5 ms, and confirmed native scheduling.
+A genuine failed acceptance run reopens Phase 0 and stops Phase 1; missing
+measurement is not relabeled a scheduler defect.
+
 ## Revisit when
 
 Production hardware/OS changes, a second production target is proposed, or
