@@ -1,0 +1,88 @@
+{
+  "ruling": "PASS for numerical colour/alpha diagnostic only",
+  "evidence_commit": "92829e8",
+  "source_revision": "8659673e6791c98e0ce6a085da8e1ae5084f27b0",
+  "adapter": "AMD Radeon RX 6800 XT",
+  "backend": "Dx12",
+  "driver": "32.0.21045.5002",
+  "source_checks": {
+    "crates/rezie-gpu/src/pool/colour.wgsl": {
+      "matches_revision": "8659673e6791c98e0ce6a085da8e1ae5084f27b0",
+      "windows_line_endings": "CRLF",
+      "macos_line_endings": "LF",
+      "windows_sha256": "dec032385b2fc9049250941356d6e0627c603c6fef1af9e48c7275f87965d96e",
+      "macos_sha256": "e739b3c470a27657db2854161acd060e7d9a57ff3d0d7137c6dfbd68b4be4dbf"
+    },
+    "crates/rezie-gpu/src/pool/colour.rs": {
+      "matches_revision": "8659673e6791c98e0ce6a085da8e1ae5084f27b0",
+      "windows_line_endings": "CRLF",
+      "macos_line_endings": "LF",
+      "windows_sha256": "b6df3da133f90f66161c7358d7aced6dc6c9b56e6f50a89c939237584a4caf46",
+      "macos_sha256": "9445828ca9f587a7212c69e5e8d1e126fab5792c8611b735fa6f99a8304a2f83"
+    },
+    "crates/rezie-gpu/src/bin/rezie-colour-check.rs": {
+      "matches_revision": "8659673e6791c98e0ce6a085da8e1ae5084f27b0",
+      "windows_line_endings": "CRLF",
+      "macos_line_endings": "LF",
+      "windows_sha256": "e6392f5a913051d710786c4993219f2667c2be33cf4582ebed37bae5e3a16d3a",
+      "macos_sha256": "3c334aef96dfbed70491ddd1ebe987f16447e360f05dad9abfe29d6d3dc285f2"
+    }
+  },
+  "input_rgba_sha256": "47f24b377b54f5ea21902be325f7121f26ea3bcef70b9357e255a38e70dd3dad",
+  "cases": [
+    {
+      "name": "black",
+      "pixels_independently_checked": 16705,
+      "max_png_error_recomputed": 1,
+      "nonzero_error_channels": 304,
+      "windows_vs_macos_different_channels": 0,
+      "png_file_sha256": "d326eb4a74822107728806adb08592d9e3386f08e4eab014400b47c94eb1cee4",
+      "rgba_sha256": "9bcb1536cf4b8aa50f2b65e9cda669fd6dba3eeb3f0f1446d8826c02148089a4",
+      "linear_max_from_gpu_report_not_independent_readback": 0.00048776070435430086
+    },
+    {
+      "name": "white",
+      "pixels_independently_checked": 16705,
+      "max_png_error_recomputed": 1,
+      "nonzero_error_channels": 312,
+      "windows_vs_macos_different_channels": 0,
+      "png_file_sha256": "7753e8d354d97f99166d2960dd84f86eb27f97778556c8ee4ed157ac3b7cc951",
+      "rgba_sha256": "6f52873bc4550e4575cc68608611cba037a696c432f0ee7f055c5ebe5a159c48",
+      "linear_max_from_gpu_report_not_independent_readback": 0.00048776070435430086
+    },
+    {
+      "name": "colour",
+      "pixels_independently_checked": 16705,
+      "max_png_error_recomputed": 1,
+      "nonzero_error_channels": 1016,
+      "windows_vs_macos_different_channels": 0,
+      "png_file_sha256": "64e51526ccfb6df5be5b760cd835fadfe5238f0c350782d1338e6c40e96b1c05",
+      "rgba_sha256": "1649059463b1fc96dff43e63e2be249a16f8bbc67d5e20a22a254b0c477f01cb",
+      "linear_max_from_gpu_report_not_independent_readback": 0.0009466618154896356
+    },
+    {
+      "name": "translucent",
+      "pixels_independently_checked": 16705,
+      "max_png_error_recomputed": 1,
+      "nonzero_error_channels": 808,
+      "windows_vs_macos_different_channels": 0,
+      "png_file_sha256": "a66f77a09a3cd1ab7c42895fc9a484575a046a1e0706f0c42073fa455a0fbb80",
+      "rgba_sha256": "d0c070bc9be1280177d5d3237bafa002eece8fba957ba6438bd9b3e274a50f44",
+      "linear_max_from_gpu_report_not_independent_readback": 0.0009596906673597916
+    },
+    {
+      "name": "transparent",
+      "pixels_independently_checked": 16705,
+      "max_png_error_recomputed": 0,
+      "nonzero_error_channels": 0,
+      "windows_vs_macos_different_channels": 0,
+      "png_file_sha256": "d4b494738b644310a3099f93669e16ebf966ed841eaeb775be62d5175fecbbc5",
+      "rgba_sha256": "05bcaf723e1b22953259cf20bee0f89eee9e3efe5585e6b0d9a064e81e22ec1e",
+      "linear_max_from_gpu_report_not_independent_readback": 0.00048776070435430086
+    }
+  ],
+  "pixels_independently_checked": 83525,
+  "method": "Pillow decoded committed RGBA8 sRGB PNGs; separate Python double-precision sRGB/premultiplied-over/sRGB calculation checked every exported channel. File and decoded-pixel SHA-256 verified. Raw linear readback was not serialized; its maxima are producer-reported, checked against unchanged limits. All five Windows RGBA arrays and recorded case metrics match M4.",
+  "golden_references_approved": false,
+  "phase_gate_passed": false
+}

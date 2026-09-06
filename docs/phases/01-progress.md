@@ -67,10 +67,24 @@ are diagnostic evidence, not approved references.
 
 Local formatting, strict workspace Clippy, 22 nextest tests and both doctests
 passed for this slice. The existing ignored manual timing test was not run;
-no latency or performance measurement is claimed. Windows execution of this
-colour diagnostic remains pending. Follow
-[colour-alpha-check.md](../user/colour-alpha-check.md); only then proceed to
-production golden candidates for human review. No Phase 1 gate has closed.
+no latency or performance measurement is claimed.
+
+The owner committed the Windows colour run in `92829e8`. The
+[RX 6800 XT / D3D12 report](../testing/phase-1-colour-windows-x86_64/report.json)
+passes all 83,525 pixels with the same maxima as M4. An
+[independent audit](../testing/phase-1-colour-windows-audit.json) verifies every
+exported RGBA channel against a separate double-precision calculation; all five
+Windows PNGs have identical decoded bytes to M4. Source hashes match `8659673`
+with CRLF on Windows and LF on macOS. The raw linear maxima remain
+producer-reported because raw linear readbacks were not serialized.
+
+[ADR 0030](../decisions/0030-review-first-colour-alpha-references.md) proposes the
+five Windows outputs as the initial reference content. The
+[candidate review](../testing/phase-1-golden-candidates.md) contains images,
+band expectations and exact file hashes. Human approval is pending; no
+references have been installed. The asset generator/perceptual golden harness
+is the next step after that approval, before decode/fallback and NDI.
+No Phase 1 gate has closed.
 
 ## Remaining gate work
 

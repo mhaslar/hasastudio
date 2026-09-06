@@ -71,6 +71,15 @@ Portable tests cover analytical midpoint/alpha cases and half-float decoding.
 Run `rezie-colour-check` on M4/Metal and RX 6800 XT/D3D12, preserve reports
 and inspect PNGs. GPU success is measured, never inferred from hosted builds.
 
+Both native runs now pass: [Windows](../testing/phase-1-colour-windows-x86_64/report.json)
+and [M4](../testing/phase-1-colour-macos-aarch64/report.json). Each checks 83,525
+pixels; reported maximum linear error is 0.000959691 and exported error is one
+code value. An [independent PNG audit](../testing/phase-1-colour-windows-audit.json)
+recomputes exported expectations and verifies the source and image hashes.
+Windows source hashes reflect CRLF checkout, M4 LF; both match `8659673`.
+Raw linear values were not serialized, so their maxima remain producer-reported.
+Initial reference content is proposed for human review in ADR 0030.
+
 ## Revisit when
 
 Integrating the streaming compositor: prepare reusable resources on the control
