@@ -1,0 +1,86 @@
+{
+  "status": "proposed; human approval pending",
+  "source_revision": "79113fd8eda86f7a502e69ddaf7e5f3dd3066903",
+  "evidence_commit": "7f01657015e0ac14f7c2e4161bfcddefa3b52012",
+  "adapter": "AMD Radeon RX 6800 XT",
+  "backend": "Dx12",
+  "driver": "32.0.21045.5002",
+  "width": 257,
+  "height": 65,
+  "report_sha256": "6b814cf809c8a3e398e171a3998b19bbefe525886f15ae9b1e409205c91e13d2",
+  "input_rgba_sha256": "47f24b377b54f5ea21902be325f7121f26ea3bcef70b9357e255a38e70dd3dad",
+  "files": [
+    {
+      "source": "docs/testing/phase-1-colour16-windows-x86_64/black.png",
+      "destination": "tests/golden/phase-1/colour-alpha/black.png",
+      "encoding": "sRGB straight-alpha RGBA16 PNG",
+      "bytes": 3866,
+      "sha256": "922b774451dd282348bf2189a3729eec66a6459c05a97a411f6eac0bd05b6226"
+    },
+    {
+      "source": "docs/testing/phase-1-colour16-windows-x86_64/black.rgba16f.le",
+      "destination": "tests/golden/phase-1/colour-alpha/black.rgba16f.le",
+      "encoding": "linear premultiplied RGBA binary16 little-endian",
+      "bytes": 133640,
+      "sha256": "a340e950f2b9c9981818f916856cb644bb1b15e78c4d9aa25f565cd4439c3811"
+    },
+    {
+      "source": "docs/testing/phase-1-colour16-windows-x86_64/white.png",
+      "destination": "tests/golden/phase-1/colour-alpha/white.png",
+      "encoding": "sRGB straight-alpha RGBA16 PNG",
+      "bytes": 2828,
+      "sha256": "8d342cc99c62ffb07f21f63ed5283955287cfa1766144a608c2a3714a6da8bd0"
+    },
+    {
+      "source": "docs/testing/phase-1-colour16-windows-x86_64/white.rgba16f.le",
+      "destination": "tests/golden/phase-1/colour-alpha/white.rgba16f.le",
+      "encoding": "linear premultiplied RGBA binary16 little-endian",
+      "bytes": 133640,
+      "sha256": "7648bfe6f3aff2f4ed48e5ffb272a838c7e1a6647d8b17a8083994e3c631fcc8"
+    },
+    {
+      "source": "docs/testing/phase-1-colour16-windows-x86_64/colour.png",
+      "destination": "tests/golden/phase-1/colour-alpha/colour.png",
+      "encoding": "sRGB straight-alpha RGBA16 PNG",
+      "bytes": 5297,
+      "sha256": "accaff5593703989a761118615b14cd9776f951a36f7f04ab8b029e6141058fb"
+    },
+    {
+      "source": "docs/testing/phase-1-colour16-windows-x86_64/colour.rgba16f.le",
+      "destination": "tests/golden/phase-1/colour-alpha/colour.rgba16f.le",
+      "encoding": "linear premultiplied RGBA binary16 little-endian",
+      "bytes": 133640,
+      "sha256": "579524da9d52cb7350ffba327d5ac4514e2ee4c2671b37dcfd231ebdacb9ec97"
+    },
+    {
+      "source": "docs/testing/phase-1-colour16-windows-x86_64/translucent.png",
+      "destination": "tests/golden/phase-1/colour-alpha/translucent.png",
+      "encoding": "sRGB straight-alpha RGBA16 PNG",
+      "bytes": 5337,
+      "sha256": "cf05555cff70bcfbea84be16f0536e18059260813df21bcef835c47bf353af3a"
+    },
+    {
+      "source": "docs/testing/phase-1-colour16-windows-x86_64/translucent.rgba16f.le",
+      "destination": "tests/golden/phase-1/colour-alpha/translucent.rgba16f.le",
+      "encoding": "linear premultiplied RGBA binary16 little-endian",
+      "bytes": 133640,
+      "sha256": "5b211e8325c83e4c02ae6f0e86e4e99ce4e82f06cd83927d8c7007623a9e3bf0"
+    },
+    {
+      "source": "docs/testing/phase-1-colour16-windows-x86_64/transparent.png",
+      "destination": "tests/golden/phase-1/colour-alpha/transparent.png",
+      "encoding": "sRGB straight-alpha RGBA16 PNG",
+      "bytes": 2522,
+      "sha256": "10f2160ddfadfffce2f7233da283e5874fcc7eb6b3ba68a46bf3b6bf3bb49117"
+    },
+    {
+      "source": "docs/testing/phase-1-colour16-windows-x86_64/transparent.rgba16f.le",
+      "destination": "tests/golden/phase-1/colour-alpha/transparent.rgba16f.le",
+      "encoding": "linear premultiplied RGBA binary16 little-endian",
+      "bytes": 133640,
+      "sha256": "20d7aa9361df4af02cd19b923a4a7a20b8a0fe95d704ac9e238aa8fab2eec5a8"
+    }
+  ],
+  "installation": "byte-for-byte copies after explicit approval; never regenerate",
+  "scope": "initial colour/alpha reference content only, not a passing golden comparison or phase gate"
+}

@@ -45,7 +45,7 @@ is one 8-bit code value; reported raw linear error is at most 0.000959691.
 The raw linear readbacks were not serialized, so that second statistic is
 producer-reported rather than independently reconstructed.
 
-All five Windows outputs have identical decoded RGBA bytes to M4. This is an
+All five Windows outputs have identical decoded RGBA bytes to M4. This is a
 coincidence for these scenes, not a general expectation or a change to the
 perceptual golden policy. Simple arithmetic on these deterministic inputs
 rounded identically on D3D12 and Metal. Phase 3's bilinear/Lanczos sampling is
@@ -53,6 +53,24 @@ expected to expose backend precision differences; differing bytes then are
 not themselves a defect. Judge numerical and perceptual bounds, not equality.
 The shader/probe/checker hashes match implementation `8659673`: Windows used
 CRLF, M4 LF. No shader or checker edits are needed to explain the difference.
+
+## Verified 16-bit Windows rerun
+
+The owner supplied the new reference run in `7f01657`, using implementation
+`79113fd` (hashes verified with CRLF checkout). The
+[independent audit](../testing/phase-1-colour16-windows-x86_64/audit.json)
+reconstructs all 83,525 pixel checks from the PNG16 and raw binary16 files:
+maximum linear error 0.000959691; maximum egress error one 16-bit code value.
+The ideal-full-pipeline export error is recorded separately, maximum 193/65535.
+No linear statistic now rests solely on the producer's summary.
+
+The raw working samples still match M4 exactly for these scenes. However, the
+[16-bit export comparison](../testing/phase-1-colour16-platform-comparison.json)
+already finds 184 differing channel values out of 334,100, each one 16-bit step
+apart. This locates the observed difference at egress, with both backends
+within the two-code-value bound; it does not establish the specific driver or
+arithmetic cause. The original 8-bit byte equality hid these differences.
+Do not wait until Phase 3 to remember that byte equality is not the criterion.
 
 ## Options
 
@@ -69,13 +87,14 @@ even when the current pixels happen to match Metal exactly.
 
 ## Proposed decision
 
-After the new Windows run, re-propose the **five 16-bit output PNGs and their
-raw linear readbacks**, with new hashes, in the
+Propose the **five 16-bit output PNGs and their raw linear readbacks** from
+Windows evidence `7f01657`, measured code `79113fd`, with exact new hashes in the
 [review sheet](../testing/phase-1-golden-candidates.md) as the initial
 colour/alpha golden pixel content. The input-alpha PNG is a generated input,
 not a golden output. Approval is bound to the file SHA-256 values in that
-sheet and the new measured source revision. The currently linked 8-bit set is
-historical and is not approved.
+sheet and the measured source revision. The linked manifest lists all ten
+source paths, destination paths, lengths and SHA-256 values. The previous
+8-bit set remains historical and is not approved.
 
 After approval, install byte-for-byte copies under
 `tests/golden/phase-1/colour-alpha/` with source/report provenance. Do not
@@ -106,7 +125,9 @@ The numerical diagnostic passed on both native GPUs. Independently decoded
 all committed input/output PNGs, verified dimensions, sRGB tags and hashes,
 recomputed all exported RGBA expectations and checked the linear midpoint and
 hidden-RGB anchors. Inspect the linked Windows images with the band legend.
-Human approval and a subsequent reference-machine golden comparison are pending.
+The 16-bit images and exact raw readbacks are now audited and proposed with
+new hashes. Final human approval and a subsequent reference-machine golden
+comparison remain pending.
 
 ## Revisit when
 

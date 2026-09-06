@@ -145,9 +145,9 @@ readbacks. No scene values changed. The new
 83,525 pixels: maximum linear error 0.000959691 (now reconstructed from raw
 samples), maximum egress error one 16-bit code value. The separately recorded
 full-pipeline PNG error reaches 193/65535 with intermediate half-float rounding.
-All old reports remain unchanged. Windows must rerun this revision before a
-new hash-bound proposal is made; conditional scene approval is not reference
-approval. Backend byte equality is coincidental; sampling in Phase 3 can differ.
+All old reports remain unchanged. Windows has now rerun this revision; the
+new hash-bound proposal is awaiting final approval. Conditional scene approval
+is not reference approval. Backend byte equality is coincidental; sampling in Phase 3 can differ.
 [Phase 4 notes](04-notes.md) reserve the ten-overlay accumulation scene for
 when overlays exist. Only the single-blend scene is implemented now.
 
@@ -158,3 +158,17 @@ that flag. No cause is established and no engine code changed. Four portable
 Python audit tests pass, including forged metrics, altered raw samples with an
 updated hash, and PNG depth/CRC rejection. ci-fast runs these recorded-data
 checks without GPU execution or a latency assertion.
+
+
+## Windows 16-bit evidence and revised hash proposal
+
+The owner's `7f01657` report passes the independent offline audit on all
+83,525 pixels. Exact raw binary16 files now reconstruct the 0.000959691 linear
+maximum; maximum egress error is one 16-bit code value. Source hashes match
+`79113fd` with CRLF line endings. Five PNGs plus five raw files are proposed in
+[the manifest](../testing/phase-1-colour16-candidate-manifest.json) and
+[review sheet](../testing/phase-1-golden-candidates.md). No files are installed
+as references pending final approval. The five raw readbacks match M4, but 184
+exported channel values differ by one 16-bit step; this bounded variation
+reinforces ADR 0030's warning against requiring backend byte equality.
+No code changed for this evidence audit and no additional full matrix ran.
