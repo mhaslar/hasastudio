@@ -62,7 +62,7 @@ jobs:
         if: runner.os != 'Linux'
         env:
           REZIE_DISABLE_HW_DECODE: '1'
-        run: cargo xtask decode-check --mode auto --output target/decode-ci
+        run: cargo xtask decode-check --mode auto --output "${{ runner.temp }}/decode-${{ github.run_id }}-${{ github.run_attempt }}"
       - name: Tick correctness only, explicit diagnostic slack
         run: cargo xtask clock-check
       - name: Package and launch GUI (Linux)
@@ -77,7 +77,7 @@ jobs:
           name: correctness-${{ matrix.os }}
           path: |
             target/native-guard-tests.json
-            target/decode-ci/
+            ${{ runner.temp }}/decode-${{ github.run_id }}-${{ github.run_attempt }}/
             target/clock-correctness.json
             target/dist-smoke.txt
             .logs/

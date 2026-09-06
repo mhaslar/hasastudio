@@ -78,7 +78,7 @@ jobs:
         if: steps.scope.outputs.build == 'true'
         env:
           REZIE_DISABLE_HW_DECODE: '1'
-        run: cargo xtask decode-check --mode auto --output target/decode-ci
+        run: cargo xtask decode-check --mode auto --output "${{ runner.temp }}/decode-${{ github.run_id }}-${{ github.run_attempt }}"
       - name: Audit serialized colour evidence without a GPU
         if: steps.scope.outputs.build == 'true'
         run: python3 -B -m unittest discover -s tools -p 'test_*.py'

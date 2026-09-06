@@ -302,3 +302,14 @@ initializes MSVC/SDK paths and checks the actual libclang before compilation.
 This clears the native Windows file-decoder validation step. The slice can
 now enter its single full matrix. Linux hardware execution, integrated preview,
 NDI reception and phase-required load/benchmark evidence remain open.
+
+The first full run (`34044170230`) passed Mac/Linux but exposed a Windows
+PATH export mistake in the new CI setup: Git's link.exe displaced MSVC.
+The corrective second run (`34044710981`) then exposed cached diagnostic
+output on Mac: target/decode-ci had been restored, and overwrite protection
+correctly rejected it. These are workflow defects, not native decoder
+regressions. CI now exports only the required compiler paths with an explicit
+MSVC linker, and writes decode evidence outside the cached target directory,
+under runner.temp with run ID/attempt in the path. Neither check is disabled.
+The exceptional additional full runs were explained to the owner before
+triggering them; the one-run normal policy remains in force.
