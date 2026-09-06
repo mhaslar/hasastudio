@@ -6,6 +6,15 @@ implementation is paused for [ADR 0037](../decisions/0037-resolve-wgpu-submissio
 the pinned wgpu submission path takes locks/allocates, conflicting with the
 literal clock/composite-thread contract. No rule has been narrowed silently.
 
+PR #7 merged as `b9de96e` after its single
+[full matrix](https://github.com/mhaslar/hasastudio/actions/runs/34047311919)
+passed, including all three packaged GUI launches and evidence retention.
+The [manual bootstrap preflight](https://github.com/mhaslar/hasastudio/actions/runs/34048057693)
+was dispatched on `phase-1/ci-preflight` at `ceaafcf`, selecting Windows.
+GitHub confirms exactly one `verify` job with label `windows-2022`; no full-gate
+or reference job was started by that dispatch. Its final result is still
+pending as this note is written; job selection is verified, not yet completion.
+
 ## Installed NDI SDK
 
 The owner supplied `/Library/NDI SDK for Apple`. Its Version.txt identifies
