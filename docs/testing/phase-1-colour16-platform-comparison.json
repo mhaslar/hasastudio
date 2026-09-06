@@ -1,0 +1,37 @@
+{
+  "windows_evidence_commit": "7f01657015e0ac14f7c2e4161bfcddefa3b52012",
+  "source_revision": "79113fd8eda86f7a502e69ddaf7e5f3dd3066903",
+  "cases": [
+    {
+      "name": "black",
+      "identical_raw_binary16": true,
+      "differing_png16_channels": 16,
+      "max_png16_channel_difference": 1
+    },
+    {
+      "name": "white",
+      "identical_raw_binary16": true,
+      "differing_png16_channels": 0,
+      "max_png16_channel_difference": 0
+    },
+    {
+      "name": "colour",
+      "identical_raw_binary16": true,
+      "differing_png16_channels": 40,
+      "max_png16_channel_difference": 1
+    },
+    {
+      "name": "translucent",
+      "identical_raw_binary16": true,
+      "differing_png16_channels": 88,
+      "max_png16_channel_difference": 1
+    },
+    {
+      "name": "transparent",
+      "identical_raw_binary16": true,
+      "differing_png16_channels": 40,
+      "max_png16_channel_difference": 1
+    }
+  ],
+  "interpretation": "Identical working binary16 samples; four exports differ in some least-significant 16-bit code values. This is bounded backend egress variation, not a byte-equality requirement."
+}

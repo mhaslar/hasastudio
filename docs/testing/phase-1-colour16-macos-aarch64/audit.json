@@ -1,0 +1,60 @@
+{
+  "ruling": "PASS: independently reconstructed linear and PNG16 numerical checks",
+  "adapter": "Apple M4",
+  "backend": "Metal",
+  "source_line_endings": {
+    "crates/rezie-gpu/src/pool/colour.wgsl": "LF",
+    "crates/rezie-gpu/src/pool/colour.rs": "LF",
+    "crates/rezie-gpu/src/bin/rezie-colour-check.rs": "LF"
+  },
+  "report_sha256": "cac20599d2c97f0c518c75c02b3f56816a176244a5a4606dbd5561065c51b623",
+  "auditor_sha256": "b27aa379b7a24cd628bece58ccf4fc4329450d982ea78a0165624646cb0f1da6",
+  "cases": [
+    {
+      "name": "black",
+      "pixels": 16705,
+      "max_linear_absolute_error": 0.00048776070435430086,
+      "max_png16_egress_code_value_error": 1,
+      "max_png16_vs_ideal_code_value_error": 21,
+      "png_file_sha256": "3559257b66abbcb013b564cdf6209cc942378e5a67dac161e1cc92e9a97ea40d",
+      "raw_file_sha256": "a340e950f2b9c9981818f916856cb644bb1b15e78c4d9aa25f565cd4439c3811"
+    },
+    {
+      "name": "white",
+      "pixels": 16705,
+      "max_linear_absolute_error": 0.00048776070435430086,
+      "max_png16_egress_code_value_error": 1,
+      "max_png16_vs_ideal_code_value_error": 193,
+      "png_file_sha256": "8d342cc99c62ffb07f21f63ed5283955287cfa1766144a608c2a3714a6da8bd0",
+      "raw_file_sha256": "7648bfe6f3aff2f4ed48e5ffb272a838c7e1a6647d8b17a8083994e3c631fcc8"
+    },
+    {
+      "name": "colour",
+      "pixels": 16705,
+      "max_linear_absolute_error": 0.0009466618154896356,
+      "max_png16_egress_code_value_error": 1,
+      "max_png16_vs_ideal_code_value_error": 142,
+      "png_file_sha256": "79bf919b067bdf47639efab45becd6ef572c4a991be1930808ad16323800feac",
+      "raw_file_sha256": "579524da9d52cb7350ffba327d5ac4514e2ee4c2671b37dcfd231ebdacb9ec97"
+    },
+    {
+      "name": "translucent",
+      "pixels": 16705,
+      "max_linear_absolute_error": 0.0009596906673597916,
+      "max_png16_egress_code_value_error": 1,
+      "max_png16_vs_ideal_code_value_error": 63,
+      "png_file_sha256": "9f4b0d381155247649aed7002b7a7d0bd89bc2bd061c6edbbb3de6d9cd049055",
+      "raw_file_sha256": "5b211e8325c83e4c02ae6f0e86e4e99ce4e82f06cd83927d8c7007623a9e3bf0"
+    },
+    {
+      "name": "transparent",
+      "pixels": 16705,
+      "max_linear_absolute_error": 0.00048776070435430086,
+      "max_png16_egress_code_value_error": 1,
+      "max_png16_vs_ideal_code_value_error": 32,
+      "png_file_sha256": "256d72d669566f2406101923fc4d110db71bc6fd93e733e88f482938ccf024d0",
+      "raw_file_sha256": "20d7aa9361df4af02cd19b923a4a7a20b8a0fe95d704ac9e238aa8fab2eec5a8"
+    }
+  ],
+  "golden_approval_or_phase_gate": false
+}

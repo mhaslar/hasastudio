@@ -1,4 +1,5 @@
 use crate::{GpuError, FRAME_USAGES, WORKING_FORMAT};
+pub(crate) mod colour;
 use crossbeam_queue::ArrayQueue;
 use rezie_core::FrameTime;
 use std::{

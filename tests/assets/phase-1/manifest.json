@@ -1,0 +1,14 @@
+{
+  "cases": [
+    "black",
+    "white",
+    "colour",
+    "translucent",
+    "transparent"
+  ],
+  "generator": "xtask::golden::input_pixels",
+  "height": 65,
+  "phase": 1,
+  "rgba_sha256": "47f24b377b54f5ea21902be325f7121f26ea3bcef70b9357e255a38e70dd3dad",
+  "width": 257
+}

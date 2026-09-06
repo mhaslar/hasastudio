@@ -9,6 +9,7 @@ use std::{
 };
 
 mod fetch;
+mod golden;
 mod reference;
 mod sweep;
 
@@ -61,6 +62,13 @@ fn fetch_deps() -> Result<()> {
 }
 
 fn golden() -> Result<()> {
+    if phase()? == 1 {
+        return golden::run(false, None);
+    }
+    golden_phase_zero()
+}
+
+fn golden_phase_zero() -> Result<()> {
     anyhow::ensure!(
         phase()? == 0,
         "golden path inventory must be implemented for the new phase"
@@ -250,16 +258,41 @@ fn main() -> Result<()> {
         }
         "gen-assets" => {
             anyhow::ensure!(args.next().is_none(), "gen-assets takes no arguments");
-            anyhow::ensure!(
-                phase()? == 0,
-                "new phase requires its media asset generator"
-            );
-            fs::create_dir_all(root().join("tests/assets"))?;
-            fs::write(root().join("tests/assets/phase-0.json"), ASSET_MANIFEST)?;
+            if phase()? == 0 {
+                fs::create_dir_all(root().join("tests/assets"))?;
+                fs::write(root().join("tests/assets/phase-0.json"), ASSET_MANIFEST)?;
+            } else {
+                anyhow::ensure!(
+                    phase()? == 1,
+                    "asset inventory must be extended for this phase"
+                );
+                golden::gen_assets()?;
+            }
         }
         "golden" => {
-            anyhow::ensure!(args.next().is_none(), "Phase 0 has no reference updates; golden --update requires human review in a pixel-producing phase");
-            golden()?;
+            let mut development = false;
+            let mut output = None;
+            while let Some(arg) = args.next() {
+                match arg.as_str() {
+                    "--development" => development = true,
+                    "--output" => output = Some(PathBuf::from(args.next().context("--output requires a new directory")?)),
+                    "--update" => anyhow::bail!("reference updates require a reviewed hash-bound proposal; this command never regenerates approved references"),
+                    _ => anyhow::bail!("unknown golden argument '{arg}'"),
+                }
+            }
+            if phase()? == 0 {
+                anyhow::ensure!(
+                    !development && output.is_none(),
+                    "Phase 0 golden is an inventory check"
+                );
+                golden_phase_zero()?;
+            } else {
+                anyhow::ensure!(
+                    phase()? == 1,
+                    "golden inventory must be extended for this phase"
+                );
+                golden::run(development, output)?;
+            }
         }
         "clock-check" => {
             anyhow::ensure!(args.next().is_none(), "clock-check takes no arguments");

@@ -71,6 +71,9 @@ jobs:
         if: steps.scope.outputs.build == 'true'
       - run: cargo clippy --workspace --all-targets --locked -- -D warnings
         if: steps.scope.outputs.build == 'true'
+      - name: Audit serialized colour evidence without a GPU
+        if: steps.scope.outputs.build == 'true'
+        run: python3 -B -m unittest discover -s tools -p 'test_*.py'
       - run: cargo nextest run --workspace --locked
         if: steps.scope.outputs.build == 'true'
       - name: Thread-affinity compile-fail doctest (nextest does not run doctests)
