@@ -1,7 +1,7 @@
 # Phase 1 preview/NDI integration preparation
 
 The native decoder slice is merged and verified on Windows/Mac as recorded in
-01-progress.md. CI preflight/evidence retention is a separate PR. Streaming
+01-progress.md. CI preflight/evidence retention is [PR #7](https://github.com/mhaslar/hasastudio/pull/7). Streaming
 implementation is paused for [ADR 0037](../decisions/0037-resolve-wgpu-submission-on-the-realtime-thread.md):
 the pinned wgpu submission path takes locks/allocates, conflicting with the
 literal clock/composite-thread contract. No rule has been narrowed silently.
@@ -50,3 +50,12 @@ lateness and rendered-output age/drops; inspect the known reference clusters
 at 131–137 s and 508–516 s under real per-tick work. The M4 two-input/one-output
 1080p50 diagnostic has no performance threshold. No sustained run has yet
 been measured or claimed.
+
+## Local verification of the CI slice
+
+Formatting, strict workspace Clippy, all 32 nextest tests, both compile-fail
+doctests and five Python tests passed. The complete nextest run marked
+`one_earlier_stall_fails_even_when_final_tick_is_on_time` leaky; an isolated
+rerun passed without that label. This pure statistics test starts no worker;
+the intermittent nextest report has no established cause and is not dismissed
+as a proven false positive. No Rust implementation changed in the CI slice.
