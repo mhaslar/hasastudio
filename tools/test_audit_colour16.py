@@ -14,7 +14,7 @@ FIXTURE = Path(__file__).resolve().parents[1] / 'docs/testing/phase-1-colour16-m
 
 class AuditTests(unittest.TestCase):
     def test_actual_rgba16_and_raw_evidence_reconstructs_metrics(self):
-        result = AUDIT.audit(FIXTURE)
+        result = AUDIT.audit(FIXTURE, source_revision='79113fd')
         self.assertEqual(sum(c['pixels'] for c in result['cases']), 83525)
         self.assertTrue(all(c['max_png16_egress_code_value_error'] <= 2 for c in result['cases']))
         rgba = AUDIT.decode_png((FIXTURE / 'black.png').read_bytes(), 16)
@@ -29,7 +29,7 @@ class AuditTests(unittest.TestCase):
             report['cases'][0]['max_linear_absolute_error'] = 0
             (directory / 'report.json').write_text(json.dumps(report))
             with self.assertRaisesRegex(ValueError, 'linear maximum cannot be reproduced'):
-                AUDIT.audit(directory)
+                AUDIT.audit(directory, source_revision='79113fd')
 
     def test_changed_raw_bits_fail_even_if_their_hash_is_updated(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -43,7 +43,7 @@ class AuditTests(unittest.TestCase):
             report['cases'][0]['linear_readback']['sha256'] = AUDIT.digest(raw)
             (directory / 'report.json').write_text(json.dumps(report))
             with self.assertRaisesRegex(ValueError, 'linear maximum cannot be reproduced'):
-                AUDIT.audit(directory)
+                AUDIT.audit(directory, source_revision='79113fd')
 
     def test_png_crc_and_depth_are_checked(self):
         original = (FIXTURE / 'black.png').read_bytes()

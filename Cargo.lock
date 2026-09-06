@@ -3799,6 +3799,7 @@ name = "xtask"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "png",
  "rezie-engine",
  "serde",
  "serde_json",

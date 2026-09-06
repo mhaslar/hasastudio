@@ -11,6 +11,7 @@ import json
 import math
 from pathlib import Path
 import struct
+import subprocess
 import zlib
 
 WIDTH, HEIGHT = 257, 65
@@ -108,7 +109,7 @@ def encode(p):
     return [math.floor(min(1, max(0, v)) * 65535 + .5) for v in srgb + [alpha]]
 
 
-def audit(directory):
+def audit(directory, source_revision=None):
     report = json.loads((directory / 'report.json').read_text())
     require(report['schema_version'] == 2, 'requires schema 2 raw/16-bit report')
     require((report['width'], report['height'], report['input_bit_depth'], report['output_bit_depth']) == (WIDTH, HEIGHT, 8, 16), 'report format mismatch')
@@ -122,7 +123,8 @@ def audit(directory):
     for key, relative in [('shader_sha256', 'crates/rezie-gpu/src/pool/colour.wgsl'),
                           ('probe_source_sha256', 'crates/rezie-gpu/src/pool/colour.rs'),
                           ('checker_source_sha256', 'crates/rezie-gpu/src/bin/rezie-colour-check.rs')]:
-        source = (root / relative).read_bytes().replace(b'\r\n', b'\n')
+        source = (subprocess.check_output(['git', 'show', source_revision + ':' + relative], cwd=root)
+                  if source_revision else (root / relative).read_bytes()).replace(b'\r\n', b'\n')
         matches = [name for name, value in [('LF', source), ('CRLF', source.replace(b'\n', b'\r\n'))] if digest(value) == report[key]]
         require(bool(matches), f'{relative}: measured source differs from current checkout')
         source_checks[relative] = matches[0]
@@ -169,9 +171,10 @@ def audit(directory):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('directory', type=Path)
+    parser.add_argument('--source-revision', help='explicit historical git revision of measured code')
     parser.add_argument('--output', type=Path, help='optional NEW audit JSON path')
     args = parser.parse_args()
-    result = audit(args.directory)
+    result = audit(args.directory, args.source_revision)
     text = json.dumps(result, indent=2) + '\n'
     if args.output:
         with args.output.open('x') as output:

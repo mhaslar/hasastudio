@@ -1,9 +1,10 @@
-# Windows 16-bit colour/alpha candidates — awaiting final hash approval
+# Approved Windows 16-bit colour/alpha reference content
 
 The scene design is already accepted. This replaces the unapproved
 [8-bit proposal](phase-1-golden-candidates-8bit.md) with **five 16-bit PNGs and
 five exact binary16 linear readbacks**, produced on the Windows RX 6800 XT.
-No references are installed. [ADR 0030](../decisions/0030-review-first-colour-alpha-references.md)
+The owner approved all ten hashes below, bound to `c9397f0`; byte-for-byte
+copies are installed under `tests/golden/phase-1/colour-alpha/`. [ADR 0030](../decisions/0030-review-first-colour-alpha-references.md)
 records the precision ruling, backend caveat and Phase 4 repeated-blend follow-up.
 
 Measured code: `79113fd8eda86f7a502e69ddaf7e5f3dd3066903`.

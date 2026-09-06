@@ -72,6 +72,7 @@ The report's `linear_readback_layout` and per-case `linear_readback` identify
 this encoding, length and checksum. Preserve both PNG and raw files with the
 report when returning evidence.
 
-The older 8-bit directories are historical and should remain unchanged. Scene
-design is accepted, but final approval binds to new Windows 16-bit PNG/raw hashes.
-No reference installation or full CI matrix has been triggered for this revision.
+The older 8-bit directories are historical and should remain unchanged.
+The owner has approved the Windows 16-bit PNG/raw hashes bound to `c9397f0`;
+byte-for-byte references are now installed. See [golden-tests.md](golden-tests.md)
+for the fresh-render comparison command. Approval alone is not a passing run.

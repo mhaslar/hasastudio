@@ -1,9 +1,9 @@
 # 0030 — Review the first Windows colour/alpha reference images
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-06
 - **Phase:** 1
-- **Decided by:** awaiting human review
+- **Decided by:** human review, hashes bound to `c9397f0`
 - **Affects:** initial golden references, rezie-gpu colour path
 
 ## Precision ruling before freezing hashes
@@ -126,10 +126,18 @@ all committed input/output PNGs, verified dimensions, sRGB tags and hashes,
 recomputed all exported RGBA expectations and checked the linear midpoint and
 hidden-RGB anchors. Inspect the linked Windows images with the band legend.
 The 16-bit images and exact raw readbacks are now audited and proposed with
-new hashes. Final human approval and a subsequent reference-machine golden
-comparison remain pending.
+new hashes. Final human approval has been received and the ten files are installed. A
+subsequent reference-machine golden comparison remains pending.
 
 ## Revisit when
 
 Adding new rendering paths or changing expected pixels. Future reference
 changes require the same explicit review; a failing test is not approval.
+
+## Approval and installation
+
+The owner explicitly approved the five PNGs and five raw readbacks identified
+in `c9397f0`. All ten were installed byte-for-byte under
+`tests/golden/phase-1/colour-alpha/`; `approved.json` records the source/destination
+paths and hashes. Every installed length and SHA-256 was checked. This installs
+approved content, not a claim that the new golden harness has passed.

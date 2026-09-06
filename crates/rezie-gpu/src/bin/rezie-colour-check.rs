@@ -121,6 +121,13 @@ async fn main() -> Result<()> {
         }
         _ => anyhow::bail!("usage: rezie-colour-check --output <new-directory>"),
     };
+    let input = match args.next().as_deref() {
+        None => None,
+        Some("--input") => Some(PathBuf::from(
+            args.next().context("--input requires a PNG path")?,
+        )),
+        _ => anyhow::bail!("expected optional --input <RGBA8-sRGB.png>"),
+    };
     anyhow::ensure!(args.next().is_none(), "unexpected colour-check arguments");
     // Atomic create, not exists-then-write: never overwrite earlier reports or candidates.
     fs::create_dir(&output).with_context(|| {
@@ -137,7 +144,13 @@ async fn main() -> Result<()> {
         adapter.name
     );
     let source_path = output.join("input-alpha.png");
-    write_png(&source_path, &fixture(), png::BitDepth::Eight)?;
+    if let Some(input) = input {
+        // Preserve the exact xtask-generated input used for this run.
+        let bytes = fs::read(&input).with_context(|| format!("read input {}", input.display()))?;
+        fs::write(&source_path, bytes)?;
+    } else {
+        write_png(&source_path, &fixture(), png::BitDepth::Eight)?;
+    }
     let source = read_fixture(&source_path)?;
     let mut pool = FramePool::new(gpu.device.clone(), 16 * 1024 * 1024);
     let mut cases = Vec::new();

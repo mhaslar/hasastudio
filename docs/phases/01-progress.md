@@ -97,9 +97,10 @@ M4 two-input/one-output 1080p50 diagnostic when its media paths exist. Normative
 goldens stay on the reference; M4/Metal functional success is necessary but
 insufficient. The former Phase 0 clock obligation is already paid.
 
-Phase 0's gen-assets/golden commands still reject Phase 1 explicitly; their
-Phase 1 media/golden implementation is not presented as complete. The manual
-Phase 0 clock sweep/bench remains available independently of that work.
+`gen-assets` and `golden` now implement the Phase 1 colour/alpha inventory.
+Default golden comparison requires the reference machine; M4 uses explicitly
+non-normative development mode. The manual Phase 0 clock sweep/bench remains
+available independently of this work.
 
 ## Approved sequence with the reference host available
 
@@ -172,3 +173,34 @@ as references pending final approval. The five raw readbacks match M4, but 184
 exported channel values differ by one 16-bit step; this bounded variation
 reinforces ADR 0030's warning against requiring backend byte equality.
 No code changed for this evidence audit and no additional full matrix ran.
+
+
+## Approved installation and golden harness
+
+The owner approved all ten reference files bound to `c9397f0`. They are installed
+byte-for-byte in `tests/golden/phase-1/colour-alpha/` with an approved manifest;
+every copied length and hash matches. The earlier pending-approval entries
+above are historical. No further permission is needed for this installation.
+
+ADR 0031 implements the regenerated input, explicit input-file rendering and
+CIEDE2000 comparison over black and white, with separate alpha and raw-linear
+checks. Strict ΔE limits remain mean <1 / max <3. Failures preserve actual
+PNG16/raw data and colour/alpha heatmaps. Tampering, alpha-only regressions,
+strict threshold edges and image bit depth are covered by portable tests.
+The reference workflow uploads these artifacts without changing its triggers.
+
+The [full M4 harness run](../testing/phase-1-golden-macos-aarch64/report.json)
+passes all five cases. Worst per-case/background mean ΔE00 is 0.00000881734,
+worst maximum 0.00284570, with zero alpha and raw-linear difference against
+approved Windows samples. Its `normative_reference_result` is false. The
+independent renderer audit also passes. Native-reference restriction and
+existing-output rejection were verified, with earlier evidence preserved.
+
+Formatting, strict workspace Clippy, 28 nextest tests, both doctests and four
+Python audit tests pass. No new full matrix has run yet. A fresh Windows run
+of [the harness](../user/golden-tests.md) is now the remaining validation for
+this slice before its one ready PR/full matrix. Reference acceptance is not
+inferred from approving files or M4 success. Phase 1 remains open; decode and
+fallback, shared-device preview, NDI, allocation and load measurements follow
+in the approved sequence. Phase 4 notes carry the observed precision and
+repeated-blend accumulation follow-up without implementing overlays now.
