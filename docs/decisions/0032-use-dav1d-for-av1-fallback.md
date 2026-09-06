@@ -164,8 +164,15 @@ build configuration, versions and notices; decode a known AV1 fixture with
 hardware disabled on all supported targets, assert `libdav1d`, and validate
 frames, PTS and end-of-stream handling. Verify actual hardware decode
 separately on equipped machines. The implementation now passes local M4
-software fixtures and hardware H.264/HEVC checks; Windows/Linux execution
-remains to be recorded. See ADR 0034 for the actual Apple session probe.
+software fixtures and hardware H.264/HEVC checks. The owner supplied Windows
+reference execution in `ad11a67`; its independent
+[audit](../testing/phase-1-decode-windows-x86_64/README.md) verifies all four
+codecs through D3D11VA and forced software, including exact 8/10-bit AV1
+samples/PTS against the independent oracle and M4. The Windows native log
+reports dav1d identifier `7161642`; its semantic release version remains
+unestablished. Linux software checks passed in ci-fast `34036144315`;
+Linux hardware execution remains open. See ADR 0034 for the actual Apple
+session probe. None of these short checks measures preview or throughput.
 
 ## Revisit when
 
