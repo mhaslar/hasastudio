@@ -1,0 +1,22 @@
+{
+  "scope": "Read-only archive inspection on macOS; not Windows execution, decoder correctness or completed redistribution audit",
+  "date": "2026-09-06",
+  "adr": "0032",
+  "archive_url": "https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2025-08-31-13-00/ffmpeg-n7.1.1-57-g1b48158a23-win64-lgpl-shared-7.1.zip",
+  "archive_bytes": 60795248,
+  "archive_sha256": "e1b36a261be92f632e8e4d35077a6154520c686dd0bb451508bfefdcd4804f55",
+  "inspected_member": "ffmpeg-n7.1.1-57-g1b48158a23-win64-lgpl-shared-7.1/bin/avcodec-61.dll",
+  "member_sha256": "bfe4311a9bec9830d33677d9099d666264402d950c1db1be8983fa1c9b151e81",
+  "embedded_configuration": "--prefix=/ffbuild/prefix --pkg-config-flags=--static --pkg-config=pkg-config --cross-prefix=x86_64-w64-mingw32- --arch=x86_64 --target-os=mingw32 --enable-version3 --disable-debug --enable-shared --disable-static --disable-w32threads --enable-pthreads --enable-iconv --enable-zlib --enable-libxml2 --enable-libvmaf --enable-fontconfig --enable-libharfbuzz --enable-libfreetype --enable-libfribidi --enable-vulkan --enable-libshaderc --enable-libvorbis --disable-libxcb --disable-xlib --disable-libpulse --enable-gmp --enable-lzma --enable-opencl --enable-amf --enable-libaom --enable-libaribb24 --disable-avisynth --enable-chromaprint --enable-libdav1d --disable-libdavs2 --disable-libdvdread --disable-libdvdnav --disable-libfdk-aac --enable-ffnvcodec --enable-cuda-llvm --disable-frei0r --enable-libgme --enable-libkvazaar --enable-libaribcaption --enable-libass --enable-libbluray --enable-libjxl --enable-libmp3lame --enable-libopus --enable-libplacebo --enable-librist --enable-libssh --enable-libtheora --enable-libvpx --enable-libwebp --enable-libzmq --enable-lv2 --enable-libvpl --enable-openal --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenh264 --enable-libopenjpeg --enable-libopenmpt --enable-librav1e --disable-librubberband --enable-schannel --enable-sdl2 --enable-libsnappy --enable-libsoxr --enable-libsrt --enable-libsvtav1 --enable-libtwolame --enable-libuavs3d --disable-libdrm --enable-vaapi --disable-libvidstab --enable-libvvenc --disable-libx264 --disable-libx265 --disable-libxavs2 --disable-libxvid --enable-libzimg --enable-libzvbi --extra-cflags=-DLIBTWOLAME_STATIC --extra-cxxflags= --extra-libs=-lgomp --extra-ldflags=-pthread --extra-ldexeflags= --cc=x86_64-w64-mingw32-gcc --cxx=x86_64-w64-mingw32-g++ --ar=x86_64-w64-mingw32-gcc-ar --ranlib=x86_64-w64-mingw32-gcc-ranlib --nm=x86_64-w64-mingw32-gcc-nm --extra-version=20250831",
+  "libdav1d_decoder_string_present": true,
+  "bundled_dav1d_version": "not established by this inspection; record from the runtime validation",
+  "licence_member": "ffmpeg-n7.1.1-57-g1b48158a23-win64-lgpl-shared-7.1/LICENSE.txt",
+  "licence_sha256": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768",
+  "licence_title": "GNU LESSER GENERAL PUBLIC LICENSE Version 3, 29 June 2007",
+  "notice_members": [
+    "ffmpeg-n7.1.1-57-g1b48158a23-win64-lgpl-shared-7.1/LICENSE.txt"
+  ],
+  "runtime_executed": false,
+  "decode_tested": false,
+  "redistribution_notice_audit_complete": false
+}
