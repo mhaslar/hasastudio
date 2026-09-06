@@ -17,9 +17,25 @@ software fallback. See ADRs 0032–0034.
 Use the Rust version in `rust-toolchain.toml`. Native builds also need Python
 3.12 or later and a C toolchain. macOS needs Command Line Tools and pkg-config.
 Ubuntu needs pkg-config, clang, nasm, python3-venv, libva-dev and patchelf.
-Windows needs MSVC build tools/Windows SDK and LLVM's libclang available to
-bindgen (typically `C:\Program Files\LLVM\bin`; set `LIBCLANG_PATH` to that
-directory if it is not discovered). Guard fixture tests also use `clang`.
+Windows needs MSVC build tools/Windows SDK and **LLVM 21.1.8** for bindgen.
+Use [the official x64 installer](https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/LLVM-21.1.8-win64.exe),
+select a dedicated directory such as `C:\Tools\LLVM-21.1.8`, and run builds
+in Developer PowerShell for Visual Studio. Set both paths in that shell:
+
+```powershell
+$env:LIBCLANG_PATH = 'C:\Tools\LLVM-21.1.8\bin'
+$env:CLANG_PATH = "$env:LIBCLANG_PATH\clang.exe"
+$env:PATH = "$env:LIBCLANG_PATH;$env:PATH"
+& $env:CLANG_PATH --version
+'#include <stdint.h>' | & $env:CLANG_PATH --target=x86_64-pc-windows-msvc -x c -fsyntax-only -
+```
+
+The version must show 21.1.8 and the header check must succeed. LLVM 22 is
+incompatible with the pinned bindgen 0.70.1: it can generate one-byte types
+for complete FFmpeg structures. Do not disable their layout assertions.
+After switching from LLVM 22, run `cargo clean -p ffmpeg-sys-next` once to
+regenerate bindings, then retry the original check. ADR 0035 records the
+upstream defect and local reproducer. Guard fixture tests also use `clang`.
 
 Run each command separately. **“then” is prose, not a shell separator.**
 
