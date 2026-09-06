@@ -1,0 +1,11 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.15s
+     Running `target/debug/xtask dist --smoke`
+   Compiling rezie-media v0.1.0 (/Users/matyashaslar/HasaStudio/crates/rezie-media)
+   Compiling libloading v0.8.9
+   Compiling rezie-engine v0.1.0 (/Users/matyashaslar/HasaStudio/crates/rezie-engine)
+   Compiling rezie-app v0.1.0 (/Users/matyashaslar/HasaStudio/crates/rezie-app)
+    Finished `release` profile [optimized + debuginfo] target(s) in 3.85s
+warning: the following packages contain code that will be rejected by a future version of Rust: block v0.1.6
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+2026-09-06T13:35:01.473004Z  INFO xtask: application bundle built path=/Users/matyashaslar/HasaStudio/dist/macos-aarch64/HasaStudio.app/Contents/MacOS/rezie-app
+2026-09-06T13:35:02.764465Z  INFO xtask: packaged GUI rendered with a live engine tick binary=/Users/matyashaslar/HasaStudio/dist/macos-aarch64/HasaStudio.app/Contents/MacOS/rezie-app

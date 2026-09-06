@@ -269,8 +269,11 @@ label. The ignored reference latency test remains intentionally excluded.
 Both compile-fail doctests and four offline colour-audit tests passed.
 A development-package smoke passed with loader overrides removed; goldens
 passed again at the existing shared thresholds. Final source-bound native
-reports and Linux ci-fast are recorded before the slice is proposed for its
-single full matrix. Windows reference decode evidence is still required;
+reports now pass at `8eed741`: [M4 evidence](../testing/phase-1-decode-macos-aarch64/README.md)
+records automatic and forced-software runs with all 168 pictures exact in
+each, and the final relocated package smoke passes. [Linux ci-fast](https://github.com/mhaslar/hasastudio/actions/runs/34036144315)
+is green on that commit, including native guards and software decode. The
+single full matrix waits for Windows reference decode evidence;
 [manual commands](../user/native-decode.md) do not require idle preparation.
 
 No GPU upload/colour conversion from decoded planes, shared-device preview,

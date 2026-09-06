@@ -1,0 +1,76 @@
+{
+  "os": "posix",
+  "tests": [
+    {
+      "case": "lgpl21",
+      "stage": "startup",
+      "expected_acceptance": true,
+      "exit_code": 0,
+      "passed": true
+    },
+    {
+      "case": "lgpl21",
+      "stage": "build",
+      "expected_acceptance": true,
+      "exit_code": 0,
+      "passed": true
+    },
+    {
+      "case": "lgpl3",
+      "stage": "startup",
+      "expected_acceptance": true,
+      "exit_code": 0,
+      "passed": true
+    },
+    {
+      "case": "lgpl3",
+      "stage": "build",
+      "expected_acceptance": true,
+      "exit_code": 0,
+      "passed": true
+    },
+    {
+      "case": "gpl",
+      "stage": "startup",
+      "expected_acceptance": false,
+      "exit_code": 1,
+      "passed": true
+    },
+    {
+      "case": "gpl",
+      "stage": "build",
+      "expected_acceptance": false,
+      "exit_code": 101,
+      "passed": true
+    },
+    {
+      "case": "nonfree",
+      "stage": "startup",
+      "expected_acceptance": false,
+      "exit_code": 1,
+      "passed": true
+    },
+    {
+      "case": "nonfree",
+      "stage": "build",
+      "expected_acceptance": false,
+      "exit_code": 101,
+      "passed": true
+    },
+    {
+      "case": "wrong-major",
+      "stage": "startup",
+      "expected_acceptance": false,
+      "exit_code": 1,
+      "passed": true
+    },
+    {
+      "case": "wrong-major",
+      "stage": "build",
+      "expected_acceptance": false,
+      "exit_code": 101,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

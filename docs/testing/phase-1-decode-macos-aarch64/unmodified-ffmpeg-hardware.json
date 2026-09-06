@@ -1,0 +1,27 @@
+{
+  "architecture": "aarch64",
+  "build_native": {
+    "configuration": "--prefix=/Users/matyashaslar/HasaStudio/.deps/native --enable-shared --disable-static --disable-gpl --disable-nonfree --disable-version3 --disable-autodetect --disable-everything --disable-doc --disable-debug --disable-avdevice --disable-avfilter --disable-swscale --disable-swresample --disable-postproc --disable-network --disable-programs --enable-ffprobe --enable-pthreads --enable-libdav1d --enable-decoder='h264,hevc,vp9,av1,libdav1d' --enable-parser='h264,hevc,vp9,av1' --enable-demuxer='mov,matroska,mpegts' --enable-protocol=file --extra-ldflags='-Wl,-rpath,/Users/matyashaslar/HasaStudio/.deps/native/lib' --extra-version=rezie-vt-probe1 --enable-videotoolbox --enable-hwaccel='h264_videotoolbox,hevc_videotoolbox'",
+    "licence": "LGPL version 2.1 or later",
+    "path": "/Users/matyashaslar/HasaStudio/.deps/native/lib/libavcodec.61.19.101.dylib",
+    "version": "4002661"
+  },
+  "cases": [
+    {
+      "error": "input 'tests/assets/phase-1/decode/h264.mp4': VideoToolbox hardware verification: dlsym(RTLD_DEFAULT, av_rezie_videotoolbox_uses_hardware): symbol not found",
+      "input": "h264.mp4",
+      "input_sha256": "b6b9112d45d35c9bc563a4aeb6bd24ba64888ec51fc7d758e4361c49968141d4",
+      "passed": false
+    }
+  ],
+  "git_revision": "b5901f1e52115fbd6eee559ab2f5f2514e612159",
+  "mode": "RequireHardware",
+  "os": "macos",
+  "passed": false,
+  "runtime_native": {
+    "configuration": "--prefix=/Users/matyashaslar/HasaStudio/.deps/native --enable-shared --disable-static --disable-gpl --disable-nonfree --disable-version3 --disable-autodetect --disable-everything --disable-doc --disable-debug --disable-avdevice --disable-avfilter --disable-swscale --disable-swresample --disable-postproc --disable-network --disable-programs --enable-ffprobe --enable-pthreads --enable-libdav1d --enable-decoder='h264,hevc,vp9,av1,libdav1d' --enable-parser='h264,hevc,vp9,av1' --enable-demuxer='mov,matroska,mpegts' --enable-protocol=file --extra-ldflags='-Wl,-rpath,/Users/matyashaslar/HasaStudio/.deps/native/lib' --enable-videotoolbox --enable-hwaccel='h264_videotoolbox,hevc_videotoolbox'",
+    "licence": "LGPL version 2.1 or later",
+    "version": 4002661
+  },
+  "scope": "File decode correctness; no GPU upload, preview, NDI or performance gate evaluated"
+}

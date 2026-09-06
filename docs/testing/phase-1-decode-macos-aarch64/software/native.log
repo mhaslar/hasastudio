@@ -1,0 +1,16 @@
+[h264 @ 0x781ec78000] Reinit context to 160x96, pix_fmt: yuv420p
+[h264 @ 0x781ec78000] Reinit context to 160x96, pix_fmt: yuv420p
+[AVIOContext @ 0x781f048000] Statistics: 32429 bytes read, 0 seeks
+[AVIOContext @ 0x781f048000] Statistics: 30101 bytes read, 0 seeks
+[AVIOContext @ 0x781f048000] Statistics: 45159 bytes read, 0 seeks
+[libdav1d @ 0x781ec78000] libdav1d 1.5.4
+[libdav1d @ 0x781ec78000] libdav1d 1.5.4
+[AVIOContext @ 0x781f048000] Statistics: 59520 bytes read, 0 seeks
+[AVIOContext @ 0x781f048000] Statistics: 29530 bytes read, 0 seeks
+[libdav1d @ 0x781ec78000] libdav1d 1.5.4
+[libdav1d @ 0x781ec78000] libdav1d 1.5.4
+[AVIOContext @ 0x781f048000] Statistics: 50308 bytes read, 0 seeks
+[h264 @ 0x781ec78000] Reinit context to 160x96, pix_fmt: yuv420p
+[h264 @ 0x781ec78000] Reinit context to 160x96, pix_fmt: yuv420p
+[AVIOContext @ 0x781f048000] Statistics: 110544 bytes read, 2 seeks
+2026-09-06T13:29:53.951893Z  INFO rezie_decode_check: decoder report written passed=true output=docs/testing/phase-1-decode-macos-aarch64/software/report.json
