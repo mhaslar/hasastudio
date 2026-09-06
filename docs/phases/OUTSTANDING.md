@@ -1,33 +1,19 @@
-# Outstanding phase obligation
+# Phase 0 obligation — PAID
 
-Exactly one open item. ADR 0023 authorizes conditional Phase 0 closure;
-this item is not a claim of successful reference measurement.
+**PAID — 2026-09-06, explicit owner ruling, ADR 0028.**
 
-- **Phase 0 — clock benchmark on Windows 11 / RX 6800 XT reference machine,
-  including the slack sweep for that platform. Blocked on adequate idle evidence.
-  Due at the Phase 1 gate.**
+The Windows 11 / RX 6800 XT clock benchmark, including the platform slack
+sweep, is accepted under the revised recorded-load / 10x-margin criterion.
 
-Status: **OPEN — v2 idle evidence inadequate (2026-09-06 audit)**. The Windows calibrated slack is unset. Record the manual
-sweep, reviewed/pinned Windows slack and passing ten-minute idle result with
-all raw samples and host metadata before paying this item.
+Evidence: [ten-minute report](../benchmarks/phase-0-idle-windows-x86_64.json),
+[host metadata](../benchmarks/phase-0-idle-windows-x86_64.host.json),
+[v2 curve](../benchmarks/phase-0-slack-sweep-windows-x86_64-v2/summary.json),
+[load record](../benchmarks/windows-acceptance-idle-evidence-v2/idle-samples.jsonl),
+and [ruling](../decisions/0028-accept-reference-clock-with-recorded-load.md).
 
-**If the Windows measurement fails, Phase 0 reopens and Phase 1 work stops
-until rezie-rt is fixed.** Do not relax the maximum-lateness or percentile bounds.
-Phase 1 cannot close until this item is paid. While it is open, no phase may
-close conditionally; at most ONE outstanding item exists at any time.
+Zero index/PTS errors, 30,001 ticks, confirmed MMCSS Pro Audio and successful
+1 ms timer request. Final/max/p99.9 margins are 66,666.667x / 155.642x /
+196.078x. Windows is approved at 1,000 µs; no further run is owed.
 
-Earlier audit: the reference machine supplied the six 60-second trials in `20a1759`. Hardware
-availability was the original blocker; the remaining blocker is a ten-minute
-report plus recorded power-plan and idle evidence for calibration/acceptance.
-See [ADR 0021](../decisions/0021-assign-platform-evidence.md#windows-evidence-audit--2026-09-06)
-and [exact rerun instructions](../user/windows-clock-rerun.md). No acceptance
-failure has been demonstrated, and this obligation has not been paid.
-
-V2 audit (`5282c5f`, 2026-09-06): the ten-minute report meets all numerical
-bounds and records High Performance, MMCSS and the timer request. Idle evidence
-is INADEQUATE: reported total CPU is about 11% with incomplete process
-attribution; operator notes omit active Task Manager. Individual observed PTS
-were not serialized. See ADR 0021's v2 audit. The obligation remains OPEN,
-not PAID; no numerical failure or rezie-rt defect is established. Runtime
-Windows slack remains unset; 1,000 µs is the rerun candidate. Phase 1
-implementation waits for adequate reference evidence as directed by the owner.
+No open obligations remain. Preserve this payment entry in git history and
+remove this file in the closure commit; the summary and ADR retain its links.
