@@ -313,3 +313,26 @@ MSVC linker, and writes decode evidence outside the cached target directory,
 under runner.temp with run ID/attempt in the path. Neither check is disabled.
 The exceptional additional full runs were explained to the owner before
 triggering them; the one-run normal policy remains in force.
+
+## Demonstrated decoder foundation — carry into the final phase summary
+
+PR #6 merged as `eae7a00` after full run `34045552329` passed. Comparing
+canonical component hashes verifies bit-identical decoded samples across
+D3D11VA, VideoToolbox and software for their overlapping tested fixtures;
+all four codecs also match between Windows hardware/software and the Mac
+software paths. This is demonstrated for the seven 8/10-bit fixtures, not
+proof over every valid codec bitstream. It supplies a measured foundation
+for Phase 3 frame selection instead of assuming decoder agreement.
+
+CI logs confirm all ten build/startup native-policy cases on all three OSes:
+Linux in the ci-fast prerequisite job, Windows/macOS in their platform jobs.
+The actual approved library is checked as well. The Windows configuration
+reports LGPLv3 and libavcodec 61; Unix reports LGPLv2.1 and major 61. Both
+guards reject GPL/nonfree and incompatible majors. These checks run in CI,
+not only on the local development machine.
+
+ADR 0036 closes the platform-preflight and evidence-retention gaps. The
+five-minute FramePool gate must report instrumented actual texture/view
+creation calls across the GPU allocation boundary, not infer allocation from
+pool occupancy, growth requests or checkout counters. No five-minute result
+has been claimed yet. Preserve this distinction in the final phase summary.

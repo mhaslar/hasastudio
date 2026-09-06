@@ -14,6 +14,8 @@ jobs:
     uses: ./.github/workflows/ci-fast.yml
     with:
       full_gate: true
+  evidence:
+    uses: ./.github/workflows/evidence.yml
   platforms:
     needs: ci-fast
     if: needs.ci-fast.outputs.build == 'true'
@@ -21,71 +23,13 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-24.04, macos-14, windows-2022]
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 40
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        with:
-          persist-credentials: false
-      - run: rustup toolchain install 1.98.1 --profile minimal --component rustfmt --component clippy
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
-        with:
-          shared-key: hosted-${{ matrix.os }}
-          cache-all-crates: true
-          cache-on-failure: true
-          cache-directories: .deps
-          save-if: ${{ github.event_name == 'pull_request' || github.ref == 'refs/heads/main' }}
-      - uses: taiki-e/install-action@7b8d4719ee4aaa279bdf55df38dacb9ebfe12a6c # v2
-        with:
-          tool: cargo-nextest@0.9.143
-      - name: Linux display dependencies
-        if: runner.os == 'Linux'
-        run: sudo apt-get update -qq && sudo apt-get install -y pkg-config libx11-dev libxkbcommon-dev libxkbcommon-x11-0 libwayland-dev libva-dev clang nasm python3-venv patchelf libvulkan1 mesa-vulkan-drivers xvfb
-      - run: cargo xtask native-deps
-      - name: Prepare MSVC headers and compatible libclang
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: ./tools/windows-build-env.ps1
-      - name: Platform-specific Clippy
-        if: runner.os != 'Linux'
-        run: cargo clippy --workspace --all-targets --locked -- -D warnings
-      - name: Platform-specific tests
-        if: runner.os != 'Linux'
-        run: cargo nextest run --workspace --locked
-      - name: Platform-specific doctests
-        if: runner.os != 'Linux'
-        run: cargo test --workspace --doc --locked
-      - name: Reject incompatible native libraries at build and startup
-        if: runner.os != 'Linux'
-        run: python tools/check-native-guards.py
-      - name: Assert software override and exact fixture decode
-        if: runner.os != 'Linux'
-        env:
-          REZIE_DISABLE_HW_DECODE: '1'
-        run: cargo xtask decode-check --mode auto --output "${{ runner.temp }}/decode-${{ github.run_id }}-${{ github.run_attempt }}"
-      - name: Tick correctness only, explicit diagnostic slack
-        run: cargo xtask clock-check
-      - name: Package and launch GUI (Linux)
-        if: runner.os == 'Linux'
-        run: xvfb-run -a cargo xtask dist --smoke
-      - name: Package and launch GUI (macOS and Windows)
-        if: runner.os != 'Linux'
-        run: cargo xtask dist --smoke
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        if: always()
-        with:
-          name: correctness-${{ matrix.os }}
-          path: |
-            target/native-guard-tests.json
-            ${{ runner.temp }}/decode-${{ github.run_id }}-${{ github.run_attempt }}/
-            target/clock-correctness.json
-            target/dist-smoke.txt
-            .logs/
-          if-no-files-found: warn
-          retention-days: 14
+    uses: ./.github/workflows/ci-platform.yml
+    with:
+      platform: ${{ matrix.os }}
+      portable_checks: ${{ matrix.os != 'ubuntu-24.04' }}
   full-gate:
     name: full-gate
-    needs: [ci-fast, platforms]
+    needs: [ci-fast, platforms, evidence]
     if: always()
     runs-on: ubuntu-24.04
     timeout-minutes: 2
@@ -94,10 +38,12 @@ jobs:
       - name: Require successful checks or a confirmed documentation-only PR
         env:
           FAST_RESULT: ${{ needs.ci-fast.result }}
+          EVIDENCE_RESULT: ${{ needs.evidence.result }}
           BUILD: ${{ needs.ci-fast.outputs.build }}
           PLATFORMS_RESULT: ${{ needs.platforms.result }}
         run: |
           test "$FAST_RESULT" = success
+          test "$EVIDENCE_RESULT" = success
           if [ "$BUILD" = true ]; then
             test "$PLATFORMS_RESULT" = success
           else
