@@ -34,11 +34,43 @@ The raw functional report is in
 [phase-1-pool-macos-aarch64.json](../testing/phase-1-pool-macos-aarch64.json),
 with exact source-file hashes. This is not a runtime benchmark, five-minute
 reference allocation test, pixel readback, decoder test or golden comparison.
-The reference hardware has not run this GPU code. The source hashes match implementation commit `573dce5`. Hosted formatting,
+The M4 source hashes match implementation commit `573dce5`. Hosted formatting,
 Clippy, nextest/doctests and packaged GUI launches passed on Windows, macOS
 and Linux in [run 33991900133](https://github.com/mhaslar/hasastudio/actions/runs/33991900133).
 These are portable correctness results; no hosted GPU or performance evidence
 is inferred from them.
+
+The owner has now supplied the [RX 6800 XT / D3D12 report](../testing/phase-1-pool-windows-x86_64.json):
+20,000 cycles, zero additional texture/view creation during reuse, exhaustion,
+shared lease retention, growth and budget checks all passed. Its
+[provenance note](../testing/phase-1-pool-windows-provenance.md) records that the
+report was supplied manually and did not embed its checkout revision. This
+clears the first functional step in the approved reference-first sequence;
+it does not satisfy the five-minute allocation gate.
+
+## Second slice: deterministic colour/alpha diagnostic
+
+[ADR 0029](../decisions/0029-check-linear-alpha-on-native-gpus.md) adds a
+control-side FramePool diagnostic: sRGB PNG ingest into premultiplied linear
+Rgba16Float, alpha-over a colour source, and sRGB PNG egress. It allocates and
+waits on the control side; this is not yet the streaming compositor or preview.
+Raw working channels and exported pixels are checked against a numerical oracle.
+
+The [M4/Metal report](../testing/phase-1-colour-macos-aarch64/report.json)
+passes all five cases, 16,705 pixels each. Maximum linear absolute error is
+0.000959691 (limit 0.002), and maximum exported channel error is one code
+value (limit two). Numerical expectations include the linear-light midpoint
+(half-white over black exports near 188, not 128), hidden RGB under zero alpha,
+translucent backgrounds, transfer breakpoints and odd dimensions. Shader,
+probe and checker source hashes identify the measured code. The output PNGs
+are diagnostic evidence, not approved references.
+
+Local formatting, strict workspace Clippy, 22 nextest tests and both doctests
+passed for this slice. The existing ignored manual timing test was not run;
+no latency or performance measurement is claimed. Windows execution of this
+colour diagnostic remains pending. Follow
+[colour-alpha-check.md](../user/colour-alpha-check.md); only then proceed to
+production golden candidates for human review. No Phase 1 gate has closed.
 
 ## Remaining gate work
 

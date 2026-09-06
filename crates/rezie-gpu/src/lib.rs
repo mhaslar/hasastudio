@@ -3,6 +3,7 @@
 #![warn(missing_docs)]
 
 mod pool;
+pub use pool::colour::{ColourReadback, COLOUR_SHADER};
 pub use pool::{AllocationCounts, Frame, FrameKey, FramePool, FrameReader};
 
 /// The sole internal working-frame format: linear BT.709, premultiplied alpha.
@@ -17,6 +18,9 @@ pub const FRAME_USAGES: wgpu::TextureUsages = wgpu::TextureUsages::TEXTURE_BINDI
 /// Actionable setup or pool error; hot-path variants allocate no error strings.
 #[derive(Debug, thiserror::Error)]
 pub enum GpuError {
+    /// Invalid diagnostic input or failed readback.
+    #[error("GPU colour diagnostic failed: {0}")]
+    Diagnostic(String),
     /// Adapter/device request or scoped GPU resource error.
     #[error("GPU setup failed: {0}")]
     Device(String),
