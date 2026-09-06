@@ -81,7 +81,10 @@ pub fn eligible(manifest: &Manifest, phase: u8, platform: &str) -> Result<Vec<De
             dependency.filename
         );
         if dependency.from_phase <= phase
-            && (dependency.platform == "all" || dependency.platform == platform)
+            && (dependency.platform == "all"
+                || dependency.platform == platform
+                || (dependency.platform == "unix"
+                    && (platform.starts_with("macos-") || platform.starts_with("linux-"))))
         {
             result.push(dependency.clone());
         }
@@ -176,7 +179,18 @@ mod tests {
         assert_eq!(selected.len(), 1);
         assert_eq!(selected[0].name, "crossbeam-channel");
         assert_eq!(eligible(&manifest(), 1, "windows-x86_64").unwrap().len(), 2);
-        assert_eq!(eligible(&manifest(), 1, "macos-aarch64").unwrap().len(), 1);
+        for platform in ["macos-aarch64", "linux-x86_64"] {
+            let before = eligible(&manifest(), 0, platform).unwrap();
+            assert_eq!(
+                before.iter().map(|d| d.name.as_str()).collect::<Vec<_>>(),
+                ["crossbeam-channel"]
+            );
+            let after = eligible(&manifest(), 1, platform).unwrap();
+            assert_eq!(
+                after.iter().map(|d| d.name.as_str()).collect::<Vec<_>>(),
+                ["crossbeam-channel", "ffmpeg-source", "dav1d"]
+            );
+        }
     }
     #[test]
     fn ndi_and_early_cef_cannot_bypass_manifest_policy() {

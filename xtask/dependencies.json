@@ -19,6 +19,26 @@
       "sha256": "e1b36a261be92f632e8e4d35077a6154520c686dd0bb451508bfefdcd4804f55",
       "filename": "ffmpeg-n7.1.1-57-g1b48158a23-win64-lgpl-shared-7.1.zip",
       "license": "LGPL shared; audit bundled notices before Phase 1 linking (ADR 0004)"
+    },
+    {
+      "name": "ffmpeg-source",
+      "version": "7.1.1",
+      "from_phase": 1,
+      "platform": "unix",
+      "url": "https://ffmpeg.org/releases/ffmpeg-7.1.1.tar.xz",
+      "sha256": "733984395e0dbbe5c046abda2dc49a5544e7e0e1e2366bba849222ae9e3a03b1",
+      "filename": "ffmpeg-7.1.1.tar.xz",
+      "license": "LGPL-2.1-or-later; isolated shared decode build (ADR 0033)"
+    },
+    {
+      "name": "dav1d",
+      "version": "1.5.4",
+      "from_phase": 1,
+      "platform": "unix",
+      "url": "https://download.videolan.org/pub/videolan/dav1d/1.5.4/dav1d-1.5.4.tar.xz",
+      "sha256": "686616b7c69eb88d44459391ab25cac13b6647a3b288835c5784e71c1514a5c5",
+      "filename": "dav1d-1.5.4.tar.xz",
+      "license": "BSD-2-Clause (ADR 0032)"
     }
   ]
 }

@@ -6,6 +6,7 @@ rust-version.workspace = true
 publish.workspace = true
 
 [dependencies]
+rezie-media.workspace = true
 rezie-core.workspace = true
 rezie-api.workspace = true
 rezie-rt.workspace = true

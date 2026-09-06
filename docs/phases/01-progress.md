@@ -223,3 +223,93 @@ Phase 1 is still open: this is the control-side diagnostic, not integrated
 preview/decode/NDI or five-minute allocation and real-load timing evidence.
 The slice is ready for its one full CI matrix and PR. Binary Git attributes
 protect the approved image/readback bytes from automatic text conversion.
+
+
+## Decode backend and mandatory native-library policy
+
+PR #5 (colour/alpha goldens) merged as `09197e3` after one successful full
+Windows/macOS/Linux matrix. The next slice is `phase-1/media-decode`.
+
+The owner approved ADR 0032 and its amendments. SPEC now records the actual
+Windows LGPLv3-or-later licence, the four enabled components requiring
+version3, dav1d AV1 fallback, and mandatory build/startup ABI/licence checks.
+The Windows artifact pin is unchanged. AV1 version skew carries no pixel
+tolerance; it matters for security updates and reproducibility. M4 golden
+thresholds remain unchanged; Phase 3 sampling is the review trigger.
+
+ADRs 0033/0034 add the dedicated file decoder, isolated native bootstrap,
+explicit software override, actual hardware context/pixel-format reporting,
+and the optional macOS accessor for Apple's actual hardware-session property.
+Generic VideoToolbox device hwctx is legitimately null. The modern FFmpeg
+session is private, and HEVC permits internal Apple software fallback, so
+backend names and hardware-shaped frames alone are not sufficient evidence.
+No application code depends on FFmpeg private layouts.
+
+Seven owned synthetic fixtures cover MP4/MOV/MKV/TS, all four codecs, and
+8/10-bit decode. They retain independently generated component hashes and PTS.
+H.264 includes actual B-frames; all 24 pictures per file must survive EOF drain.
+Local M4 automatic decode matches all 168 pictures: H.264 and 8/10-bit HEVC
+use observed hardware sessions, while this FFmpeg version has no VideoToolbox
+configuration for VP9/AV1 and explicitly falls back to native VP9/libdav1d.
+The actual dav1d log reports 1.5.4. Replacing the Mac library with an unmodified
+compatible FFmpeg was tested: Auto remains functional via software, while
+strict hardware reports the missing accessor and fails.
+
+Both guard stages reject synthetic GPL, nonfree and wrong-major libraries.
+The real development Mac GPL FFmpeg 9 was also rejected with its actual
+63.1.101 version/configuration. The isolated Mac build is LGPLv2.1-or-later,
+libavcodec 61.19.101; ordinary engine startup always checks the process-linked
+library before starting threads. Native bootstrap no longer depends on the
+engine, and build preparation does not mutate system FFmpeg.
+
+The first portable test attempt exposed an outdated Phase 1 Unix dependency
+count and one nextest leak label on an unrelated sink test; after correcting
+the manifest expectation the complete 32-test run passed without a leak
+label. The ignored reference latency test remains intentionally excluded.
+Both compile-fail doctests and four offline colour-audit tests passed.
+A development-package smoke passed with loader overrides removed; goldens
+passed again at the existing shared thresholds. Final source-bound native
+reports now pass at `8eed741`: [M4 evidence](../testing/phase-1-decode-macos-aarch64/README.md)
+records automatic and forced-software runs with all 168 pictures exact in
+each, and the final relocated package smoke passes. [Linux ci-fast](https://github.com/mhaslar/hasastudio/actions/runs/34036144315)
+is green on that commit, including native guards and software decode. The
+single full matrix waits for Windows reference decode evidence;
+[manual commands](../user/native-decode.md) do not require idle preparation.
+
+No GPU upload/colour conversion from decoded planes, shared-device preview,
+input commands or NDI output is presented as complete in this slice. No
+performance or Phase 1 closure claim is made. These remain the next approved
+integration steps after native decode validation.
+
+## Windows native decode evidence received
+
+The owner committed hardware and forced-software results as `ad11a67`.
+The [independent audit](../testing/phase-1-decode-windows-x86_64/README.md)
+passes all 336 pictures: exact PTS/time bases and component hashes against
+the fixture oracle and M4, 24 ordered pictures per file, 8/10-bit depth and
+colour metadata retained. All four codecs use observed D3D11VA contexts in
+strict hardware mode. Forced software uses the expected native decoders and
+libdav1d, with no hardware contexts. Windows dav1d reports identifier `7161642`,
+not a verified release version. Build/runtime configuration agrees with the
+pinned LGPLv3 artifact and libavcodec major 61.
+
+The upload also deleted two prior golden audits; they were restored unchanged
+from `e9c7605`. These unrelated worktree deletions do not alter decoder source.
+The actual libclang version was not captured, so the successful build does
+not independently prove the requested LLVM 21.1.8 selection. Windows CI now
+initializes MSVC/SDK paths and checks the actual libclang before compilation.
+
+This clears the native Windows file-decoder validation step. The slice can
+now enter its single full matrix. Linux hardware execution, integrated preview,
+NDI reception and phase-required load/benchmark evidence remain open.
+
+The first full run (`34044170230`) passed Mac/Linux but exposed a Windows
+PATH export mistake in the new CI setup: Git's link.exe displaced MSVC.
+The corrective second run (`34044710981`) then exposed cached diagnostic
+output on Mac: target/decode-ci had been restored, and overwrite protection
+correctly rejected it. These are workflow defects, not native decoder
+regressions. CI now exports only the required compiler paths with an explicit
+MSVC linker, and writes decode evidence outside the cached target directory,
+under runner.temp with run ID/attempt in the path. Neither check is disabled.
+The exceptional additional full runs were explained to the owner before
+triggering them; the one-run normal policy remains in force.

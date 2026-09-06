@@ -1,0 +1,21 @@
+{
+  "scope": "Local generator reproducer, not Windows execution or media correctness",
+  "bindgen": "0.70.1",
+  "header": "typedef struct Probe Probe; struct Probe { int field; };",
+  "results": [
+    {
+      "toolchain": "Homebrew clang/libclang 22.1.8",
+      "generated_source": "llvm22.rs",
+      "exit_code": 1,
+      "expected_compile_success": false,
+      "stderr": "error[E0080]: attempt to compute `1_usize - 4_usize`, which would overflow\n  --> /tmp/rezie-bindgen-llvm-audit/llvm22.rs:10:23\n   |\n10 |     [\"Size of Probe\"][::std::mem::size_of::<Probe>() - 4usize];\n   |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ evaluation of `_` failed here\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0080`.\n"
+    },
+    {
+      "toolchain": "Apple clang/libclang 21.0.0 (clang-2100.0.123.102)",
+      "generated_source": "apple.rs",
+      "exit_code": 0,
+      "expected_compile_success": true,
+      "stderr": ""
+    }
+  ]
+}

@@ -95,3 +95,11 @@ This passes this native golden inventory, not the remaining Phase 1 gate.
 Git displayed some `.rgba16f.le` files as text. Explicit binary attributes
 protect all raw readbacks and PNGs against newline conversion and text merges;
 no approved file bytes are changed by this protection.
+
+
+## Owner follow-up: no separate Metal threshold
+
+After the RX harness pass, the owner confirmed the shared mean ΔE00 <1 /
+max ΔE00 <3 bounds remain unchanged. M4 maximum 0.00284570 does not justify
+a looser threshold. Revisit at Phase 3 when bilinear/Lanczos sampling is
+implemented and measured, never in anticipation of a divergence.

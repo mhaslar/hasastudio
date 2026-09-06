@@ -43,6 +43,8 @@ These break silently and expensively. They are not style preferences.
 
 ```bash
 cargo xtask fetch-deps          # native deps (FFmpeg, SRT, CEF); hash-verified. Run first.
+cargo xtask native-deps         # Phase 1+: build/extract isolated LGPL native libraries
+# Activate .deps/native-env.sh (Unix) or .deps/native-env.ps1 (Windows) before native builds.
 cargo xtask gen-assets          # generate tests/assets/ — required before golden tests
 
 cargo build --workspace

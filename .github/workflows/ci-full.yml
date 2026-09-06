@@ -40,8 +40,12 @@ jobs:
           tool: cargo-nextest@0.9.143
       - name: Linux display dependencies
         if: runner.os == 'Linux'
-        run: sudo apt-get update -qq && sudo apt-get install -y pkg-config libx11-dev libxkbcommon-dev libxkbcommon-x11-0 libwayland-dev libvulkan1 mesa-vulkan-drivers xvfb
-      - run: cargo xtask fetch-deps
+        run: sudo apt-get update -qq && sudo apt-get install -y pkg-config libx11-dev libxkbcommon-dev libxkbcommon-x11-0 libwayland-dev libva-dev clang nasm python3-venv patchelf libvulkan1 mesa-vulkan-drivers xvfb
+      - run: cargo xtask native-deps
+      - name: Prepare MSVC headers and compatible libclang
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./tools/windows-build-env.ps1
       - name: Platform-specific Clippy
         if: runner.os != 'Linux'
         run: cargo clippy --workspace --all-targets --locked -- -D warnings
@@ -51,6 +55,14 @@ jobs:
       - name: Platform-specific doctests
         if: runner.os != 'Linux'
         run: cargo test --workspace --doc --locked
+      - name: Reject incompatible native libraries at build and startup
+        if: runner.os != 'Linux'
+        run: python tools/check-native-guards.py
+      - name: Assert software override and exact fixture decode
+        if: runner.os != 'Linux'
+        env:
+          REZIE_DISABLE_HW_DECODE: '1'
+        run: cargo xtask decode-check --mode auto --output "${{ runner.temp }}/decode-${{ github.run_id }}-${{ github.run_attempt }}"
       - name: Tick correctness only, explicit diagnostic slack
         run: cargo xtask clock-check
       - name: Package and launch GUI (Linux)
@@ -64,6 +76,8 @@ jobs:
         with:
           name: correctness-${{ matrix.os }}
           path: |
+            target/native-guard-tests.json
+            ${{ runner.temp }}/decode-${{ github.run_id }}-${{ github.run_attempt }}/
             target/clock-correctness.json
             target/dist-smoke.txt
             .logs/

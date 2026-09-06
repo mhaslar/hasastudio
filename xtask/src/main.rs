@@ -8,6 +8,7 @@ use std::{
     time::{Duration, Instant},
 };
 
+mod decode;
 mod fetch;
 mod golden;
 mod reference;
@@ -199,10 +200,17 @@ fn dist() -> Result<PathBuf> {
     };
     fs::copy(release.join(binary), &destination)?;
     fs::copy(release.join(headless), output.join(headless))?;
+    run(
+        Command::new(if cfg!(windows) { "python" } else { "python3" })
+            .arg(root().join("tools/package-native.py"))
+            .arg(&output)
+            .arg(&destination)
+            .arg(output.join(headless)),
+    )?;
     if cfg!(target_os = "linux") {
         fs::write(output.join("HasaStudio.desktop"), "[Desktop Entry]\nType=Application\nName=HasaStudio\nExec=rezie-app\nTerminal=false\nCategories=AudioVideo;Video;\n")?;
     }
-    fs::write(output.join("README.txt"), "HasaStudio Phase 0 — empty application shell.\nLaunch the application to open its window. No media SDKs are required.\nThis development bundle is not a Phase 11 installer. Linux requires a desktop session, Vulkan driver and standard X11/Wayland libraries.\n")?;
+    fs::write(output.join("README.txt"), "HasaStudio Phase 1 development shell and validated native decode backend.\nLaunch the application to open its window. Shared LGPL native libraries are included; preview integration remains in progress.\nThis development bundle is not a Phase 11 installer. Linux requires a desktop session, Vulkan driver and standard X11/Wayland libraries.\n")?;
     tracing::info!(path = %destination.display(), "application bundle built");
     Ok(destination)
 }
@@ -216,6 +224,8 @@ fn smoke(binary: &Path) -> Result<()> {
         .arg("--smoke-test")
         .arg(&marker)
         .current_dir(root())
+        .env_remove("LD_LIBRARY_PATH")
+        .env_remove("DYLD_LIBRARY_PATH")
         .spawn()
         .with_context(|| format!("launch packaged application '{}'", binary.display()))?;
     let start = Instant::now();
@@ -249,6 +259,17 @@ fn main() -> Result<()> {
         .next()
         .context("usage: cargo xtask fetch-deps|gen-assets|golden|bench|soak|dist|ci")?;
     match command.as_str() {
+        "decode-check" => decode::run(args.collect())?,
+        "native-deps" => {
+            anyhow::ensure!(args.next().is_none(), "native-deps takes no arguments");
+            anyhow::ensure!(phase()? >= 1, "native decode begins in Phase 1");
+            fetch_deps()?;
+            run(
+                Command::new(if cfg!(windows) { "python" } else { "python3" })
+                    .current_dir(root())
+                    .arg("tools/build-native.py"),
+            )?;
+        }
         "fetch-deps" => {
             anyhow::ensure!(
                 args.next().is_none(),

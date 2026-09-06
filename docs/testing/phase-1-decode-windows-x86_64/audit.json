@@ -1,0 +1,340 @@
+{
+  "scope": "Offline audit of retained Windows native decode evidence; no performance, preview or Phase 1 closure claim",
+  "passed": true,
+  "fixture_oracle_sha256": "48ff9bfe7162e6cb0dc9bbbba8699e91bcdead8a0f680c268992befce3cf2b5e",
+  "runs": [
+    {
+      "mode": "hardware",
+      "source": "e9c76054360cb24594fff47a9a92483c055354e3",
+      "source_worktree": "D docs/testing/phase-1-golden-windows-x86_64/audit.json\n D docs/testing/phase-1-golden-windows-x86_64/render/audit.json\n?? docs/testing/phase-1-decode-windows-x86_64/",
+      "host": {
+        "cpu": [
+          {
+            "Name": "Intel(R) Core(TM) i5-14600K",
+            "NumberOfCores": 14,
+            "NumberOfLogicalProcessors": 20
+          }
+        ],
+        "gpu": [
+          {
+            "DriverVersion": "32.0.21045.5002",
+            "Name": "AMD Radeon RX 6800 XT"
+          }
+        ],
+        "memory_bytes": 34102353920,
+        "os": {
+          "BuildNumber": "26200",
+          "Caption": "Microsoft Windows 11 Pro",
+          "Version": "10.0.26200"
+        }
+      },
+      "pictures": 168,
+      "cases": [
+        {
+          "input": "h264.mp4",
+          "pictures": 24,
+          "exact_oracle_and_mac_match": true,
+          "readback_formats": [
+            "NV12"
+          ],
+          "status": {
+            "decoder": "h264",
+            "environment_disabled_hardware": false,
+            "fallback_reason": null,
+            "hardware_device": "d3d11va",
+            "hardware_frame_context_observed": true,
+            "hardware_pixel_format": "d3d11",
+            "observed_hardware_device": "d3d11va",
+            "videotoolbox_using_hardware": null
+          }
+        },
+        {
+          "input": "hevc.mov",
+          "pictures": 24,
+          "exact_oracle_and_mac_match": true,
+          "readback_formats": [
+            "NV12"
+          ],
+          "status": {
+            "decoder": "hevc",
+            "environment_disabled_hardware": false,
+            "fallback_reason": null,
+            "hardware_device": "d3d11va",
+            "hardware_frame_context_observed": true,
+            "hardware_pixel_format": "d3d11",
+            "observed_hardware_device": "d3d11va",
+            "videotoolbox_using_hardware": null
+          }
+        },
+        {
+          "input": "vp9.mkv",
+          "pictures": 24,
+          "exact_oracle_and_mac_match": true,
+          "readback_formats": [
+            "NV12"
+          ],
+          "status": {
+            "decoder": "vp9",
+            "environment_disabled_hardware": false,
+            "fallback_reason": null,
+            "hardware_device": "d3d11va",
+            "hardware_frame_context_observed": true,
+            "hardware_pixel_format": "d3d11",
+            "observed_hardware_device": "d3d11va",
+            "videotoolbox_using_hardware": null
+          }
+        },
+        {
+          "input": "av1.mkv",
+          "pictures": 24,
+          "exact_oracle_and_mac_match": true,
+          "readback_formats": [
+            "NV12"
+          ],
+          "status": {
+            "decoder": "av1",
+            "environment_disabled_hardware": false,
+            "fallback_reason": null,
+            "hardware_device": "d3d11va",
+            "hardware_frame_context_observed": true,
+            "hardware_pixel_format": "d3d11",
+            "observed_hardware_device": "d3d11va",
+            "videotoolbox_using_hardware": null
+          }
+        },
+        {
+          "input": "hevc10.mov",
+          "pictures": 24,
+          "exact_oracle_and_mac_match": true,
+          "readback_formats": [
+            "P010LE"
+          ],
+          "status": {
+            "decoder": "hevc",
+            "environment_disabled_hardware": false,
+            "fallback_reason": null,
+            "hardware_device": "d3d11va",
+            "hardware_frame_context_observed": true,
+            "hardware_pixel_format": "d3d11",
+            "observed_hardware_device": "d3d11va",
+            "videotoolbox_using_hardware": null
+          }
+        },
+        {
+          "input": "av1-10.mkv",
+          "pictures": 24,
+          "exact_oracle_and_mac_match": true,
+          "readback_formats": [
+            "P010LE"
+          ],
+          "status": {
+            "decoder": "av1",
+            "environment_disabled_hardware": false,
+            "fallback_reason": null,
+            "hardware_device": "d3d11va",
+            "hardware_frame_context_observed": true,
+            "hardware_pixel_format": "d3d11",
+            "observed_hardware_device": "d3d11va",
+            "videotoolbox_using_hardware": null
+          }
+        },
+        {
+          "input": "h264.ts",
+          "pictures": 24,
+          "exact_oracle_and_mac_match": true,
+          "readback_formats": [
+            "NV12"
+          ],
+          "status": {
+            "decoder": "h264",
+            "environment_disabled_hardware": false,
+            "fallback_reason": null,
+            "hardware_device": "d3d11va",
+            "hardware_frame_context_observed": true,
+            "hardware_pixel_format": "d3d11",
+            "observed_hardware_device": "d3d11va",
+            "videotoolbox_using_hardware": null
+          }
+        }
+      ],
+      "evidence_sha256": {
+        "native.log": "22c4d92b3745d7559d04e3122e99850a27d4d190d3e830464dedc1e6e9d6787b",
+        "report.json": "50d08002f22fd01f469b8e75a7c502c695e44831b186c907c1b1517b4695fc15",
+        "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "libavcodec": "61.19.101",
+      "licence": "LGPL version 3 or later",
+      "dav1d_reported_identifier": "7161642"
+    },
+    {
+      "mode": "software",
+      "source": "e9c76054360cb24594fff47a9a92483c055354e3",
+      "source_worktree": "D docs/testing/phase-1-golden-windows-x86_64/audit.json\n D docs/testing/phase-1-golden-windows-x86_64/render/audit.json\n?? docs/testing/phase-1-decode-windows-x86_64/",
+      "host": {
+        "cpu": [
+          {
+            "Name": "Intel(R) Core(TM) i5-14600K",
+            "NumberOfCores": 14,
+            "NumberOfLogicalProcessors": 20
+          }
+        ],
+        "gpu": [
+          {
+            "DriverVersion": "32.0.21045.5002",
+            "Name": "AMD Radeon RX 6800 XT"
+          }
+        ],
+        "memory_bytes": 34102353920,
+        "os": {
+          "BuildNumber": "26200",
+          "Caption": "Microsoft Windows 11 Pro",
+          "Version": "10.0.26200"
+        }
+      },
+      "pictures": 168,
+      "cases": [
+        {
+          "input": "h264.mp4",
+          "pictures": 24,
+          "exact_oracle_and_mac_match": true,
+          "readback_formats": [
+            "YUV420P"
+          ],
+          "status": {
+            "decoder": "h264",
+            "environment_disabled_hardware": true,
+            "fallback_reason": null,
+            "hardware_device": null,
+            "hardware_frame_context_observed": false,
+            "hardware_pixel_format": null,
+            "observed_hardware_device": null,
+            "videotoolbox_using_hardware": null
+          }
+        },
+        {
+          "input": "hevc.mov",
+          "pictures": 24,
+          "exact_oracle_and_mac_match": true,
+          "readback_formats": [
+            "YUV420P"
+          ],
+          "status": {
+            "decoder": "hevc",
+            "environment_disabled_hardware": true,
+            "fallback_reason": null,
+            "hardware_device": null,
+            "hardware_frame_context_observed": false,
+            "hardware_pixel_format": null,
+            "observed_hardware_device": null,
+            "videotoolbox_using_hardware": null
+          }
+        },
+        {
+          "input": "vp9.mkv",
+          "pictures": 24,
+          "exact_oracle_and_mac_match": true,
+          "readback_formats": [
+            "YUV420P"
+          ],
+          "status": {
+            "decoder": "vp9",
+            "environment_disabled_hardware": true,
+            "fallback_reason": null,
+            "hardware_device": null,
+            "hardware_frame_context_observed": false,
+            "hardware_pixel_format": null,
+            "observed_hardware_device": null,
+            "videotoolbox_using_hardware": null
+          }
+        },
+        {
+          "input": "av1.mkv",
+          "pictures": 24,
+          "exact_oracle_and_mac_match": true,
+          "readback_formats": [
+            "YUV420P"
+          ],
+          "status": {
+            "decoder": "libdav1d",
+            "environment_disabled_hardware": true,
+            "fallback_reason": null,
+            "hardware_device": null,
+            "hardware_frame_context_observed": false,
+            "hardware_pixel_format": null,
+            "observed_hardware_device": null,
+            "videotoolbox_using_hardware": null
+          }
+        },
+        {
+          "input": "hevc10.mov",
+          "pictures": 24,
+          "exact_oracle_and_mac_match": true,
+          "readback_formats": [
+            "YUV420P10LE"
+          ],
+          "status": {
+            "decoder": "hevc",
+            "environment_disabled_hardware": true,
+            "fallback_reason": null,
+            "hardware_device": null,
+            "hardware_frame_context_observed": false,
+            "hardware_pixel_format": null,
+            "observed_hardware_device": null,
+            "videotoolbox_using_hardware": null
+          }
+        },
+        {
+          "input": "av1-10.mkv",
+          "pictures": 24,
+          "exact_oracle_and_mac_match": true,
+          "readback_formats": [
+            "YUV420P10LE"
+          ],
+          "status": {
+            "decoder": "libdav1d",
+            "environment_disabled_hardware": true,
+            "fallback_reason": null,
+            "hardware_device": null,
+            "hardware_frame_context_observed": false,
+            "hardware_pixel_format": null,
+            "observed_hardware_device": null,
+            "videotoolbox_using_hardware": null
+          }
+        },
+        {
+          "input": "h264.ts",
+          "pictures": 24,
+          "exact_oracle_and_mac_match": true,
+          "readback_formats": [
+            "YUV420P"
+          ],
+          "status": {
+            "decoder": "h264",
+            "environment_disabled_hardware": true,
+            "fallback_reason": null,
+            "hardware_device": null,
+            "hardware_frame_context_observed": false,
+            "hardware_pixel_format": null,
+            "observed_hardware_device": null,
+            "videotoolbox_using_hardware": null
+          }
+        }
+      ],
+      "evidence_sha256": {
+        "native.log": "d742157245f6839a6e04b7f6fb93eb0b0ffd37074fbbc1ca85d4f910080d35fb",
+        "report.json": "abe738cd46d625d8bd10226ffcd48aa619b187388e4d5b0206e486c344793705",
+        "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "libavcodec": "61.19.101",
+      "licence": "LGPL version 3 or later",
+      "dav1d_reported_identifier": "7161642"
+    }
+  ],
+  "limitations": [
+    "Component hashes are observed decoded samples, not serialized raw YUV planes.",
+    "Native libclang version is not recorded; rustc LLVM 22.1.8 is a separate compiler backend.",
+    "7161642 is retained as a native dav1d build identifier, not interpreted as a semantic release version.",
+    "Host inventory identifies RX 6800 XT; per-decoder DXGI adapter identity is not serialized.",
+    "Both source worktrees record deletion of two unrelated golden audit JSON files, restored byte-for-byte in the audit commit."
+  ]
+}
