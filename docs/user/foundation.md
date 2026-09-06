@@ -79,8 +79,11 @@ mode and never asserts latency on shared runners. Its report explicitly has
 `latency_passed: null`.
 
 `cargo xtask bench` builds the release headless executable first, waits 15
-seconds for builds to settle, then measures ten minutes on the otherwise idle
-Windows 11 / RX 6800 XT reference machine (a manual run is valid). Keep other applications/workloads idle for this measurement. It
+seconds for builds to settle, then measures ten minutes on the Windows 11 /
+RX 6800 XT reference machine (a manual run is valid). Record background load.
+A pass with at least tenfold margin on every timing bound is admissible under
+SPEC §13; failures or lower-margin passes require idle evidence before ruling.
+Use --output with a fresh JSON path to preserve existing reports. It
 writes `docs/benchmarks/phase-0-idle-<os>-<architecture>.json`, including all
 30,001 lateness samples in tick order and nearest-rank p50/p99/p99.9/max.
 Acceptance requires no skipped indices, final drift and maximum lateness
@@ -98,8 +101,8 @@ CAP_SYS_NICE / RLIMIT_RTPRIO / RLIMIT_NICE to exercise elevated scheduling; the 
 prior thread state on drop, including unwind. Audio will reuse this in Phase 6.
 
 `cargo xtask soak --minutes 30` checks long-running clock/dispatch correctness
-and writes `target/soak.json`. Latency acceptance is a separate idle benchmark.
-The ignored ten-minute integration test is for the idle production reference only.
+and writes `target/soak.json`. Latency acceptance is a separate reference benchmark with recorded load.
+The ignored ten-minute integration test is for the production reference only.
 No hosted test asserts a maximum or percentile lateness bound.
 
 Logs use tracing with a nonblocking rolling file writer. The headless binary
@@ -128,8 +131,8 @@ The repository is initialized on `main`; the attached remote is
 workflow checks Windows/macOS/Linux correctness and launches each packaged
 GUI. Production timing runs use Windows 11 / RX 6800 XT, manually or on a
 `self-hosted, Windows, rezie-reference` runner. Runner setup does not block
-Phase 0; the manual reference clock result does. No repository secrets are required for
-hosted correctness. Phase 0 remains active until all required evidence is in.
+Phase 0. Its manual reference clock result is accepted and the phase is closed
+under ADR 0028. No repository secrets are required for hosted correctness.
 
 For per-platform slack sweeps, full distributions, measured spin CPU costs
 and exact manual commands, see [clock calibration](clock-calibration.md).

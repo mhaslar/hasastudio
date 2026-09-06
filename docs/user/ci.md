@@ -54,8 +54,10 @@ It needs labels `self-hosted`, `Windows`, `rezie-reference`, Windows 11,
 RX 6800 XT/Adrenalin, MSVC x64 tools/Windows SDK and an interactive desktop.
 No secrets are required by the current workflows. Until hardware is available,
 reference jobs can remain queued; this is not a successful measurement.
-The uncalibrated Windows default also causes a clear benchmark failure until
-its manual sweep selects the value. Follow `clock-calibration.md` first.
+Windows now uses the accepted 1,000 µs default (ADR 0028). The reference
+workflow writes each clock attempt to a fresh path; recorded load and the
+margin rule govern evidence admission. The Phase 1 media/golden tooling is
+still in progress; runner registration alone is not a completed phase gate.
 
 ## Historical wall-clock comparison (before ADR 0026)
 

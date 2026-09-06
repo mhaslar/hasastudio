@@ -53,3 +53,11 @@ Keep the native thread-affinity compile-fail doctest and unwind cleanup tests.
 
 The Windows reference sweep selects its value, or new platform measurements
 justify a change. ADR 0019's verified Rust 1.98.1 pin stands unchanged.
+
+## Subsequent owner ruling — ADR 0028
+
+The Windows v2 result is accepted under SPEC §13's recorded-load / tenfold-margin
+rule. Windows is pinned to 1,000 µs; the Phase 0 obligation is PAID and its
+ledger removed. Phase 0 is closed and Phase 1 resumes. Earlier pending or
+INADEQUATE statements in this ADR are historical. Observed-PTS serialization,
+accounting limitations, preferred power plan and evidence protection remain.

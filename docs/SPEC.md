@@ -700,16 +700,26 @@ Workspace, `xtask`, CI on three platforms, dependency fetching, `rezie-core` dom
 **Accepts when:**
 
 - **[CI]** `cargo nextest run --workspace` and `cargo test --workspace --doc` pass on all three platforms.
-- **[Reference machine]** The clock meets the ten-minute idle-machine criterion below.
+- **[Reference machine]** The clock meets the ten-minute reference criterion below.
 - **[CI]** The WebSocket harness connects, sends a command, and receives an event.
 - **[CI]** `xtask dist` produces a runnable empty application bundle on each platform, verified by actual launch.
 
-**[Reference machine]** On the otherwise idle Windows 11 / RX 6800 XT
+**[Reference machine]** On the Windows 11 / RX 6800 XT
 production host, over a ten-minute run at the programme
-rate: zero skipped tick indices; final drift under one frame interval;
+rate: zero skipped tick indices and exact PTS; final drift under one frame interval;
 maximum tick lateness under one frame interval; p99.9 lateness under
 5 ms. The full lateness distribution (p50/p99/p99.9/max) is recorded
 in the benchmark output, not just the summary statistics.
+
+Background load is recorded, not required to be absent. If a run
+passes every bound with at least 10x margin, recorded background load
+does not invalidate it — load biases lateness upward, so a pass under
+load is conservative. If a run fails, or passes with less than 10x
+margin on any bound, an idle machine is required before the result can
+be ruled on in either direction.
+
+The margin rule applies to the positive timing bounds. Zero skipped indices
+and exact PTS remain exact requirements (ADR 0028).
 
 If maximum lateness under one frame interval proves unachievable on a
 production reference with a correctly prioritised thread, that is an ADR,
@@ -717,14 +727,14 @@ not a relaxation.
 
 Reference runner automation and nightly soak are not Phase 0 closure gates;
 the owner may run and commit the reference clock benchmark manually.
-ADR 0023 authorizes conditional Phase 0 closure with exactly this unpaid
-Windows reference clock benchmark (including its slack sweep), blocked on
-hardware availability and due at the Phase 1 gate. This is not full verification.
-Failure reopens Phase 0 and stops Phase 1 until rezie-rt is fixed.
+ADR 0023's single deferred reference-clock obligation was paid under ADR 0028
+using the recorded Windows v2 sweep and ten-minute result. Phase 0 is closed;
+no reference-clock debt carries into Phase 1. Keep the recorded tail clusters
+under observation with Phase 1's real per-tick work.
 
 Hosted CI asserts tick correctness (zero skipped indices, ordering and exact
-PTS), not latency. Timing acceptance runs only on the otherwise idle production
-reference machine. Preserve every observed per-tick lateness sample alongside
+PTS), not latency. Timing acceptance runs only on the production reference machine, with load
+recorded and admission governed by the margin rule above. Preserve every observed per-tick lateness sample alongside
 the percentile summary so the full distribution can be inspected.
 
 ---

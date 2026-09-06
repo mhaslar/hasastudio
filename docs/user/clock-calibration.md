@@ -1,16 +1,20 @@
 # Manual Phase 0 clock calibration
 
-The owner runs both sweeps manually. No self-hosted runner is needed. The
-Windows 11 / RX 6800 XT result is Phase 0's sole conditional-closure obligation,
-due at the Phase 1 gate (OUTSTANDING.md); runner provisioning and nightly soak
-automation are separate. The M4 sweep informs its
-development configuration and never provides production acceptance.
+Phase 0's Windows reference obligation is **PAID** under ADR 0028. Windows
+uses 1,000 µs and macOS 500 µs. The accepted v2 sweep and ten-minute report
+remain committed; no further clock run is owed. These instructions are for
+future calibration and regression checks, not a request to repeat v2.
 
-The first Windows audit found only a short sweep. V2 now contains the
-ten-minute report and High Performance records, but its approximately 11%
-reported total CPU is not reconciled by the incomplete process telemetry. Follow the [recorded Windows rerun
-procedure](windows-clock-rerun.md) to supply adequate idle evidence and observed PTS; 1,000 µs is
-an explicit candidate override, not a pinned Windows default.
+Record background load. A ten-minute run passing every timing bound with at
+least 10x margin is admissible despite recorded load. A failure or a pass with
+less margin requires idle evidence before ruling in either direction. All
+numeric bounds and exact index/PTS requirements remain unchanged. The M4
+sweep informs development settings and never supplies production acceptance.
+
+The [Windows recording procedure](windows-clock-rerun.md) retains optional raw
+CPU diagnostics, observed-PTS verification and fresh output paths. A specific
+power plan is preferred, not mandatory. Runner automation is separate from
+manual evidence collection.
 
 ## Prerequisites and checkout
 
@@ -50,7 +54,7 @@ for the complete output, commit hash and manifest hash. On Windows, verify
 
 ## Sweep, on each machine
 
-Pause other work and let the machine stay idle. Run:
+Prefer low competing activity for comparable calibration, and record actual load. Run:
 
 ```sh
 cargo xtask clock-sweep
@@ -116,33 +120,32 @@ calibration evidence.
 
 Pick the smallest slack comfortably above where lateness starts degrading,
 considering the CPU-cost curve. Record the choice and both sweeps in ADR 0021
-and pin the platform constants. After checking out that pin, run on the idle
-Windows reference:
+and pin the platform constants. For a future fresh report, run on the Windows reference with load recorded:
 
 ```powershell
-cargo xtask bench
+cargo xtask bench --output docs/benchmarks/reference-clock-new.json
 ```
 
 For an explicitly reviewed candidate before it is pinned, the equivalent
-command is `cargo xtask bench --slack-us N`, where `N` is the reviewed integer
+command is `cargo xtask bench --slack-us N --output docs/benchmarks/reference-clock-new.json`, where `N` is the reviewed integer
 in microseconds; the report records the override. An override is not a licence
 to skip pinning the final default or verifying that it matches the measurement.
 
 Expected files:
 
-- `docs/benchmarks/phase-0-idle-windows-x86_64.json`
-- `docs/benchmarks/phase-0-idle-windows-x86_64.host.json`
+- `docs/benchmarks/reference-clock-new.json`
+- `docs/benchmarks/reference-clock-new.host.json`
 
 The command verifies Windows 11/RX 6800 XT identity and records OS/GPU/driver
 metadata. It builds before its 15-second settling delay. Allow ten minutes
-after settling, with the machine otherwise idle. The report must contain
+after settling, with background load recorded under the margin rule above. The report must contain
 30,001 contiguous ticks with exact PTS, confirmed MMCSS Pro Audio and 1 ms
 timer resolution, final drift and maximum lateness strictly below 20 ms,
 and p99.9 strictly below 5 ms. All lateness samples are retained. CPU profiling
 is disabled (`wait_profile: null`) for this acceptance run.
 
 ```powershell
-git add docs/benchmarks/phase-0-idle-windows-x86_64.json docs/benchmarks/phase-0-idle-windows-x86_64.host.json
+git add docs/benchmarks/reference-clock-new.json docs/benchmarks/reference-clock-new.host.json
 git commit -m "test(phase-0): record manual Windows reference clock acceptance"
 ```
 
@@ -153,11 +156,11 @@ do not lower the standard or present a short/hosted/M4 run as a substitute.
 ## Approved operating values (ADR 0022)
 
 macOS now uses the owner-approved 500 µs value from the recorded M4 sweep.
-Finer sampling is optional. Windows and Linux have no calibrated default and
-normal startup returns a missing-calibration error. Sweep candidates remain
+Finer sampling is optional. Windows now uses the accepted 1,000 µs value. Linux has no calibrated default
+and normal startup returns a missing-calibration error. Sweep candidates remain
 explicit overrides, so an unset default does not prevent calibration.
 Hosted correctness and GUI smoke use an explicit zero-slack diagnostic value;
 that is never a performance result. The WebSocket harness can run explicitly
 with `rezie-headless --ws 127.0.0.1:9800 --slack-us 0` for correctness.
-If the deferred Windows benchmark fails, Phase 0 reopens and Phase 1 work stops
-until rezie-rt is fixed; the latency bounds are unchanged.
+The former deferred Windows benchmark is paid. A future failing or low-margin
+result needs idle confirmation before adjudication; never relax the bounds.

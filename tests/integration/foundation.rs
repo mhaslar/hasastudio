@@ -130,7 +130,7 @@ fn clock_runs_and_a_stalled_sink_cannot_interrupt_dispatch() {
 }
 
 #[test]
-#[ignore = "idle local/reference latency gate only; hosted CI runs correctness"]
+#[ignore = "reference latency gate with recorded load; hosted CI runs correctness"]
 fn ten_minute_clock_drift_is_strictly_under_one_frame() {
     let report =
         rezie_engine::benchmark::run(600, rezie_engine::benchmark::MeasurementMode::IdleLatency)
@@ -317,9 +317,14 @@ fn correctness_config() -> EngineConfig {
 #[test]
 fn normal_start_requires_a_calibrated_platform_value() {
     let started = Engine::start(EngineConfig::default());
-    if cfg!(target_os = "macos") {
+    if cfg!(any(target_os = "macos", target_os = "windows")) {
+        let expected_ns = if cfg!(target_os = "windows") {
+            1_000_000
+        } else {
+            500_000
+        };
         let (mut engine, _) = started.unwrap();
-        assert_eq!(engine.scheduling_report().finishing_slack_ns, 500_000);
+        assert_eq!(engine.scheduling_report().finishing_slack_ns, expected_ns);
         engine.shutdown().unwrap();
     } else {
         let error = started.err().expect("uncalibrated startup must fail");

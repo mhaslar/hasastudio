@@ -92,3 +92,11 @@ measurement was attempted.
 
 Adequate idle reference evidence pays Phase 0, or cycle-based/ETW CPU profiling
 is implemented with separately named units and an explicit measurement model.
+
+## Subsequent owner ruling — ADR 0028
+
+The Windows v2 result is accepted under SPEC §13's recorded-load / tenfold-margin
+rule. Windows is pinned to 1,000 µs; the Phase 0 obligation is PAID and its
+ledger removed. Phase 0 is closed and Phase 1 resumes. Earlier pending or
+INADEQUATE statements in this ADR are historical. Observed-PTS serialization,
+accounting limitations, preferred power plan and evidence protection remain.

@@ -3,10 +3,9 @@
 Cross-platform live production switcher. The normative design is
 [docs/SPEC.md](docs/SPEC.md); contribution rules are in [AGENTS.md](AGENTS.md).
 
-**Phase 1 is in progress.** Phase 0 closed conditionally, not fully verified:
-its [Windows reference clock obligation](docs/phases/OUTSTANDING.md) is due at
-the Phase 1 gate. A failing reference measurement reopens Phase 0 and stops
-Phase 1 until rezie-rt is fixed.
+**Phase 1 is in progress.** [Phase 0 is closed](docs/phases/00-summary.md):
+its Windows reference-clock obligation is paid under ADR 0028. No Foundation
+obligation carries into Phase 1.
 
 The engine/control foundation and empty GUI work. Phase 1 has begun with a
 native GPU context and reusable Rgba16Float frame leases, tested functionally
@@ -27,9 +26,9 @@ cargo test --workspace --doc --locked
 cargo run -p rezie-app
 ```
 
-macOS uses the calibrated 500 µs slack. Normal Windows/Linux startup explicitly
-rejects their missing calibrated defaults; correctness harnesses provide an
-explicit diagnostic value. The reference Windows sweep is still due. Native
+macOS uses calibrated 500 µs slack and Windows 1,000 µs. Linux startup explicitly
+rejects its missing calibrated default; correctness harnesses provide an
+explicit diagnostic value. Native
 dependency fetching is phase-gated and hash-verified; Phase 1 enables the pinned
 Windows FFmpeg archive, which is not linked by this first GPU slice. NDI SDK is
 never fetched, and CEF is never fetched before Phase 10.
@@ -37,7 +36,7 @@ never fetched, and CEF is never fetched before Phase 10.
 ```sh
 cargo xtask clock-check           # hosted correctness only, explicit zero slack
 cargo xtask clock-sweep           # manual M4/Windows calibration with CPU cost
-cargo xtask bench                 # reference clock obligation; idle Windows RX 6800 XT
+cargo xtask bench --output docs/benchmarks/reference-clock-new.json # fresh reference report
 cargo xtask dist --smoke          # package and launch with explicit diagnostic slack
 cargo run -p rezie-gpu --bin rezie-pool-check -- --output target/pool-check.json
 ```
