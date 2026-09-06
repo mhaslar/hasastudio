@@ -1,4 +1,9 @@
-# First colour/alpha golden candidates — awaiting review
+# Historical 8-bit colour/alpha candidates — not approved
+
+**Superseded proposal:** the owner requires 16-bit outputs and raw linear
+readbacks before freezing hashes. The scene design is accepted; these 8-bit
+hashes are not. A new Windows run and hash proposal are pending (ADR 0030).
+The images below remain historical evidence and must not be installed.
 
 These are the original Windows 11 / RX 6800 XT / D3D12 outputs committed in
 `92829e8`, using driver `32.0.21045.5002`. No reference files have been installed.

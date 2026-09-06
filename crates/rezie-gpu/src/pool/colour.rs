@@ -8,8 +8,11 @@ pub const COLOUR_SHADER: &str = include_str!("colour.wgsl");
 
 /// Diagnostic/egress readback only; never an engine frame or preview transport.
 pub struct ColourReadback {
-    /// Straight-alpha sRGB RGBA8 bytes ready for PNG export.
-    pub png_rgba: Vec<u8>,
+    /// Straight-alpha sRGB RGBA16 channels, in PNG's big-endian byte order.
+    pub png_rgba16_be: Vec<u8>,
+    /// Exact working readback bits: tightly packed RGBA binary16, little-endian.
+    /// Row-major, with GPU row padding removed and no numerical conversion.
+    pub linear_rgba_f16_le: Vec<u8>,
     /// Raw linear premultiplied Rgba16Float result expanded for numerical inspection.
     pub linear_rgba: Vec<[f32; 4]>,
 }
@@ -38,7 +41,8 @@ impl FramePool {
         }
         let row_pitch = (u64::from(key.width()) * 8).div_ceil(256) * 256;
         let raw_size = row_pitch * u64::from(key.height());
-        let buffer_bytes = bytes * 3 + raw_size + 16;
+        let export_bytes = bytes * 2;
+        let buffer_bytes = bytes + export_bytes * 2 + raw_size + 16;
         let reader = self.reserve(key, 3).await?;
         let used: u64 = self
             .active
@@ -93,13 +97,13 @@ impl FramePool {
             );
             let export = buffer(
                 "PNG egress bytes",
-                bytes,
+                export_bytes,
                 wgpu::BufferUsages::STORAGE | wgpu::BufferUsages::COPY_SRC,
                 None,
             );
             let png_readback = buffer(
                 "PNG diagnostic readback",
-                bytes,
+                export_bytes,
                 wgpu::BufferUsages::MAP_READ | wgpu::BufferUsages::COPY_DST,
                 None,
             );
@@ -205,7 +209,7 @@ impl FramePool {
                 pass.set_bind_group(0, group, &[]);
                 pass.dispatch_workgroups(key.width().div_ceil(8), key.height().div_ceil(8), 1);
             }
-            encoder.copy_buffer_to_buffer(&export, 0, &png_readback, 0, bytes);
+            encoder.copy_buffer_to_buffer(&export, 0, &png_readback, 0, export_bytes);
             encoder.copy_texture_to_buffer(
                 wgpu::TexelCopyTextureInfo {
                     texture: out.texture(),
@@ -229,10 +233,16 @@ impl FramePool {
             );
             queue.submit([encoder.finish()]);
             // Blocking wait is intentional here; this function cannot be used on the compositor thread.
-            let png_rgba = read_buffer(&self.device, &png_readback)?;
+            let mut png_rgba16_be = read_buffer(&self.device, &png_readback)?;
+            // GPU packed words contain little-endian u16 channels; PNG requires big-endian.
+            for channel in png_rgba16_be.as_chunks_mut::<2>().0 {
+                channel.swap(0, 1);
+            }
             let raw = read_buffer(&self.device, &raw_readback)?;
-            let mut linear_rgba = Vec::with_capacity(png_rgba.len() / 4);
+            let mut linear_rgba = Vec::with_capacity(png_rgba16_be.len() / 8);
+            let mut linear_rgba_f16_le = Vec::with_capacity(png_rgba16_be.len());
             for row in raw.chunks_exact(row_pitch as usize) {
+                linear_rgba_f16_le.extend_from_slice(&row[..key.width() as usize * 8]);
                 for pixel in row[..key.width() as usize * 8].as_chunks::<8>().0 {
                     linear_rgba.push(std::array::from_fn(|i| {
                         half_to_float(u16::from_le_bytes([pixel[i * 2], pixel[i * 2 + 1]]))
@@ -240,7 +250,8 @@ impl FramePool {
                 }
             }
             Ok(ColourReadback {
-                png_rgba,
+                png_rgba16_be,
+                linear_rgba_f16_le,
                 linear_rgba,
             })
         })();

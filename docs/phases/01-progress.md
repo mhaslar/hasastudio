@@ -81,8 +81,9 @@ producer-reported because raw linear readbacks were not serialized.
 [ADR 0030](../decisions/0030-review-first-colour-alpha-references.md) proposes the
 five Windows outputs as the initial reference content. The
 [candidate review](../testing/phase-1-golden-candidates.md) contains images,
-band expectations and exact file hashes. Human approval is pending; no
-references have been installed. The asset generator/perceptual golden harness
+band expectations and exact file hashes. The owner accepted the scene design but required 16-bit output and raw linear
+serialization before approving hashes. The old 8-bit proposal is superseded;
+no references have been installed. The asset generator/perceptual golden harness
 is the next step after that approval, before decode/fallback and NDI.
 No Phase 1 gate has closed.
 
@@ -134,3 +135,26 @@ Re-check the accepted clock report's 131–137 s and 508–516 s tail clusters
 under real per-tick media/compositor work. Record tail counts, temporal grouping,
 p50/p99/p99.9/max and headroom under the same unchanged timing bounds. These
 are known reference observations, not existing defects or a new Phase 0 debt.
+
+## Precision revision before reference approval
+
+ADR 0030 now requires direct GPU RGBA16 PNG export and exact `.rgba16f.le`
+readbacks. No scene values changed. The new
+[M4 report](../testing/phase-1-colour16-macos-aarch64/report.json) and
+[independent audit](../testing/phase-1-colour16-macos-aarch64/audit.json) pass
+83,525 pixels: maximum linear error 0.000959691 (now reconstructed from raw
+samples), maximum egress error one 16-bit code value. The separately recorded
+full-pipeline PNG error reaches 193/65535 with intermediate half-float rounding.
+All old reports remain unchanged. Windows must rerun this revision before a
+new hash-bound proposal is made; conditional scene approval is not reference
+approval. Backend byte equality is coincidental; sampling in Phase 3 can differ.
+[Phase 4 notes](04-notes.md) reserve the ten-overlay accumulation scene for
+when overlays exist. Only the single-blend scene is implemented now.
+
+Validation for the precision revision: formatting and strict workspace Clippy
+passed; 22 nextest tests and both doctests passed. Nextest marked the existing
+pure clock-distribution unit test leaky once; its isolated rerun passed without
+that flag. No cause is established and no engine code changed. Four portable
+Python audit tests pass, including forged metrics, altered raw samples with an
+updated hash, and PNG depth/CRC rejection. ci-fast runs these recorded-data
+checks without GPU execution or a latency assertion.

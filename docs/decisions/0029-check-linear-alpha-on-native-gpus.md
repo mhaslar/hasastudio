@@ -80,6 +80,19 @@ Windows source hashes reflect CRLF checkout, M4 LF; both match `8659673`.
 Raw linear values were not serialized, so their maxima remain producer-reported.
 Initial reference content is proposed for human review in ADR 0030.
 
+## Precision amendment (human ruling, ADR 0030)
+
+The original 8-bit export evidence above is retained as history. New runs
+export 16-bit PNGs directly from the working texture and serialize exact raw
+binary16 readbacks. Scene/input values remain unchanged. The 0.002 linear
+bound remains; 16-bit egress is independently checked within two code values
+against encoding of the observed working sample. Full-pipeline PNG error is
+also recorded, separately from egress error. The standalone Python stdlib
+auditor recomputes both claims from the artifacts, checks hashes/counts and
+runs in ci-fast against recorded evidence without a GPU. No new native or
+workspace dependency is introduced. Its restricted RGBA8/16 PNG decoder uses
+[the PNG filter specification](https://www.w3.org/TR/png-3/#9Filters).
+
 ## Revisit when
 
 Integrating the streaming compositor: prepare reusable resources on the control

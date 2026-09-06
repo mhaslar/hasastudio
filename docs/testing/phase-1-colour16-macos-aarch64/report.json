@@ -1,0 +1,156 @@
+{
+  "adapter": "Apple M4",
+  "architecture": "aarch64",
+  "backend": "Metal",
+  "cases": [
+    {
+      "background_srgb_rgba": [
+        0,
+        0,
+        0,
+        255
+      ],
+      "failing_pixels": 0,
+      "first_failure": null,
+      "linear_readback": {
+        "bytes": 133640,
+        "path": "black.rgba16f.le",
+        "pixels": 16705,
+        "sha256": "a340e950f2b9c9981818f916856cb644bb1b15e78c4d9aa25f565cd4439c3811"
+      },
+      "max_linear_absolute_error": 0.00048776070435430086,
+      "max_png16_egress_code_value_error": 1,
+      "max_png16_vs_ideal_code_value_error": 21,
+      "name": "black",
+      "pixels_checked": 16705,
+      "png_file_sha256": "3559257b66abbcb013b564cdf6209cc942378e5a67dac161e1cc92e9a97ea40d",
+      "png_rgba16_be_sha256": "062dff51e82dae78f919ebb0a337ab582af3f52f48cb6169af63386f2e531e94"
+    },
+    {
+      "background_srgb_rgba": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "failing_pixels": 0,
+      "first_failure": null,
+      "linear_readback": {
+        "bytes": 133640,
+        "path": "white.rgba16f.le",
+        "pixels": 16705,
+        "sha256": "7648bfe6f3aff2f4ed48e5ffb272a838c7e1a6647d8b17a8083994e3c631fcc8"
+      },
+      "max_linear_absolute_error": 0.00048776070435430086,
+      "max_png16_egress_code_value_error": 1,
+      "max_png16_vs_ideal_code_value_error": 193,
+      "name": "white",
+      "pixels_checked": 16705,
+      "png_file_sha256": "8d342cc99c62ffb07f21f63ed5283955287cfa1766144a608c2a3714a6da8bd0",
+      "png_rgba16_be_sha256": "97cdd3761d9622b7493e7ec2a1749dfd18277e61468896a5bd58af00d1764474"
+    },
+    {
+      "background_srgb_rgba": [
+        31,
+        153,
+        219,
+        255
+      ],
+      "failing_pixels": 0,
+      "first_failure": null,
+      "linear_readback": {
+        "bytes": 133640,
+        "path": "colour.rgba16f.le",
+        "pixels": 16705,
+        "sha256": "579524da9d52cb7350ffba327d5ac4514e2ee4c2671b37dcfd231ebdacb9ec97"
+      },
+      "max_linear_absolute_error": 0.0009466618154896356,
+      "max_png16_egress_code_value_error": 1,
+      "max_png16_vs_ideal_code_value_error": 142,
+      "name": "colour",
+      "pixels_checked": 16705,
+      "png_file_sha256": "79bf919b067bdf47639efab45becd6ef572c4a991be1930808ad16323800feac",
+      "png_rgba16_be_sha256": "d657f5c26191b5864b1a13b56c0ae41ae7a8737e9897cc09aad4c119fb2f4ca4"
+    },
+    {
+      "background_srgb_rgba": [
+        31,
+        153,
+        219,
+        96
+      ],
+      "failing_pixels": 0,
+      "first_failure": null,
+      "linear_readback": {
+        "bytes": 133640,
+        "path": "translucent.rgba16f.le",
+        "pixels": 16705,
+        "sha256": "5b211e8325c83e4c02ae6f0e86e4e99ce4e82f06cd83927d8c7007623a9e3bf0"
+      },
+      "max_linear_absolute_error": 0.0009596906673597916,
+      "max_png16_egress_code_value_error": 1,
+      "max_png16_vs_ideal_code_value_error": 63,
+      "name": "translucent",
+      "pixels_checked": 16705,
+      "png_file_sha256": "9f4b0d381155247649aed7002b7a7d0bd89bc2bd061c6edbbb3de6d9cd049055",
+      "png_rgba16_be_sha256": "972c3fa9f821895615e2b1361d7f0873c696ff12e494e7c32cd6e186fda97916"
+    },
+    {
+      "background_srgb_rgba": [
+        255,
+        0,
+        255,
+        0
+      ],
+      "failing_pixels": 0,
+      "first_failure": null,
+      "linear_readback": {
+        "bytes": 133640,
+        "path": "transparent.rgba16f.le",
+        "pixels": 16705,
+        "sha256": "20d7aa9361df4af02cd19b923a4a7a20b8a0fe95d704ac9e238aa8fab2eec5a8"
+      },
+      "max_linear_absolute_error": 0.00048776070435430086,
+      "max_png16_egress_code_value_error": 1,
+      "max_png16_vs_ideal_code_value_error": 32,
+      "name": "transparent",
+      "pixels_checked": 16705,
+      "png_file_sha256": "256d72d669566f2406101923fc4d110db71bc6fd93e733e88f482938ccf024d0",
+      "png_rgba16_be_sha256": "1226eff18bf828ff4387ffc370a285a1f8872701de0e02469f7a35e6f3ea09ae"
+    }
+  ],
+  "checker_source_sha256": "e0d71aaff6882700190f1d2cc00f43500294707f927c34986ff926d971600c0b",
+  "driver": "",
+  "driver_info": "",
+  "five_minute_allocation_criterion_evaluated": false,
+  "golden_references_updated": false,
+  "height": 65,
+  "input_bit_depth": 8,
+  "input_rgba_sha256": "47f24b377b54f5ea21902be325f7121f26ea3bcef70b9357e255a38e70dd3dad",
+  "linear_absolute_error_limit": 0.002,
+  "linear_readback_layout": {
+    "byte_order": "little-endian",
+    "bytes_per_pixel": 8,
+    "channels": "RGBA",
+    "format": "IEEE 754 binary16",
+    "order": "row-major, top-to-bottom, left-to-right",
+    "padding_bytes": 0,
+    "row_stride_bytes": 2056
+  },
+  "os": "macos",
+  "output_bit_depth": 16,
+  "passed": true,
+  "performance_measured": false,
+  "png16_egress_code_value_error_limit": 2,
+  "probe_source_sha256": "36d50ec8856363f2c0f32cc45ac295aec95eda4af8cbf10849c69a325aa06f3e",
+  "schema_version": 2,
+  "scope": "Phase 1 native-GPU numerical PNG alpha diagnostic; not approved goldens or phase acceptance",
+  "shader_sha256": "dc4c54117851d9d22be2d4c02c646bc12e451700936225a5011de66cff52f8cb",
+  "width": 257,
+  "workgroup_size": [
+    8,
+    8,
+    1
+  ],
+  "working_format": "Rgba16Float linear BT.709 premultiplied"
+}

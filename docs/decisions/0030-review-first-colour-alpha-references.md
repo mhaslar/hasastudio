@@ -6,7 +6,36 @@
 - **Decided by:** awaiting human review
 - **Affects:** initial golden references, rezie-gpu colour path
 
-## Context
+## Precision ruling before freezing hashes
+
+The owner conditionally accepted the scene design, but **did not approve the
+8-bit candidate hashes**. Use 16-bit-per-channel sRGB RGBA PNG outputs. This
+preserves much more of the working-frame precision at negligible fixture size;
+there is no concrete reason to freeze the 8-bit exports. Keep the RGBA8 input
+and all band/background values unchanged so this is the same scene, not a new
+stimulus. Export directly from the GPU working result at 16-bit precision;
+expanding existing 8-bit bytes would preserve the precision loss.
+
+Serialize each actual working readback as a tightly packed `.rgba16f.le` file:
+row-major top-to-bottom, left-to-right, interleaved RGBA, IEEE binary16 in
+little-endian order, 8 bytes/pixel, no row padding. Preserve bits straight from
+GPU readback, not values reconstructed from the CPU oracle or PNG. Record file
+path, byte count, dimensions, format and SHA-256 in the JSON. This retains all
+working precision, including information a normalized PNG cannot represent.
+
+Keep the existing 0.002 absolute working-channel bound. Separately check
+16-bit GPU egress against sRGB encoding of the **observed** working readback,
+within two 16-bit code values, and record its error against the ideal full
+pipeline as an additional statistic. This separates half-float intermediate
+rounding from egress quantization; the old two-8-bit-code-value limit is not
+silently rescaled into a coarse 16-bit tolerance. Add an independent offline
+auditor that recomputes both numerical claims from the PNG and raw files.
+
+Rerun on M4 and Windows, preserve the old 8-bit reports, and re-propose the
+Windows **16-bit PNG and raw readback hashes** for final approval. No references
+may be installed on the strength of the old hashes or conditional approval.
+
+## Context (original 8-bit run)
 
 The owner committed the RX 6800 XT / D3D12 colour diagnostic in `92829e8`.
 All five cases pass, checking 83,525 pixels. The independent
@@ -17,7 +46,11 @@ The raw linear readbacks were not serialized, so that second statistic is
 producer-reported rather than independently reconstructed.
 
 All five Windows outputs have identical decoded RGBA bytes to M4. This is an
-observation about this run, not a change to the perceptual golden policy.
+coincidence for these scenes, not a general expectation or a change to the
+perceptual golden policy. Simple arithmetic on these deterministic inputs
+rounded identically on D3D12 and Metal. Phase 3's bilinear/Lanczos sampling is
+expected to expose backend precision differences; differing bytes then are
+not themselves a defect. Judge numerical and perceptual bounds, not equality.
 The shader/probe/checker hashes match implementation `8659673`: Windows used
 CRLF, M4 LF. No shader or checker edits are needed to explain the difference.
 
@@ -36,11 +69,13 @@ even when the current pixels happen to match Metal exactly.
 
 ## Proposed decision
 
-Approve the **five output PNGs** linked in the
+After the new Windows run, re-propose the **five 16-bit output PNGs and their
+raw linear readbacks**, with new hashes, in the
 [review sheet](../testing/phase-1-golden-candidates.md) as the initial
 colour/alpha golden pixel content. The input-alpha PNG is a generated input,
 not a golden output. Approval is bound to the file SHA-256 values in that
-sheet and the source revision above.
+sheet and the new measured source revision. The currently linked 8-bit set is
+historical and is not approved.
 
 After approval, install byte-for-byte copies under
 `tests/golden/phase-1/colour-alpha/` with source/report provenance. Do not
@@ -55,6 +90,10 @@ reference machine, compare with SPEC §7.6's mean ΔE <1 / max ΔE <3, and write
 actual/difference images on failure. Checking alpha must remain explicit;
 transparent output cannot be validated by ignoring its alpha channel.
 Approval of pixels does not constitute a passing golden comparison.
+
+These scenes perform a **single composite operation**. Repeated-blend error
+accumulation through ten stacked overlays (SPEC §6.3) must be checked in Phase 4;
+see [Phase 4 notes](../phases/04-notes.md). It is not implemented early here.
 
 These small deterministic scenes cover colour conversion and alpha; they do
 not establish streaming preview, decode, NDI, allocation or timing acceptance.

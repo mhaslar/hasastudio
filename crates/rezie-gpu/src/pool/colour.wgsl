@@ -47,6 +47,9 @@ fn egress(@builtin(global_invocation_id) id: vec3<u32>) {
     var rgb = vec3<f32>(0.0);
     if p.a > 0.0 { rgb = p.rgb / p.a; }
     let srgb = vec4<f32>(srgb_channel(rgb.r), srgb_channel(rgb.g), srgb_channel(rgb.b), p.a);
-    let bytes = vec4<u32>(round(clamp(srgb, vec4<f32>(0.0), vec4<f32>(1.0)) * 255.0));
-    exported_png[id.y * size.x + id.x] = bytes.r | (bytes.g << 8u) | (bytes.b << 16u) | (bytes.a << 24u);
+    // Two packed u32 words per pixel, preserving 16 bits per channel at egress.
+    let channels = vec4<u32>(round(clamp(srgb, vec4<f32>(0.0), vec4<f32>(1.0)) * 65535.0));
+    let offset = (id.y * size.x + id.x) * 2u;
+    exported_png[offset] = channels.r | (channels.g << 16u);
+    exported_png[offset + 1u] = channels.b | (channels.a << 16u);
 }
