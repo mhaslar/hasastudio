@@ -66,11 +66,19 @@ jobs:
           tool: cargo-nextest@0.9.143
       - name: Linux build dependencies
         if: steps.scope.outputs.build == 'true'
-        run: sudo apt-get update -qq && sudo apt-get install -y pkg-config libx11-dev libxkbcommon-dev libwayland-dev
-      - run: cargo xtask fetch-deps
+        run: sudo apt-get update -qq && sudo apt-get install -y pkg-config libx11-dev libxkbcommon-dev libwayland-dev libva-dev clang nasm python3-venv patchelf
+      - run: cargo xtask native-deps
         if: steps.scope.outputs.build == 'true'
       - run: cargo clippy --workspace --all-targets --locked -- -D warnings
         if: steps.scope.outputs.build == 'true'
+      - name: Reject incompatible native libraries at build and startup
+        if: steps.scope.outputs.build == 'true'
+        run: python3 tools/check-native-guards.py
+      - name: Assert software override and exact fixture decode
+        if: steps.scope.outputs.build == 'true'
+        env:
+          REZIE_DISABLE_HW_DECODE: '1'
+        run: cargo xtask decode-check --mode auto --output target/decode-ci
       - name: Audit serialized colour evidence without a GPU
         if: steps.scope.outputs.build == 'true'
         run: python3 -B -m unittest discover -s tools -p 'test_*.py'

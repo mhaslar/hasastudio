@@ -42,10 +42,11 @@ jobs:
       - uses: taiki-e/install-action@7b8d4719ee4aaa279bdf55df38dacb9ebfe12a6c # v2
         with:
           tool: cargo-nextest@0.9.143
-      - run: cargo xtask fetch-deps
+      - run: cargo xtask native-deps
       - run: cargo xtask gen-assets
       - run: cargo nextest run --workspace --locked
       - run: cargo test --workspace --doc --locked
+      - run: cargo xtask decode-check --mode hardware --output target/decode-reference-${{ github.run_id }}-${{ github.run_attempt }}
       - run: cargo xtask golden
       # Both commands build before settling and sampling; no concurrent build steps.
       # Windows uses the accepted 1 ms pin; record load and apply SPEC §13 margins.
@@ -58,6 +59,7 @@ jobs:
           name: reference-evidence
           path: |
             docs/benchmarks/**/*.json
+            target/decode-reference-*/
             target/soak.json
             target/golden-runs/
             target/golden-failures/

@@ -41,6 +41,9 @@ impl Default for EngineConfig {
 /// Actionable startup or shutdown failure.
 #[derive(Debug, thiserror::Error)]
 pub enum EngineError {
+    /// Native media library violates the approved licence or ABI.
+    #[error(transparent)]
+    Media(#[from] rezie_media::MediaError),
     /// Invalid configuration.
     #[error("invalid engine configuration: {0}")]
     Configuration(String),
@@ -139,6 +142,7 @@ pub struct Engine {
 impl Engine {
     /// Allocate queues and state, then start dedicated control and clock threads.
     pub fn start(config: EngineConfig) -> Result<(Self, Vec<TickConsumer>), EngineError> {
+        rezie_media::initialize()?;
         if config.frame_count == Some(0) || config.sinks.is_empty() || config.sinks.len() > 8 {
             return Err(EngineError::Configuration(
                 "require 1–8 tick sinks and a positive frame count".into(),

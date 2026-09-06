@@ -87,7 +87,7 @@ VideoToolbox test on M4 cannot satisfy production AMF acceptance. The Windows
 reference runner needs AMD Adrenalin drivers (including the AMF runtime) and
 MSVC build tools/Windows SDK.
 
-RDNA2 has **no AV1 encoder**. AV1 decode is available and should be used when present. Decode always has a software fallback, via FFmpeg's own LGPL decoders. Encode software fallback is OpenH264 for H.264 only. There is no software HEVC encoder; HEVC output requires hardware encode and its absence is a clear GUI error, never a silent failure or a silent downgrade.
+RDNA2 has **no AV1 encoder**. AV1 decode is available and should be used when present. Decode always has a software fallback through the LGPL FFmpeg build: FFmpeg's native decoders for H.264, HEVC and VP9, and its libdav1d integration (BSD-2-Clause) for AV1. Encode software fallback is OpenH264 for H.264 only. There is no software HEVC encoder; HEVC output requires hardware encode and its absence is a clear GUI error, never a silent failure or a silent downgrade.
 
 This is already flagged for commercial review as §16 item 2. Do not resolve it further.
 
@@ -114,6 +114,9 @@ This is already flagged for commercial review as §16 item 2. Do not resolve it 
 The project is closed-source-capable. This constrains linking:
 
 - FFmpeg must be **LGPL**, built without `--enable-gpl` and without `--enable-nonfree`, **dynamically linked**. This means no `libx264`/`libx265` linked in-tree. For software H.264/HEVC encoding, use OpenH264 (BSD, dynamically loaded) for H.264 and accept that software HEVC encoding is unavailable — hardware HEVC is a hard requirement for HEVC output. Record this in an ADR.
+- The pinned Windows FFmpeg bundle is **LGPLv3-or-later** (`--enable-version3`), not LGPLv2.1. Its enabled GMP, libaribb24 and opencore-amrnb/amrwb components require that flag. Keep the existing pin (ADR 0032); a future narrower build may prefer LGPLv2.1-or-later. Record licence versions per platform and review LGPLv3 distribution obligations under §16 item 4.
+- AV1 software decode uses FFmpeg's dav1d integration (BSD-2-Clause). Retain dav1d's copyright, licence conditions and disclaimer with distributed notices (ADR 0032).
+- At **build time and startup**, query the actual selected/loaded libavcodec configuration and version. Fail loudly if `--enable-gpl` or `--enable-nonfree` is present, if the licence is not LGPL, or if the libavcodec major differs from the pinned **61** (FFmpeg 7.x). There is no warning-only or bypass mode. CI asserts this on Windows, macOS and Linux.
 - The NDI SDK must be **loaded at runtime** via `libloading`, never linked at build time. If the runtime is absent, all NDI features are disabled with a clear GUI message and a link to the download; the application must still start and function fully otherwise.
 - SRT (`libsrt`) is MPL-2.0 and may be dynamically linked.
 - CEF (§12.1) is BSD and runs as a separate process, so it imposes no constraint on the main binary.
@@ -965,5 +968,5 @@ Raise these when the relevant phase is reached. Do not decide unilaterally.
 1. **Application name and branding.** "HasaStudio" is a working codename. Confirm before phase 11 installers.
 2. **HEVC software encoding.** §3.1 leaves the LGPL build without one. If software HEVC output turns out to be needed, the choice is between a GPL build (which forecloses closed-source distribution) and dropping HEVC on machines without hardware encode. Flag at phase 5.
 3. **2160p50 output count.** VCN 3.0 will not sustain four 2160p50 HEVC encodes. Measure at phase 5 and agree the documented limit.
-4. **Codec licensing.** H.264 and HEVC patent licensing (MPEG-LA / Access Advance) is a commercial question, not a technical one. Flag before any distribution.
+4. **Codec licensing.** H.264 and HEVC patent licensing (MPEG-LA / Access Advance) is a commercial question, not a technical one. Flag before any distribution. Include the pinned Windows FFmpeg bundle’s LGPLv3-or-later obligations: replaceable shared-library mechanism, notices and corresponding source, permissions for debugging modified libraries, and any applicable installation-information requirements. Dynamic linking does not by itself complete commercial/licence review (ADR 0032).
 5. **Project file format for binary-adjacent state.** §10 specifies YAML for rundowns. The project file is also YAML, which is right for hand-editing but will be large with 50 inputs. Revisit at phase 11 if load time exceeds 1 second.

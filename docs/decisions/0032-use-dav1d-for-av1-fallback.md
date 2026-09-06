@@ -1,9 +1,9 @@
 # 0032 — Use dav1d through FFmpeg for software AV1 decode
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-06
 - **Phase:** 1
-- **Decided by:** Pending human review
+- **Decided by:** Human approval, with amendments on 2026-09-06
 - **Affects:** `rezie-media`, native dependency manifest, SPEC §2.1/§3.1
 
 ## Context
@@ -54,19 +54,18 @@ these libraries has been measured or is claimed by this decision.
 
 ## Decision
 
-**Proposed, awaiting approval:** select `libdav1d` for software AV1 decode;
+Select `libdav1d` for software AV1 decode;
 retain FFmpeg's native H.264, HEVC and VP9 software decoders. Keep FFmpeg
 dynamically linked and built without GPL/nonfree components. Hardware
 selection and the explicit override that disables hardware remain required.
 
-On approval, replace only the decode sentence in SPEC §2.1 with:
+Replace only the decode sentence in SPEC §2.1 with:
 
 > Decode always has a software fallback through the LGPL FFmpeg build:
 > FFmpeg's native decoders for H.264, HEVC and VP9, and its libdav1d
 > integration (BSD-2-Clause) for AV1.
 
-Add the corresponding dav1d licence/notice requirement to §3.1. Leave all
-encoder policy and §16's commercial-review question unchanged.
+Add the corresponding dav1d licence/notice requirement to §3.1. Leave encoder policy unchanged; extend §16 item 4 with the LGPLv3 distribution review below.
 
 For isolated macOS/Linux builds, pin dav1d **1.5.4**, the latest release in
 VideoLAN's official release index when checked on 2026-09-06:
@@ -82,6 +81,49 @@ The Windows bundle retains its existing artifact pin; do not pretend its
 embedded dav1d is necessarily 1.5.4. Record the actual bundled version
 when validating it on Windows. Changing that bundle remains a separate ADR.
 
+### LGPL version and why version3 is enabled
+
+The pinned Windows build is **LGPL version 3 or later**, not LGPLv2.1.
+The exact enabled configuration intersects FFmpeg 7.1.1's
+`EXTERNAL_LIBRARY_VERSION3_LIST` at **gmp, libaribb24,
+libopencore_amrnb and libopencore_amrwb**. FFmpeg's configure script rejects
+these when version3 is disabled and selects LGPLv3-or-later when version3
+is enabled without GPL/nonfree. This flag is required by this configuration,
+not an unexplained build default. dav1d itself does not require version3.
+See [the list](https://github.com/FFmpeg/FFmpeg/blob/n7.1.1/configure#L1883-L1892)
+and [enforcement and licence selection](https://github.com/FFmpeg/FFmpeg/blob/n7.1.1/configure#L4493-L4518).
+
+A future reduced build that excludes those components can prefer the weaker
+LGPLv2.1-or-later obligations; **do not change the Windows pin in this slice**.
+The isolated macOS/Linux decode build has no need for those components and
+keeps version3 disabled. Record each build's actual licence version.
+
+LGPLv3 remains compatible with the project's closed-source-capable desktop
+model: use replaceable shared libraries under §4(d)(1), retain required
+notices and corresponding source, and permit debugging modified libraries.
+Dynamic linking addresses the shared-library/recombination condition, not
+all distribution obligations. Commercial review under SPEC §16 item 4 must
+cover the exact LGPLv3 bundle and packaging, including §4(e)'s conditional
+installation-information provision; ordinary replaceable desktop libraries
+must not become locked into an appliance-style distribution. This records
+the approved distribution approach, not completed legal clearance.
+
+### Build-time and startup rejection
+
+At build time, load the selected libavcodec and call `avcodec_configuration`,
+`avcodec_version` and `avcodec_license`. At application/headless startup,
+query the libavcodec actually linked into that process again, before opening
+media. Both checks fail with an error if configuration contains
+`--enable-gpl` or `--enable-nonfree`, or the reported major is not **61**
+(FFmpeg 7.x's libavcodec major). Include offending configuration, actual
+version and expected major in diagnostics. There is no warning-only mode or
+licence-check bypass. Reject a non-LGPL licence string too.
+
+CI on Windows, macOS and Linux must exercise these guards, including
+negative build-time and startup cases using deliberately incompatible
+probe libraries. The real selected native library must also pass; a test
+of a manifest string alone does not establish loaded-library compliance.
+
 ## Consequences
 
 AV1 software fallback becomes testable on every supported target through
@@ -96,20 +138,34 @@ FFmpeg and verify the exact libraries/configuration actually loaded.
 Retain FFmpeg and dav1d notices and identify bundled versions; no encoder
 or later-phase feature is introduced by this decoder decision.
 
-This proposal changes no dependency manifest, links no native library and
-amends no normative spec text until approved. Inspection archives are in
-`/tmp`, outside the project dependency cache.
+Version skew between the bundled Windows dav1d and macOS/Linux 1.5.4 is
+**not a reason for different decoded pixels or a tolerance**: AV1 decoding
+is normatively bit-exact. Conformant decoders given the same valid bitstream
+and decode settings produce identical decoded samples, unlike encoders.
+Compare native decoded planes before colour conversion; do not confuse GPU
+colour-conversion rounding, optional processing or error concealment of
+invalid input with decoder conformance. Skew matters for security patching
+and reproducibility. Record versions and investigate any decoded-sample
+mismatch rather than relaxing the comparison.
+
+Golden tolerances remain mean ΔE00 <1 / max ΔE00 <3 on both platforms.
+M4's observed maximum 0.00284570 gives no reason for a separate threshold.
+Revisit only when Phase 3 introduces bilinear/Lanczos sampling and measured
+backend differences justify a new reviewed decision. No threshold changes
+are introduced here.
 
 ## Verification
 
 Completed: inspected FFmpeg's pinned source, verified both archive hashes,
 read dav1d's licence and the Windows bundle's embedded configuration.
 
-After approval: build the isolated LGPL configuration; record library paths,
+Implementation verification: build the isolated LGPL configuration; record library paths,
 build configuration, versions and notices; decode a known AV1 fixture with
 hardware disabled on all supported targets, assert `libdav1d`, and validate
 frames, PTS and end-of-stream handling. Verify actual hardware decode
-separately on equipped machines. No decoder execution result exists yet.
+separately on equipped machines. The implementation now passes local M4
+software fixtures and hardware H.264/HEVC checks; Windows/Linux execution
+remains to be recorded. See ADR 0034 for the actual Apple session probe.
 
 ## Revisit when
 

@@ -1,0 +1,23 @@
+--- a/libavcodec/videotoolbox.c
++++ b/libavcodec/videotoolbox.c
+@@ -477,0 +478,20 @@
++}
++
++/* Rezie diagnostic accessor: keep private context layout inside FFmpeg. */
++int av_rezie_videotoolbox_uses_hardware(const AVCodecContext *avctx);
++int av_rezie_videotoolbox_uses_hardware(const AVCodecContext *avctx)
++{
++    AVVideotoolboxContext *context = videotoolbox_get_context((AVCodecContext *)avctx);
++    CFTypeRef value = NULL;
++    int result = -1;
++    OSStatus status;
++    if (!context || !context->session)
++        return -1;
++    status = VTSessionCopyProperty(context->session,
++        kVTDecompressionPropertyKey_UsingHardwareAcceleratedVideoDecoder,
++        kCFAllocatorDefault, &value);
++    if (status == noErr && value && CFGetTypeID(value) == CFBooleanGetTypeID())
++        result = CFBooleanGetValue((CFBooleanRef)value) ? 1 : 0;
++    if (value)
++        CFRelease(value);
++    return result;

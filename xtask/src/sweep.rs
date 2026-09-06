@@ -1,6 +1,21 @@
 use anyhow::{Context, Result};
-use rezie_engine::benchmark::ClockReport;
-use serde::Serialize;
+
+use serde::{Deserialize, Serialize};
+
+// Read only the wire fields needed by a sweep; bootstrap must not link media.
+#[derive(Deserialize)]
+struct ClockReport {
+    scheduling: rezie_rt::SchedulingReport,
+    wait_profile: Option<rezie_rt::WaitProfile>,
+    lateness: Lateness,
+}
+#[derive(Deserialize)]
+struct Lateness {
+    p50_ns: u64,
+    p99_ns: u64,
+    p99_9_ns: u64,
+    max_ns: u64,
+}
 use std::{
     fs,
     path::Path,
@@ -316,4 +331,25 @@ fn write_summary(directory: &Path, points: &[Point], seconds: u64) -> Result<()>
     svg.push_str("</g></svg>\n");
     fs::write(directory.join("curve.svg"), svg)?;
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn existing_clock_wire_evidence_still_parses() {
+        let reports = std::fs::read_dir(super::super::root().join("docs/benchmarks")).unwrap();
+        let mut parsed = 0;
+        for entry in reports {
+            let path = entry.unwrap().path();
+            if path.extension().is_some_and(|s| s == "json") {
+                let bytes = std::fs::read(path).unwrap();
+                if let Ok(report) = serde_json::from_slice::<ClockReport>(&bytes) {
+                    assert!(report.lateness.max_ns >= report.lateness.p99_9_ns);
+                    parsed += 1;
+                }
+            }
+        }
+        assert!(parsed > 0);
+    }
 }
