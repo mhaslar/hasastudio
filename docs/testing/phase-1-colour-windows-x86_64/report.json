@@ -1,0 +1,104 @@
+{
+  "adapter": "AMD Radeon RX 6800 XT",
+  "architecture": "x86_64",
+  "backend": "Dx12",
+  "cases": [
+    {
+      "background_srgb_rgba": [
+        0,
+        0,
+        0,
+        255
+      ],
+      "failing_pixels": 0,
+      "first_failure": null,
+      "max_linear_absolute_error": 0.00048776070435430086,
+      "max_png_code_value_error": 1,
+      "name": "black",
+      "pixels_checked": 16705,
+      "png_rgba_sha256": "9bcb1536cf4b8aa50f2b65e9cda669fd6dba3eeb3f0f1446d8826c02148089a4"
+    },
+    {
+      "background_srgb_rgba": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "failing_pixels": 0,
+      "first_failure": null,
+      "max_linear_absolute_error": 0.00048776070435430086,
+      "max_png_code_value_error": 1,
+      "name": "white",
+      "pixels_checked": 16705,
+      "png_rgba_sha256": "6f52873bc4550e4575cc68608611cba037a696c432f0ee7f055c5ebe5a159c48"
+    },
+    {
+      "background_srgb_rgba": [
+        31,
+        153,
+        219,
+        255
+      ],
+      "failing_pixels": 0,
+      "first_failure": null,
+      "max_linear_absolute_error": 0.0009466618154896356,
+      "max_png_code_value_error": 1,
+      "name": "colour",
+      "pixels_checked": 16705,
+      "png_rgba_sha256": "1649059463b1fc96dff43e63e2be249a16f8bbc67d5e20a22a254b0c477f01cb"
+    },
+    {
+      "background_srgb_rgba": [
+        31,
+        153,
+        219,
+        96
+      ],
+      "failing_pixels": 0,
+      "first_failure": null,
+      "max_linear_absolute_error": 0.0009596906673597916,
+      "max_png_code_value_error": 1,
+      "name": "translucent",
+      "pixels_checked": 16705,
+      "png_rgba_sha256": "d0c070bc9be1280177d5d3237bafa002eece8fba957ba6438bd9b3e274a50f44"
+    },
+    {
+      "background_srgb_rgba": [
+        255,
+        0,
+        255,
+        0
+      ],
+      "failing_pixels": 0,
+      "first_failure": null,
+      "max_linear_absolute_error": 0.00048776070435430086,
+      "max_png_code_value_error": 0,
+      "name": "transparent",
+      "pixels_checked": 16705,
+      "png_rgba_sha256": "05bcaf723e1b22953259cf20bee0f89eee9e3efe5585e6b0d9a064e81e22ec1e"
+    }
+  ],
+  "checker_source_sha256": "e6392f5a913051d710786c4993219f2667c2be33cf4582ebed37bae5e3a16d3a",
+  "driver": "32.0.21045.5002",
+  "driver_info": "",
+  "five_minute_allocation_criterion_evaluated": false,
+  "golden_references_updated": false,
+  "height": 65,
+  "input_rgba_sha256": "47f24b377b54f5ea21902be325f7121f26ea3bcef70b9357e255a38e70dd3dad",
+  "linear_absolute_error_limit": 0.002,
+  "os": "windows",
+  "passed": true,
+  "performance_measured": false,
+  "png_code_value_error_limit": 2,
+  "probe_source_sha256": "b6df3da133f90f66161c7358d7aced6dc6c9b56e6f50a89c939237584a4caf46",
+  "scope": "Phase 1 native-GPU numerical PNG alpha diagnostic; not approved goldens or phase acceptance",
+  "shader_sha256": "dec032385b2fc9049250941356d6e0627c603c6fef1af9e48c7275f87965d96e",
+  "width": 257,
+  "workgroup_size": [
+    8,
+    8,
+    1
+  ],
+  "working_format": "Rgba16Float linear BT.709 premultiplied"
+}
