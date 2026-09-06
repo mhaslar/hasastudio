@@ -280,3 +280,25 @@ No GPU upload/colour conversion from decoded planes, shared-device preview,
 input commands or NDI output is presented as complete in this slice. No
 performance or Phase 1 closure claim is made. These remain the next approved
 integration steps after native decode validation.
+
+## Windows native decode evidence received
+
+The owner committed hardware and forced-software results as `ad11a67`.
+The [independent audit](../testing/phase-1-decode-windows-x86_64/README.md)
+passes all 336 pictures: exact PTS/time bases and component hashes against
+the fixture oracle and M4, 24 ordered pictures per file, 8/10-bit depth and
+colour metadata retained. All four codecs use observed D3D11VA contexts in
+strict hardware mode. Forced software uses the expected native decoders and
+libdav1d, with no hardware contexts. Windows dav1d reports identifier `7161642`,
+not a verified release version. Build/runtime configuration agrees with the
+pinned LGPLv3 artifact and libavcodec major 61.
+
+The upload also deleted two prior golden audits; they were restored unchanged
+from `e9c7605`. These unrelated worktree deletions do not alter decoder source.
+The actual libclang version was not captured, so the successful build does
+not independently prove the requested LLVM 21.1.8 selection. Windows CI now
+initializes MSVC/SDK paths and checks the actual libclang before compilation.
+
+This clears the native Windows file-decoder validation step. The slice can
+now enter its single full matrix. Linux hardware execution, integrated preview,
+NDI reception and phase-required load/benchmark evidence remain open.

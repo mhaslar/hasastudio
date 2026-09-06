@@ -70,8 +70,20 @@ is present and the generated Rust compiles. See
 This proves the generator incompatibility independently of FFmpeg.
 
 The exact Windows LLVM 21.1.8 installation and full reference decode retry
-remain unmeasured here; the owner must run them. No Windows success is inferred
-from the Mac reproducer or from upstream release notes.
+were not measured by the original Mac reproducer. The owner subsequently
+committed successful Windows hardware and software reports in `ad11a67`,
+audited under `docs/testing/phase-1-decode-windows-x86_64/`. Those reports do
+not capture the libclang version, so they prove a working Windows build and
+decoder, not independently that LLVM 21.1.8 was selected. The LLVM version
+in rustc's metadata is its separate backend.
+
+Before the slice's first full matrix, Windows workflows now initialize the
+x64 MSVC developer environment and inspect the actual selected libclang DLL
+with `tools/windows-build-env.ps1`. Explicit LIBCLANG_PATH is authoritative;
+otherwise known installed locations are inspected and the first compatible
+pre-22 library selected. The script records its version, checks standard C
+headers, and exports compiler variables for later steps. It downloads nothing
+and changes no machine-wide settings. Hosted pre-22 LLVM can remain in use.
 
 ## Revisit when
 

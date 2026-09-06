@@ -43,6 +43,9 @@ jobs:
         with:
           tool: cargo-nextest@0.9.143
       - run: cargo xtask native-deps
+      - name: Prepare MSVC headers and compatible libclang
+        shell: pwsh
+        run: ./tools/windows-build-env.ps1
       - run: cargo xtask gen-assets
       - run: cargo nextest run --workspace --locked
       - run: cargo test --workspace --doc --locked
