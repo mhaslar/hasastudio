@@ -1,0 +1,5387 @@
+{
+  "architecture": "x86_64",
+  "build_native": {
+    "configuration": "--prefix=/ffbuild/prefix --pkg-config-flags=--static --pkg-config=pkg-config --cross-prefix=x86_64-w64-mingw32- --arch=x86_64 --target-os=mingw32 --enable-version3 --disable-debug --enable-shared --disable-static --disable-w32threads --enable-pthreads --enable-iconv --enable-zlib --enable-libxml2 --enable-libvmaf --enable-fontconfig --enable-libharfbuzz --enable-libfreetype --enable-libfribidi --enable-vulkan --enable-libshaderc --enable-libvorbis --disable-libxcb --disable-xlib --disable-libpulse --enable-gmp --enable-lzma --enable-opencl --enable-amf --enable-libaom --enable-libaribb24 --disable-avisynth --enable-chromaprint --enable-libdav1d --disable-libdavs2 --disable-libdvdread --disable-libdvdnav --disable-libfdk-aac --enable-ffnvcodec --enable-cuda-llvm --disable-frei0r --enable-libgme --enable-libkvazaar --enable-libaribcaption --enable-libass --enable-libbluray --enable-libjxl --enable-libmp3lame --enable-libopus --enable-libplacebo --enable-librist --enable-libssh --enable-libtheora --enable-libvpx --enable-libwebp --enable-libzmq --enable-lv2 --enable-libvpl --enable-openal --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenh264 --enable-libopenjpeg --enable-libopenmpt --enable-librav1e --disable-librubberband --enable-schannel --enable-sdl2 --enable-libsnappy --enable-libsoxr --enable-libsrt --enable-libsvtav1 --enable-libtwolame --enable-libuavs3d --disable-libdrm --enable-vaapi --disable-libvidstab --enable-libvvenc --disable-libx264 --disable-libx265 --disable-libxavs2 --disable-libxvid --enable-libzimg --enable-libzvbi --extra-cflags=-DLIBTWOLAME_STATIC --extra-cxxflags= --extra-libs=-lgomp --extra-ldflags=-pthread --extra-ldexeflags= --cc=x86_64-w64-mingw32-gcc --cxx=x86_64-w64-mingw32-g++ --ar=x86_64-w64-mingw32-gcc-ar --ranlib=x86_64-w64-mingw32-gcc-ranlib --nm=x86_64-w64-mingw32-gcc-nm --extra-version=20250831",
+    "licence": "LGPL version 3 or later",
+    "path": "\\\\?\\C:\\Users\\matya\\hasastudio-1\\.deps\\native\\bin\\avcodec-61.dll",
+    "version": "4002661"
+  },
+  "cases": [
+    {
+      "input": "h264.mp4",
+      "input_sha256": "b6b9112d45d35c9bc563a4aeb6bd24ba64888ec51fc7d758e4361c49968141d4",
+      "matches_independent_fixture_oracle": true,
+      "passed": true,
+      "pictures": [
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "cb5519bca95ddbd8b1a4d1aee5d14f807badce3034a1205e926544780c0753be",
+            "96caf40506553171d0c43e7f527eaed199af4805c225713a6d450641ae13dd74",
+            "84cbd32aa6b0775f4f04c68f6384adee8dea1889bdd1be76e6c668961304a7d0"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 0,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 0,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "6897497fcb2b658be0e8a188529085ba53db4bb47e0dff6a0460e24d4e04f08e",
+            "3feac3f83304b5c2ecdb72c129f4d5f2f267c50c9efec62bb8917a9d2e97226a",
+            "d8e71cd9caec9e21f70df91c00b5e29201a62a93828020916ef9e81c41bcca98"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 1,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 256,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "da7c5244e3ecac141a9bd379425428c0edb3b820c57d0f2b864653f7081c00ff",
+            "4c75a7b668b7783e96cd534e99ef39b09bae4d1f47e599726ea861a9bbb13f3d",
+            "8ce7b87f1df86b3d0b3b0f8f17bbcebdfcfbb73e9b8b2dedd7ea2dfc503404b9"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 2,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 512,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "f7a47e01612cd9f820bd53f705e301b1e098dec62420845258182b0dbd0cbf28",
+            "88aff964abd8080287928a469d64347ad48e34db6d7a40ef35dc37723c04a3e2",
+            "99a4ed63405cc3a3371a6b8c9476d79f7e4ab24c6c52d4a980c009bf60831e26"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 3,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 768,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "d51d0623b589bccde9f2a21519ca9a626c5410f3f40722c5fd8f9056b3427e28",
+            "895d17344b1ebb24badc8b992bdea41c2578ac11bcb0c27bee66633cf1cb1c6c",
+            "4d5fe5cec39d8a6cff3a1948f95660f640e02186579fd7f58c6cb393965c3ffe"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 4,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 1024,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "174cf1f42dfb770af4e7c0a1964077f58112129aa6474d9ef8a4a8c3f5745e49",
+            "e58235a4ea2cc5f677de06c3507aacb1dab99776478bc2a8434d18cdbb9bd043",
+            "a020fe3102e274b01a7814750250341aa2135c60e9c94f03b3d38fb8888d5412"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 5,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 1280,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "974f8f560eebc74ae648a1f1a560456436c9281c716d97efc01806c0e2635c62",
+            "ba7fa34c90fdd7c3532f38362aad31833991d498341112f3a6f6ba93fe3879a0",
+            "77d07b1360212a601a07103a759b80633770d2dd6fadd5244aa91a54f31f0392"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 6,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 1536,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "56e5783fc08ca6db3eefe778cc1b31d0bf6d19700757e190c0650ee4298e7ab7",
+            "7887dd3a3b19c9dc84f640cc13bf8cdd10d56a44927d8422204b9bfccc6b4cb7",
+            "a79b705121ddb389cd5eeceef9f436008450beda513540a6876495941f5dc382"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 7,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 1792,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "b34e4bae775ef502f72c2e14e8e278fc54b052e4b35b6b15575dce3b28d52f7a",
+            "35aa4c955fc9177ab4d08af7794e7e15f5d402f853b80e13d29dc9aae75664e6",
+            "3c71239b34281469eb246991305a216d560bcd3e6e7a95799d36af6a8692b6d3"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 8,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 2048,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "550ee78b78d32a35b6a28fe808bd1b72d66bf489ce9fee144dd54fd111589740",
+            "fb361913e1180f8de88f68449be94691a5ada649015e9ca6a8021fc3175f8a34",
+            "535a7bfbaf807ee245db31249bc81629077febdf2d6d76ffd0159b6e1946203d"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 9,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 2304,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "f9f2e208ff888c7c8a10c8a685623fb21d3191e39eda4497f1c8d33f5bf47f3a",
+            "aba2e643caf3e3b16def2aa42f3cf72bf6c780b6772389583f81bc7246d2909d",
+            "f508777be016df46ef956b88e3f95e11c370b3f7e00d476d7379cd5a49cb90ed"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 10,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 2560,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "e6036d57b4bf83402b02cdd98f67201fa159ec89000c4f671b67021210cb5b46",
+            "d92d26575dd665401ae89253661515169959871275509c025adc12c8688b26a5",
+            "1305a1481e0313e37946b2c9559a2962c482febbe5c597225cc09eb843096924"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 11,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 2816,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "b9185990ebb5f3661d92e28c6539dbf5bd63bfe1aec2dc5169e941ed51cff2ef",
+            "d398733ac59e7b0997bfdd9295fcc6431739a0a77296ccd32d5dfedb9f5e9d46",
+            "1c30f7b7fee3ff183da0e63ca053414d440a4fe6732f3b79befee686a92c48b9"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 12,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 3072,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "978b5917f3cfce3fbab3bfc1ffb3105dff994e179c04f85423f62af0163e34a2",
+            "ad1e35d056e977b226050f57f35edf3dea370450e8f53e4f3463e8e035e8f2aa",
+            "324ecd8e6848b9c28bb62875752f6bb22677ae62d9e8345dba627b06ed475f3e"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 13,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 3328,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "352b3dfdf11c0e528271ac3641741b4c1b5965ed1ee02f47c1076e50838d48dd",
+            "0f9752f835d93f6922bb8c47df77bd06098215b9f4ddc285ee31442934de0dcc",
+            "1ef98a186c0e8cf2ae02599c8df191ff6ae70881edd0654ef826065cb125370a"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 14,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 3584,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "0a2560537bc751b4f5f4edf65afe166b0f8f4ceeca560536f612296fb8860d49",
+            "150e2427a7e49ad30f42a9574c2a2828073a3bcc53c817c7d68b228b44df03a9",
+            "3fc15f19ab92cc33188cec31b7490ebf71dad218f0fc8a62aa62008b4e5a3c63"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 15,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 3840,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "f8f8a49614607b064b40d16a0034051ac74e1c06dfa7a86e3646ac9332c85077",
+            "fb69f1bd28da7eb4bc01bb9c16b5e3507f9fc685829b626801805806ad24b812",
+            "cb4ca0cfa1d6c43660a003cf59fed58bf6956937ec93405f3309134e84e15d18"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 16,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 4096,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "59849620123799cc3dbc0bb3c5460e3313cc432739df201fc23a7edcfd259628",
+            "cfdb61bf852309df08a3afa6d59869796a10cc03c80e3a53584d502de7a51a66",
+            "0a7d64bbd0ad11c6337204f894d3197d89efe39dfea0debc2cf8b01d98940af5"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 17,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 4352,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "73f440ea3266acd0039f166b71eb00d383fc8e1ad7d9392d563fdca1b571a67b",
+            "1a5420c5d153fb6248526cedfa4ba9981bdf92669483a224657cd999094320c5",
+            "e7918d7d2f0f45e978220966ef394747184b7fbb9dce045a596aed211590b0aa"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 18,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 4608,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "ea99108365c52bd88a2ab4b4c0dc07db0533b67d4259ee4de91b35caef677fb0",
+            "2bec332fc9574b7cd5d48c12142a05b5f487453298083bc0766058b842f5d586",
+            "e7bdcb6b9deb51ddb4de0965b87e45cd62d7a307e42d41a0c6078b90cd58852f"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 19,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 4864,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "b464a0f4fd09d6a68697ab7b73b77a168f6011eb14ae8c10afdc367fb9845eb2",
+            "003e85d39e6feb8a6e214e23c1a77e6250b0f9097be8499f114f9327bf27c263",
+            "96d04aa8e9ec8ea2b81b86481a2f2520696ce748292d462912b7537243127fc9"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 20,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 5120,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "74b40cd6e556cf8cb2bd97465b3a46a3c6f60f008f4d47fe5b0f56b7d8c75d06",
+            "9c77955eeb5e8ad7f5285cacfdde02a56af0c02777c0da000e55790e76c51d85",
+            "a50d3798d35d53f32576ec1008fbb46d96b5b65c68f40c326f4d092d2b5022e8"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 21,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 5376,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "87720d40a9bd7d382b933b4f8c4adb97483b36796666688711b2e2f71e966bdf",
+            "72ec68f421f134c1032e95c25dd46106d5da4ca4225aec1251b6a8383af0c1d5",
+            "bfcae4d6b5663f831da82b2edd3043ce0f196cd63446f9fd9364ff7b8eff64b7"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 22,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 5632,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "426664d02d1e4213c5311429dc9fd8a697cb0f994844ed7041f2e05761a919f3",
+            "a6a22658363692d069079dcc709df387f59f7b6f26f514b5ad40ec748370222d",
+            "0ecf328f27b218b9899bfcdc473e2225eccf5859448e57452d0c0a47356aa1c2"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 23,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 5888,
+          "time_base": [
+            1,
+            12800
+          ]
+        }
+      ],
+      "status": {
+        "decoder": "h264",
+        "environment_disabled_hardware": true,
+        "fallback_reason": null,
+        "hardware_device": null,
+        "hardware_frame_context_observed": false,
+        "hardware_pixel_format": null,
+        "observed_hardware_device": null,
+        "videotoolbox_using_hardware": null
+      }
+    },
+    {
+      "input": "hevc.mov",
+      "input_sha256": "639f489512e5e61e5ad57c40aa1eb9c49383fabb505a7bdda17d9905115784c7",
+      "matches_independent_fixture_oracle": true,
+      "passed": true,
+      "pictures": [
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "2624bc93032f43bb5b9d1ef80910a7f4777940bc03e9e749c6878e54d96902ea",
+            "f63778806c5245f546ecda93ae3fe1afb7b2e5d5490ed46797df3fc389486e01",
+            "5891355be819037b17e69593b37c7877f938acb9a01810a16c6a83c7dcfbcd5e"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 0,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 0,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "fe82d7f122f072cda51c08bdc38e137d914b874a7e9a06b45fb30bce344aea04",
+            "1dd0cb37a29933fda0e1b77b16b0c41ffcd97dcf873d9d22d39b17c4493a0849",
+            "43d4bf8038a42f61dbf79636a0b8b9b1a06deb9565dceb7bcdbf75a926eb170b"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 1,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 256,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "5d0a8ae72426776ad2fdde9c2e8711ee422029b06b551da110609cc821675531",
+            "3f5f1721361f1b6967200b7b1bf72003900b3b891f74f6a7471657afbe381afc",
+            "5ada77cca45196a3955f97167a729fdaed5d7b1b2cf8bf20bb9f4ed9487fc6b6"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 2,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 512,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "08541f309f11f7bad6911ff22b25e315b68d4215b3227b9c765005128e89c43c",
+            "d1bc0c1bab06d6c1ae6a9bb10efcc42a7eafd8d5682f80d4c2f948f95849862a",
+            "433d45314f925107be8ca149aec50c801036bd20e6db4298acfe570919470f2b"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 3,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 768,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "81ea7901b78e85610b73f8e48dc770e718f7715d174a15e8706cebd6db61a890",
+            "12c81296bc9b67beedc040e958272eda73234c5bf75ff36822186b47b43f8a75",
+            "014103e678bf84be4264e4425e3016cd55a9f56320bab0e30f8639f17befd92e"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 4,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 1024,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "4ee7e1ab73e2fc80c71c0ea3c82f6b742732ec7e9de016101d43a3ac7c300b37",
+            "5e7b6c618cdd4fac7af78a49abb80d1f4553d8c9df07be50b9b5dfbb90e9fb25",
+            "6f457b8e977562cdaeaa3705975f72dde6a5d206f645cbe1c06f0415feff19c7"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 5,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 1280,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "d83571cc58de60a1e934a7de74a4976b19b8fda97d781254f162e3e6c17a0440",
+            "254e649aaf868cef7731b248575b0dc57bc20d54c152cc87e78b7b3dec8ba368",
+            "78846d83306300d623dc039110800d96ebed106a50ec3a9af9456c246876d62f"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 6,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 1536,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "0c0db5e471bd66a3b597c81f015c8bf64b4c83b11f10b129db6a3a25ad0ad6e3",
+            "47865ddbdda627f2dffc2e476a8f2832563e2a3f63d74c448ef5d3adf791c557",
+            "8ed8d20a5178a1e734652bc49a1e9073f4dbd91e5687ba2b1a02859d8d2d5805"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 7,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 1792,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "b01d3825a5c3d5bf92393af0cd8f3147fca9170b417a2a9ce9eed26b5809fae4",
+            "8f825b821d6af837e9c75ededb065394a75e497e4ddd280acc90524a33d7e495",
+            "aa22ff5eb221b137a93dcc3d665c44f45d9d72e13ea5d705edcd8bd66efaee03"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 8,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 2048,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "7f9a799dc035e6179bb54a4a4458fba696e7a80c2213f67f4a82ce77c11b4681",
+            "b8acd6426a7ce4a5d169724477881a0aff3521d5675b78c1953c310120bf6cb3",
+            "67b5c988e3be28ce24a2550342bc5de9846c1669d02a49644c30526d998ad50d"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 9,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 2304,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "a10741fed677e1765694a592ff91395585ee831de1fa9c2738ba0b3f092d9bc2",
+            "aca7d733aaebf96ed9be87340a27d11a4961ea3c839c8f62bd74628bc63ccc59",
+            "a5c7d901792c67edbc5e6e8e236bc97c11600ecdf84ba1c6c128788733c4fff9"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 10,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 2560,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "1fca02ef18f9875f8d69916853b56d904eddaa18254a5c2d28472113c3d65eee",
+            "d4e71cf59e74e63be937bca6ae41f821fc1f8b887ac04312404db99992cf5059",
+            "8010b9892009e22e1472f25cc0454feb26d09b7d4abf4f3c829f7c2d3a181c72"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 11,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 2816,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "2986c352d4d344d744515cbbeae7bfe9464cada1bebe80116b3c8925b76e8234",
+            "7d583a46b22afd7affa0483def302ae47727be7e733ac825abb2f3b93e8b3142",
+            "330f95fb07224370c7acaf83632e895017e9ef414e84777c745cb6a56f0e5708"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 12,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 3072,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "4a02b7b2c3f7394696d2495b2876b29555c9912e22bb6b6a440c3241d869cf22",
+            "23a726654972cd491336fe69cd7be6bc21265a6feff05b5e8ab8cccd9e97c841",
+            "2d2dc1d6ab37461c19e6773e2c0c7959e50087555e4b22ec1029f2aa0890b6c1"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 13,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 3328,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "005755a719e6d7ec5d1ff2da4248527a85c3da208ff921abe303ffd45effc795",
+            "51cb967cfb17d7afc8817c6fedde43a7afd9a503dc14e593d53a5f192ce70d43",
+            "4bbebdf08ab2c664a2c30a6cfa26270b19701f73bbe0b14fb6d933e76ca8ea20"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 14,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 3584,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "40dca8d9b6f47f460cc132cbb9c2f87c3a3e631580a6a087fd4a5a267cb3d31b",
+            "be6d94f7461c22e9d3ad523de46955f06d5d163214116236ac62f0a3e7e4735a",
+            "02fbad6b691d0f92481a998f682af6f6e10237ac07a322ac71e4652e710364cb"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 15,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 3840,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "903a5b6f5ff7a0384440a97e5e1fd248aa0dfbcc41da429c0e34d1ee96edecc1",
+            "cb1b289f9af930a89de7c326d60ec9acfc097757d76782e94c4dc3129cc4cf7a",
+            "ffdadd29ce080b4052119c31af8465036d2082d5645879036c326e7edf42a5ce"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 16,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 4096,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "299af476c3530115821d0eb5191e4f68cb5948e6be733d81ab33468428123621",
+            "322b3bbaf21719d458f4c17dccdecfa15fc862885ca74434c73d5332b3e8cc0e",
+            "e6c0f39a8dbb0904d8bec6dc9ead8cc6553490f6c2612d53e998600c1303d260"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 17,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 4352,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "c2458e3a741840f6d066c864c964d90c0adad066ee390e53127b9cbdb83d19e7",
+            "bc4c77f3fc14d525bf65e5307594683dfe6761951893be11c6f22eb636af2701",
+            "1709a06506d3b68a5930ee987aae425ecd092f902125075ff755fdc615109610"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 18,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 4608,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "713823982e7e0794bd51ba0e31038439de30fedcd3f9ce8af3f89976129ef8fc",
+            "5e4d32431b5c324502fac5240733533d23d80b3c4e1cfa38f27fa759b89b661c",
+            "1c8a5549ce5e1b31dbc91d56c35eccbf0cd3618937c2d93443303a921848c140"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 19,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 4864,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "e47f69f5c475b2d7f4d4024d1e0137fcfa2cf2109a59becb153882d79746d7df",
+            "c5c5e52a6d9d3bbe0d62b56c98d999c6ddc5bbe81b9399b1e700bd385065a1f2",
+            "8de1d54f9d4bb938f8edec1de011ba2fe94ed3e506f8a4152cffc807f6d01326"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 20,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 5120,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "ed81ae922cd162b8436d2549bfd95869305392d6c7211afc7e714b3f4737936c",
+            "cc1a802399d46c4c204a178d99c85c3a83abe1b6c9acdd78774759116d057ab3",
+            "f460583216864f9d73e3f0e02cf06fe9a3468e396bc565a39adf2274722d2666"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 21,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 5376,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "b42d83f1c0bcaeeb25f5b4dc69d119ee35f4744072293b7df313596e440c9407",
+            "7c7cdbf3f106d0e4693c9abe0f8042d0fcaf7c8f20a63bf42a68f68de5c1d1ff",
+            "9b0257a4e8574a1a767e6e9d5b1c2d6ca6da0a5ee2e8fd44047fde69455407c3"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 22,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 5632,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "3deaceacc1cda786f9493e2f181122906529292baac21ef254f0915799263cd6",
+            "d304d3ef0e52322df21112655d2a4b8410be83ae6937800eabca5f0ffdf877d4",
+            "2860a94eacabb492f74694a5ac3a8eb1435dd0ca450f01a7be2fe1c2c6c9c2d4"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 23,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 5888,
+          "time_base": [
+            1,
+            12800
+          ]
+        }
+      ],
+      "status": {
+        "decoder": "hevc",
+        "environment_disabled_hardware": true,
+        "fallback_reason": null,
+        "hardware_device": null,
+        "hardware_frame_context_observed": false,
+        "hardware_pixel_format": null,
+        "observed_hardware_device": null,
+        "videotoolbox_using_hardware": null
+      }
+    },
+    {
+      "input": "vp9.mkv",
+      "input_sha256": "7b1315f01a4caa4e8cf77f9d6a13865a9c5703787f0ed8ed0da46d3b6b75f318",
+      "matches_independent_fixture_oracle": true,
+      "passed": true,
+      "pictures": [
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "783908e11170df9d9bf6dc99839d25acfcfadac5b054b0e90644b7216a4f52ce",
+            "d815363b9f54e58461a4e24bf696c46378a16862af2fbdfc037e3446b66893f7",
+            "5778ee9487c565b92d67971d22726e9896d7687dc077412bd06e4a39e893c2ee"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 0,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 0,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "595b2a6638cca723909fe72bf1dcece0cc23d4bff01c66bc387f6f09f787ad70",
+            "78b3a8010070fcf3c71acec95e14ad7d9cae7354753e264040bfac511dff3db8",
+            "9935c8b5670143440db88f4649cc844cffde95606efa8d151b74f6de1a8c38b2"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 1,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 20,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "4b58162fc9c425a1fdab5eaed8647477fb6720e6fd80b8e95d8d3343ca0901bc",
+            "457a0db5aced489f5afe2c454231df2019d0e768be7bc5e0c8465dc70bd7c663",
+            "848db5b93bff5e78bd2d3b470e79c8162fa7d51fff783d4fc736ff908f9085a1"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 2,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 40,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "797da37ed58fcd38eb2a2114c541d49b19cc675a1c52b7e14c240ff9f71dca65",
+            "ed882978f809419e3d31113f0a87bbc2b8b8aa139a59f6a7ec4d26f9a4a50744",
+            "9d95bda16a5db0561f78740e46f3c3b73ca5186d5f5bc5c2a5cb27935001425f"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 3,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 60,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "86558b4423084c232921268e6263aaf9f57655a26c967eb644569f01391e382b",
+            "f5d833fe255857c4e43a2f0b616a8ee4b82ec4e3f894c4f0a25c421c5c07dbe4",
+            "c8596b7dfe8eb145fda9bb0ade29e2888794d149dab81f9614c370188c2c91d8"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 4,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 80,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "595facbdadcf6175e6f0487af30ba7958020c743c46ad0cae63d2be82ee82d29",
+            "85ab102b7d244ccd5e3c0b4a44d3478bf21131930c790f7d71b5f395b5e3b9a5",
+            "93cb250fb36230c69cbca88019cc2d3ff151d01b65e1f6e1a08396f7726e7681"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 5,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 100,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "a84f60f3221fc7b12d39a8fe8359e07a499b680fa53d222728959e09fa88e843",
+            "8513695a7648adb8b614d9e602fc64955d0ed4516689e30c181e10817f506fa7",
+            "20707abd2db9e8985e6d41943f689d97b4623ab1ff96f15f8b4ae4ea6076cada"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 6,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 120,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "67ad425d248e31c9b608523f9bbd2652810130069c57afe4ab0b2c008a0c41d6",
+            "c583aff54e1e47f4aa83010391884eee9de7de476565f69571091b7861c3d26f",
+            "0ae6b2d0a3498e0b65bd85171839f1bc90757d5a2024ce7e79e7c02028a64d3c"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 7,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 140,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "968ba5489e81405efc7baed38bb8db23f501702cf7a47930935df8135f14be7d",
+            "a2ab32a145fda9c4a9cf6c2deb449ccadd61bb0237a0911d83ad830a5e4baa38",
+            "b08e1f4740f718b1fe7ae08d8571e44558eb192e9c1589cead23c2e21832190f"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 8,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 160,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "c6e5661f5ab66b0a4b4d2807803f734e5d416b33a350eb401a9e51941aa9b056",
+            "87c7cffe0f06d69e4174e619f731bfd7108d06e0dbbfeb5dd6eab6aa10c661c2",
+            "6942069804c0b6d93d480a672348eb4e2490340c89965c5363e2bff9f0190bdb"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 9,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 180,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "6498c3e9d9423ddceb8495b4440f20c132f0ce691f338a329ed0f88ca78d4d34",
+            "b15cdf3c5c1f2b2bfbdf7dd0e4fbba8fdbc90fb251b20734fa4a9a6835d370fc",
+            "812bfc35f6ec4f183992b538776778d3cbdaab12081f85867329708d9e7a1456"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 10,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 200,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "8c6b78cac9374ffdac93cc9b01e35168ba5e1ab99adb6e6cc6ccc28357fe1752",
+            "01d5114e323133a206036ae5db09c08645f4390bf373aea7dc6af3934b105ef5",
+            "b06e8aa1a8510ead8a017ab088e697f441ad50dd825fd2a1e9f2ea0295885b3f"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 11,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 220,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "2addd2ed3562e0e3cf86eca5dafd489592f1991ad8867c86af888c32c075ac03",
+            "0bfb22beecca9750fdd3a0856e67cc4cd40a2367b42bdeed8f63dd40f01c3ffd",
+            "15bc479adcb87b7d254a0c807bc683fc163473aa892a744e805ec8b28fbd2d7f"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 12,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 240,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "d730d472f5a4bcc1321bbf34f423cf9a3296c9d853b1b6b227e240e07a2bf286",
+            "bf458dae48268585ed1f683f4d5624f308e31ee68ea2bda87eee8fc1c0a2da99",
+            "8ee72543cd4dac2c702f103961632cf6fd5f6a1d0de40f083665f464decc9ed3"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 13,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 260,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "43bf2bfcbed2ba6d3ce20cfea3866e15d93990fa6e51993a290851cfeb7ddb32",
+            "0f06a29959030c4d04a18ac881189873302d2035517dc76eac8a4e5041737128",
+            "a92caf06f270abdfa126ceabc65e83d78052de02deb7247323fa748c8a46bacf"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 14,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 280,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "6c24cacf5c7ba21417f3e5bed7ea37225e8e2e622d922ec852858886e855906f",
+            "326fff91e496505b1b9c071a114bb36bfca3e19c733e0aa0e0378dd7aa53a0a4",
+            "8e4df7e71921b96c09c097ef58c7862702ec4267b4bff01914df0a2e48c925a7"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 15,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 300,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "3c9b259f1b1c906ad860fdff615fc8840e305ecca6664e0e48b83d6513441fd4",
+            "ae3da3cf2cf68273b4f854c5eeca9428a3566402640b7a6484cff195f7ac3581",
+            "d169f92fb2466ebf81f049ba03be78a561c16a327b89f5fd56558666da87d801"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 16,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 320,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "3aba164124c0c31714a7ca7474683f4a0ecda8f1905fab3a4c2e89090657b109",
+            "a5dc6b931f75168f4ce634c7c516c6a36413368f63f072c4db971a591d7ae69b",
+            "8e3b13a8807102f5cd33c6923968884c371e5eae4bbb05cfac6626b6ec7c4c9e"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 17,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 340,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "dd2a15561ac13cb584b9c8b92ef84bb6e11d485b3b7c380f5a43c6b66e70e225",
+            "d2652bb9a461ff5e797d12744108a5bfced57c997cedf497f57d028a1c3f13b0",
+            "656e015061b5c8dc52dc4c094902735075a78f005c0a52cd3b511e966ac9a5dc"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 18,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 360,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "f97cf5a9b53c14d09ebc5e97ba8b2d3f7fc258c7024b07d6a4b1d08534c1488c",
+            "7f1e7f0a7cce510b0e506dd51486714fa47b5f004fc449678ca535a15cc46c1c",
+            "3eb8ca80d80466f8f9798394fb954ec3a4b9c5ce422eb2ed07483f6470689204"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 19,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 380,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "13302e01e454250d0aba54eb66a5f3dcb862a823e5275fb12048c2a2f6754d1c",
+            "ef39ba88c52c341295c8f91937461149240425d98c49e1b414cf3213e467d21d",
+            "cfe17995e9630881280b85a3f7ccd26d369924c567e1741c1a18a17db4c37aaf"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 20,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 400,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "4590d24f6f1b8c4ec6b58911da8efcc0457a3e34d2d51eff38e75f45ea75616c",
+            "ba435fe506a2936288250a40ca560d9600b987503daaaabbea3bcc1abcad62a4",
+            "67dde7e835ab3edd05761166240d67ed97dafaa668a8e8747095c9d3f4fa76ef"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 21,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 420,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "43ae56d9585aec80c37bb48cedec1e81b7300960d8f09e903d8b16fd78dc5776",
+            "7a11eba245ff4f3cf66493a565387d5bf27ec0227b25ac98936f6d5701865b3b",
+            "8e38019ac1fbb33a3185caf1be9510a2934a78ee58a4a8a76ba78ec4a4ec5756"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 22,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 440,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "9f737fbea0b5f96ec54011321eb29d286d8dbdf8a77e8c3bf02a514f4657384e",
+            "ac5ef0270c4062c3c8052322b4777995d48b23ab554c7a9c27a0f19e04b7bf35",
+            "e50d4dfb895a95f2010008e3e3c3e727b020d47369a1390b594327905ec14b23"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 23,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 460,
+          "time_base": [
+            1,
+            1000
+          ]
+        }
+      ],
+      "status": {
+        "decoder": "vp9",
+        "environment_disabled_hardware": true,
+        "fallback_reason": null,
+        "hardware_device": null,
+        "hardware_frame_context_observed": false,
+        "hardware_pixel_format": null,
+        "observed_hardware_device": null,
+        "videotoolbox_using_hardware": null
+      }
+    },
+    {
+      "input": "av1.mkv",
+      "input_sha256": "db449486a876c6ff89d01b066bf3975ad13151066f4c32a3c44ecd11cf031643",
+      "matches_independent_fixture_oracle": true,
+      "passed": true,
+      "pictures": [
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "a4ad7301126ef6258b1b2c8b7768c701745f4edaacddf76f5139f53152913bc0",
+            "bbb9475a2663ab599b35f56f43bea7f827676df5c05b4147f00dc7cb1656c00e",
+            "0eff5056a5ea3cdb2db5c5c4bb6b68e1bda9f1e9357f790cbfd6593eeb15ebe6"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 0,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 0,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "bc82c58e147c41e3746487dd481033c736f0101d899a0a65f975d04544a75a8b",
+            "8422cca7eabd7043c3bff57f95a188768dd5b8b4f97660ace05359c16d42a292",
+            "18d1aad8d636ca6ff468266fd2a8ad6eb3ed8fef0a723234fb42a9a6d457a39a"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 1,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 20,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "6c8d76373bc348dd34199566cc8e918da26c680dfdc6ac1be0b1347ee806838f",
+            "47ad4a06b92e164359018a4dbf71e479c5d9c725e2b818b702334ea5b5ce5d93",
+            "3b46281825c29f372145c9699007e9c3186df36013a7544555dfda8f81552dbd"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 2,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 40,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "ac308aac91f82598f14d36ff5fa3427fb34046bdaa2632d170e5bb6dbbe8ffc7",
+            "47aa31d59f596356319b70094068c4bfa51f1fa8bb3ecff4034dfebf504a8663",
+            "ec06df2d863381dc9f69f61780d717d7351096737d65fd099d27c73ec0873cd8"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 3,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 60,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "d91479da95ef1e953450cd064a25a36e99405b82281519c86c3744d6495d8a71",
+            "bb8892407b85cb306c5708e5d0ce2beed60044f54f9daad4832fa436fc932fb0",
+            "14f348efdb40b1d8ca354b60d408adc1690ff1aea8f6fb6896c9fc19733d687a"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 4,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 80,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "5e8ac262d375ea95176ae5320c6ee823abcc644b3cd4249965f01424cd3aca0e",
+            "ad0625b8e5aa754d92f661839fc453619f6eb29456873a3ace38fd1946750c96",
+            "29042c26d0c83d49059c6ab07e8bbc7f9e883977872b6521bca751dd24831af9"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 5,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 100,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "66d41eb69c8037f2ebbf941f1cf7d6afa8224e565d85e4649b972c7a970ff7fe",
+            "302b6c8c25210b1227070f7e2f5719162474d9d1e6887e4c810e83de5506ffa4",
+            "8ed234f4351e7afdf81d8072cf650ff4399e9b1c7380492d95e592d2803eb108"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 6,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 120,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "f978e5946b375a3f100bea0300dc438728c13263440681ae7523a601e40622cf",
+            "ab2f3886e2d9d39c91c09e507fb7b8bdb4b906a519254a1e2180578c484ecba0",
+            "04d4adb96be8ce6d7c162ec7d517a730c1b59ec81419cf1472c969d7fbd4d5a7"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 7,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 140,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "e65f082d387718d4f15771529b3a958241d3b13beb6a5b4c667d872be59cee72",
+            "aad02985da857e87831d6a693150c286c0a2dac44f593b2f74f2c937ca05c089",
+            "ca767d6b613ea0377ba3e043a833da241afd11617aa4b28268df4a869d1261d7"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 8,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 160,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "5c79e1b99f6acf2d9f62a61a617f902b312c76931ce75bc569331b2c3a02e8c5",
+            "3101a411cd1c58968111915b5aa18242d5a59ccd83d2094879f5f27135fb4961",
+            "f0f0f96c9ca0a3479a35f60fab2abc80969885809704a1a35a4ecf0c51e00965"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 9,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 180,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "077444bdab7a1aaa347fd5dbb25d8b82c828fa309347df3a2b726ca0019bbcd8",
+            "a355050f560e0f1320ed54c88ff585f1ef9b68f1e5118b1609d468e75103d2c1",
+            "ccc04e5bcf00a7bfe7244b098d9c6f3bf34dc6de91ce3a2fef159387d6817b46"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 10,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 200,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "045f11e8e53d706b03d8dd66e06a2954067b74099a4a7dfd0f7b052ab0bb7e06",
+            "c9335d6b749f9363b3ff068b5f4707059f93b167c28b68ba4c135b7397e86b03",
+            "73e48509bca592ea1769a8a9f72b60b8aa1c410f17736fece08883dc7b8040d3"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 11,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 220,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "469ef3b9f3c127bfc4d43159a17482e37b03fb7e9458a50891f1dcbe1c6f364f",
+            "100d606cdc31b4fb9f46c37a480afecccf198354cb0405a15ea1ea6c2b46c469",
+            "87e112985b2167281a6ef0669ffc1f160bd7ba77f11b4a2af4a8de3b4ab96c83"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 12,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 240,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "c4a14fad63351ff1e6678b31d2e6f5a4e964f15cd4fb5b37413d9d3ce993fa98",
+            "6ccf4d575aef8bef67429481c124d620a4aab8de78e7a2ec26457ed09dc915a2",
+            "3988dac2f3848a8e202274909f15772bb0d5a6f3aa35e4404110c85110e978b1"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 13,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 260,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "f08e4b9ef0610ce86772dff1f27aa3d2a56a38981642670e90cb3894780511a4",
+            "9ea7b760d9109851ba44450426e6e33fa1c2977ccc97efaa2f6e296f2fb17d6d",
+            "f957ee7d1c1f992035acc932828e41730c94c208df48ffb423342f718f24ed1b"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 14,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 280,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "48409f5f82fff23ca64f630d06534f7d11511c0f9c7d9554fd4be38afc5b9e71",
+            "6c7811355fdfe1cce7892c13ffcc73aa6a3ab6f151d1c6f89df2259ae25999fe",
+            "c16857f767e7723bbacc77a45585c40a588a7cc3e4dff89e3b359fd7fdedf014"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 15,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 300,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "c979b94032b27cb9d6a1ab4c9ebd71d688a3b8c832026d3d82f195c9d3ee36b7",
+            "1d0d74f7eeeb06b72e4f6c0990df381af39e9180bd08b3c4e5d3c7be491d2694",
+            "16430e00c2ba8b7c4d25c96b60ccbc6a0cc43713ffef504ba7c4a54dcbfcc325"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 16,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 320,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "9d3ad917116e6faf1f9dc24723c9ef36431e51a5aeb5a00bd30bbfb793f46aaa",
+            "6b0be4552f2fcdff599e790697fe3f35b14257100565a205515bdd04d8145bcc",
+            "c0c0100acf24c7c17f8560a393480d7703f074a583113deadfcb3cb3e0a2a823"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 17,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 340,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "1298b5c0a3c0059a3b10ea6e2f7628ad212813ab21a1c2032a386663e3de922d",
+            "edcefbd7250bb8a193801207eba7fbcf785ff5c3d426ac0a487f35b9ee231429",
+            "437f01579bebe81576b3ad269b2cfc64a70d4d41052847501f3b2aa5ab1cdae9"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 18,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 360,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "e56125503c26b1305544735f6b20e4d4f797c1e829ab52a6021bff89d5745b23",
+            "f90c50fa3ed51e5bbec12a9976c79f2b7877910208b1ea9b8da7d0c2b8be9271",
+            "efea1eef0cc78197fbcd9f823cc7cae6280e47507b0d68b0a7656c1adeeac491"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 19,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 380,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "2bc0d9e581d4b687a6615010c6be3e7e41905b256ca5c8777adebacd97250d9e",
+            "54bf89a89faa8aa7a2934e74b18309a562132a913e6cf5790bbfef48d06d7c10",
+            "de552f87679085380a024b53cf3060e6e1fe8ab47e8785291a5fc50bbc5b9198"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 20,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 400,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "7a66cc33a35890c5ffca51ee135516218ca71d3582eb6b640f3b8128e60dfa37",
+            "48501929e34c8da056227d60f004131f4b95084c36a47364093e3a16bbaad49a",
+            "1279ada4d4482f7bd90095a3912eb37a5f03e0c85908de93c815c6ddf7198ec3"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 21,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 420,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "4f12438cd0eb3ea4888d306c95240a0a7b814154fb69c046d02eb0ca59ff6f18",
+            "828431947fa73c2d8c161f9e9ccf5bc9fb8b5915f40b53beb759d68b0b08f0f0",
+            "e6f9886c0dd97d5f9e854ea575a872f197d0a7d11ceda740e26942108e452102"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 22,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 440,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "6671e4c673c783b0d866a9250f00a3e65f0385180962f9a676b073fe5857f734",
+            "878a0b8464c067508eaebab4d851302c2fcf1e3239946d5420d36f7629c56e84",
+            "4a1715e408fde2eb2ccc4a63c784a098dddb58d294e9b93351a640f67dcb14ab"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 23,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 460,
+          "time_base": [
+            1,
+            1000
+          ]
+        }
+      ],
+      "status": {
+        "decoder": "libdav1d",
+        "environment_disabled_hardware": true,
+        "fallback_reason": null,
+        "hardware_device": null,
+        "hardware_frame_context_observed": false,
+        "hardware_pixel_format": null,
+        "observed_hardware_device": null,
+        "videotoolbox_using_hardware": null
+      }
+    },
+    {
+      "input": "hevc10.mov",
+      "input_sha256": "cfbb6054af127e5b826216484eb1cd146546e9bfadd224e4e92824e216bf453c",
+      "matches_independent_fixture_oracle": true,
+      "passed": true,
+      "pictures": [
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "f7ae8209dab8761f93ef44fd01d4b9fdf1e6540d873f543238ff94b84cad9646",
+            "ac68e9fc5ecec6dc4057a3e19ab7fbcf7f53d74274e01d79d876a823e6dc97e4",
+            "cd6caaf1b817640b358f8e889574613da9c1fb95ae51f6d80e1c7b3f2f12c7bc"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 0,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 0,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "67642b0ba8f8b581854d0b7356386661a942d34ee82916186b8c1142c967ae78",
+            "e1ec712d21a6e9b33f57f9eb7d6630791fdd75218eb556d71abf97a03c42e3ef",
+            "554b75bcac5a54c4166779fd323bef4059d6c8a758049c525dea79ec8fff9d66"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 1,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 256,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "97edfe89dffede5c2477776bceb567b9360fe27e30ec728aab1667d377990c9f",
+            "9d55fae175ad5b000fa45702323237f9c8c7d20ffc8e7cf119b0203780baf34d",
+            "fd92b86d08a80cbb24ddf69a3734e371e0e1e81ab1673f55eeb632a496b977e0"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 2,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 512,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "6df73a575204d10ec3bbaabfe1746b4ca433e9900bee34cb694268e655406ce5",
+            "043e9bad6e58bd098d1b3b435845b38bf6d6ac9687f1465659a2a0049487cb5c",
+            "c62a04122d51f2ba5d8eb191f48d2b28b7678c78e2a725484eae376a5df812b1"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 3,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 768,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "e3f32b51d9e121ccb274d720a7fc32415a27944020f17557e019581586a4b881",
+            "114e254e446cb376731d488a9154bc512217b890a9d09e4a8c1e89a75d5c0ec2",
+            "dc6b6b8ca97ac3b4ab2fa887f8d6a7f0d7aeb2d3497f474dbf0e691c5cbb8198"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 4,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 1024,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "435af4cda4895d2ea44cf7b4b2a08e80241280d81bf50e5aa9316f46779ae3c5",
+            "32f6f6d473f0d275683bdab9bc07fd1e885b28a526f77d17a9137df83be40e6d",
+            "79d09811768cd26fc4b6c948f7bbce2249a02fb7d2ca1510c535d3b9bf99899d"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 5,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 1280,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "ee462b270e6589bf26f3510490c3c445451d0b79e501fa1b19ee79fbc3a1bf5c",
+            "9e1fdc829ca907c1db7a65530d9a4580bf4aa88f3d1fcb164dec0efc6d7137eb",
+            "657e78d518bfdd4b9cb97cbdfc85aa4ffb509cbb3a13fdb9c6c8f2c4f30b721f"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 6,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 1536,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "4021c0b2caf58d628e115d4d4f8079d60e408ad1c86fb31048c4d3fc77ec1274",
+            "ef6e1fb3ee1769cd4a8c1e6b9029dfabfe640c612697b2cd87575b53afdd968f",
+            "53e7bbed0cb472a9f74551955cd0df243601e26a64cf956b97f732a12d9cc231"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 7,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 1792,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "069a39cb9bdfe6931dce565b127c1b66e20b7b1aef674f21ee7330ebf8793587",
+            "0eb13e272f496eaee256bfc5cc44ceabb6d129c310f39adf69f77ff84d566292",
+            "633e3dd17c0e1edb1bd3448e2bdb8a4e2e94850c56cf42e002325a6dd8830659"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 8,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 2048,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "b5ebf16dcbe75e28e58b91a4e167021cd8c22c1a7b76e34690b9619a6bc9ee29",
+            "d524c1e6def930b2485aa0bdea835b1f6542f9358037a2afeee44835056583a6",
+            "f360b21a4db8ee97e24cade973d1247ea5f5346685cb0fb0ab39df8c3dedc0cf"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 9,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 2304,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "96cc9b91faa0ebe51c61785c87511649529ae8a95e7c42c16ad135cd66eb895b",
+            "957b4e60e3ce8a446d7510bf174dd0ce0c81787ebc0496f24c7ec4d1afb86854",
+            "e3dc5d969a8a04d907eab6d8606f3ae635baf88fcec67d7c224c11fca627db72"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 10,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 2560,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "6c477a9796c2d107ff99f86e660d0892742d92b90f3296821008fb9ee2906751",
+            "4824aba339699f6ea250014d91a860d77af0d3ccf0040c2e7532732fd066bd07",
+            "ef5db0b6eba26d0f65f222d8ad8ee29c13e8b9e3d190710a7bfc1f32b51be066"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 11,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 2816,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "81daed31a8928c7e0a73df24375011757b094916aa0e3fa0f2da6fe7fb5cb07a",
+            "741e8e9dc4574ee4565bff490a4db5c68bc53f14279d9bf9558be948790312bf",
+            "abb615f2814b80597e570b4319e9aba4bd8191cca93d71219f62196b9486e660"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 12,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 3072,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "ebd5d4085bee85049c76efdd13e94bea75fd2a6034b6042571f5a1982e115c39",
+            "8c0d6707b361bb120fdd42752ddbfbda3c7338910e2c5fbfc32da8c7ead5667c",
+            "c9fc11c6a9440eb971972f984a22385523b21f8bb8daaaf2c8ab71a484d975c8"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 13,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 3328,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "f9897a4d716bc31dbd8c91fceb0d2f2030aad76de1cad647885091a1a706f753",
+            "e7e015de58ce4ac3c90840e546800d02291089a55cccde822814a7975a5d1612",
+            "e5ccd8f050c96c5e55a9767bf13aa4393c87d4c3b0efe39b9cbc092429930c70"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 14,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 3584,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "b5b747b8c1fb5e13f8bb2cf3e983a552505d27be13e900f7373881fbfd72ad3b",
+            "2693bac819dd847e64dd8fa66ca7ffaf3904b345779e232c47d44c4f00ad5660",
+            "7aa9ed963a25320cb59365e26b4ab4b349f3e820fcd7d6563916bc915ddba87f"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 15,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 3840,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "67281abd118986e2ca501b9e6b563fa9767d0567e20f356b9bafe5942f83bfc5",
+            "cfa03fa10dbbb18ffe1445fa49a9261c51c97ec3eb8c85f5a5e664cd4e7b2ce0",
+            "2ca6713fb918b3e5c8c5f07fce95ac178e02bcbaedb80f16c8561ccbcb556c02"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 16,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 4096,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "3d72a14ed72c9133ad0f8cae1e8b2ed5bd9668e449df3f69787e899f62baf5a3",
+            "20cc03b31595c84f3b2bf2fae35cee7776cf8c86bc98b688f1a7a88db6ab1e48",
+            "269aa245d9592451e9de5773ea077daf16d9c8c4d6dc45096ad518e45ccba7ee"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 17,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 4352,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "aa2b51c7f25f6c7b7daa94996f7c8c9c339489c6a49c26a37a78dd73fdb1779e",
+            "c348dcaf652ec3315ac542b73905b793cdc8e69bb5c312c168ecc495c3e5caf6",
+            "637846fc5e80ddd7f227096355ee3f2db737efa5a8b499e65441674b32d2e2d5"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 18,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 4608,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "acbf0822f6c0879e0a110788385ffa7ec003544e7ba94d8466f4e084d72dc7b1",
+            "d4227abaf52c505104fcf3d9de9c6489c1eee4e47e1d9f239d4a8086cfd628e4",
+            "de37ba836370f3f61f68d44db234f61b4f6f6473bb4f203cdde7579b2551885e"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 19,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 4864,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "e6da37c50695d972f5fffb3f978bc49b82c5b4917fe0c19f8ff625f47e771fe0",
+            "52b4a6f4c03af27cc1a3db1f293d03b2379432744679df88e0660ae64cedf855",
+            "ac2fe2d9dfe652892f61d6fd817afb6f6a9cd09603723b4ceb8f484e91bf6a94"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 20,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 5120,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "4f432d62b41611b7898de44e49ca3d328221dfb4cb7874580a77136ed73242b6",
+            "e48800b703e3c82e2abeaccf3e5c45a2b1ecf0988faf8d6e7de2301959140f8f",
+            "5496621528b0f82a967192bacb2f6a088cd8a32496e24171ed38e6a35784ddbf"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 21,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 5376,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "d0be805361f50a89bfc33ffd183c659e709992ba524f456b1836fee9650ffafd",
+            "28439fdc1c8564e0899701d0a86158e064a69945d90dfcc76ddfda10e786e2a5",
+            "214344596d1babd3ffaea47dca1c47428cc78c9ac776f7878113d05019ac3669"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 22,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 5632,
+          "time_base": [
+            1,
+            12800
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "232cbff159bb32bac0f535d0143de572557942ec39390ae607fb1dc4bec0be86",
+            "f0bcd34bd3fc543bfe850888ec8cc0be368eb7349625b8f4d3e539f18aa13e96",
+            "8e0742ed722f24be31e50ffefc546bcdbf5b12f79f0733e3583d8703a1cec8eb"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 256,
+          "has_alpha": false,
+          "index": 23,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 5888,
+          "time_base": [
+            1,
+            12800
+          ]
+        }
+      ],
+      "status": {
+        "decoder": "hevc",
+        "environment_disabled_hardware": true,
+        "fallback_reason": null,
+        "hardware_device": null,
+        "hardware_frame_context_observed": false,
+        "hardware_pixel_format": null,
+        "observed_hardware_device": null,
+        "videotoolbox_using_hardware": null
+      }
+    },
+    {
+      "input": "av1-10.mkv",
+      "input_sha256": "c1d3e3c229418f198ca2cc8846048db837ac45083922683137870157d1e9a68c",
+      "matches_independent_fixture_oracle": true,
+      "passed": true,
+      "pictures": [
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "5c02562297584b90ed25229e66f61dab04f2621ec304d4392dd7fc8c1f685533",
+            "1a6f9b9347e0e2ec468804b64a7054a8ec0338a15d606cb6d624f8af3292b921",
+            "ab23ccf2de99bd9f0721526b6c1ee339c4332a3c960044a605b69aa20279d5cc"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 0,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 0,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "d34291c68d3ca36ace268d83ed7b5aab8880e1d59b24a6118ef7cb0d9ad89e84",
+            "79c07c512b8e1fa128b4fd31ab1654c015610f551bb10b9bfc545dd8badc3891",
+            "27b5073ae536842258f903650f05e73764962661f9cd675fe02ab2050c2543af"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 1,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 20,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "24409654855471d24d988df539e64e843088fef025ec7d5b0923fb0624317c3f",
+            "87f712faba3b8b953d474e66b1a592fed1aef76dbdf0286b7626f7cb66ff1439",
+            "2d4732187fc59f0455327ea3dcff0b6cf98ab3065d453cad1782549dbedfca4b"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 2,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 40,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "23542a1f180fb8fc15fc783a031f8826b61171daa2074de65e19581762cadd36",
+            "14d51d8eb4b3c435ec8ea8ec318ccd6dc2ade63c76d987bb5d86cd7c3d5da629",
+            "2b55b529b159abadc3ac844fd1b132055008531330b28b3f9bec0ce13b992f2e"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 3,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 60,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "ad020b1f5672fd65df50b3d15d8cb85d6bdb09729b8bf1b2641472bb55588210",
+            "ba52269b1309c0ef04d9a300f2ae5de71753b28f9e0804ddb07edc429dbdc116",
+            "bbe5b1af395a742a45fbd61935c948d0166df3b979c94a6adebfb4439107f9f2"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 4,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 80,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "9d27297fd6775e23c1391ae54a595ac7ffeebf1b0f08dac66a6cfd21f06bcf0c",
+            "688c05e14151aa3dd6361b97cfd904eec4fbe3052a46a70b90867ffebb053316",
+            "1c6e222e92fe7782d3c32952a319dc096b327260dccf174cd532615ac844090f"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 5,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 100,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "669e308b4e1e8c0ea658a988ed4c381b951e55464cb7d8de51e79fade165f711",
+            "72a0a9eb079893070b7f8e32a40a25df81739e759054405454a029bc10afaf1b",
+            "c08df0c50989526955009932d5173e5f9fc05888f2c9608ec62bd6334e08cabe"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 6,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 120,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "750771f30a27f7fe8ad5a5a2e6893c88aec7d1f060a0a2d4b044ca974c0114c3",
+            "be911f995be3935cbde24b543c7e5a45dd42a83b438d06e2370e562c105504b2",
+            "83440d2805808b647ed0d627a563c4cc44176327e72f08aabd088b90fa43d2d7"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 7,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 140,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "20c2f83cb6031b80e4d170fe08f25d94de2faec69a45827c5a498e8c0e8f932e",
+            "86cb8faecc06964e75d23ca246cce2158328b249edbd201cb4e4e1d4f01aec9f",
+            "6009ec5c09941e248137eb7c5ae3ec113cd4b8cb6e2cc18a4dfb251396813204"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 8,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 160,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "07573a1522566b8cfba23f5f2bf75fe02a7c9b8c6dfde791a559ca7eca495170",
+            "74277e410fe0032e9df510ff7ccc9a9f3efc578eebb064c3860eaf8a9c70c07d",
+            "6b24a95bb06d7a3efddb8c2074568fd1593a3514b0db07567b0134dbb9ef8db4"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 9,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 180,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "33b07fde6a95c91e6a1063f9b9ffd1fee858f00f72ab3d9df7bf136eb4c28d6e",
+            "55fc3a52213bb943768932bc8658881fb911a7792368da6dac127686b559bc47",
+            "98dd60e005722d589be5cf224bbff67609d778c22f88befd09d875e7d801c8ac"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 10,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 200,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "f9ce8ccfe31ada343b14d77ee0afc9447b1be7a2d1d35d3901f4435cab0fa80c",
+            "61a03d3760f45d6dbb2e7293fa346767acdff9f59d616081e32a0413a56801dd",
+            "12a275c786447fb2600a49c83c9af1ffd5a540b4ca7688735562875aa5bf594d"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 11,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 220,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "818b5dd851b1406acfdff19e524269537f3972fae6c30588da016374036a48cd",
+            "588cbbd1a09cb2d3becb074744d4c00abf3c57b0cbd78c1479b21fc1ad451735",
+            "6e2de73c1bc679438e4d91630582915f8c3c273330818de35f5fe1196cf42cf7"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 12,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 240,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "3d9409fb0549a55c9be5ae2af6a0680e53be30895ebb4dc346f986307e8bfa91",
+            "7e63c60cdb94bba6f13703d9fee492b16f5ca6130237b803a8a44d52aad9b0cf",
+            "0d04789b0f614e1c0f5d6bb76d35cc11b190820c8e2456e2ac7f41cea66a0f5a"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 13,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 260,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "ae5b6db34367474db0fc82967b98668d12d1616e3f6e0dfa0f49410350ed33d3",
+            "c2fed9f8739a084d9b9a5c3c2acf7c96ccd2aa1cbfb88ee87b6b97ca4eb8670a",
+            "8457dc45fb5810876e69ddb94896d1a20ad82145e911c52276b572bb093d645f"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 14,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 280,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "7e5e0ac991173f5fadd096907150d3cc009fd1f24c8629c2ec616b10a9c6c48c",
+            "0996fdba4111c4e78189e9602d08834b09b23f4492a7202abbb1f572d55cf064",
+            "8aadb4c6c6a3542929523ffaf563db6e348eeab92243aa13ccce1ed16b971c02"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 15,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 300,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "81a75473affb8c4083cf3ee7d6cf510e329b54524c28a2088250fce84eb9117a",
+            "cec240d842560a6a841da784d6d59584e21cb68ac6a15cf5cfadc395ed27a674",
+            "293575ad9005c360fea439dcb401e9ac978e458ffdc376bbe528aead873c3351"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 16,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 320,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "31fb31a1ea11ec5059ec69a60e7c5dc2d7e267c87b14645a91a0862095d787ac",
+            "717f74f507d1e9c20f2e0fbbfd2016daa057cd4ea2af91c05195b8d742b44eda",
+            "75d8557361fa22920fef7159cb444aeb61d036653e465106986dd2785106c242"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 17,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 340,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "42bff7c8710c5db45e3c4526c079de19fa521c3b7f00ca42193b5b836038a7f3",
+            "29360dd7bddda7d8ec47b5836dfd6c3ef4edc7d01359d481e71f1d085aa23c4b",
+            "cdacfc0b7cebc2a6325b5ad8fd1d5557d5a0f481049284ccad61d0d0e7f908bc"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 18,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 360,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "c65ee3bb8c062a6acdd92622a372f0db63c5371c2983957f035cfaade83b432e",
+            "80fd8245ff25d324ff96df588a571577278f4dc748259306c40c039cf4c09901",
+            "1716526ba4daf4fda7cd9d8837f532081374c606998d1014053fe29e18b317e7"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 19,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 380,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "5c02562297584b90ed25229e66f61dab04f2621ec304d4392dd7fc8c1f685533",
+            "1a6f9b9347e0e2ec468804b64a7054a8ec0338a15d606cb6d624f8af3292b921",
+            "ab23ccf2de99bd9f0721526b6c1ee339c4332a3c960044a605b69aa20279d5cc"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 20,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 400,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "90c342cfc9871e548b60820d69b0501aa0cca121a5ecc31f47a1c31297d33d30",
+            "4108faa4bc9a04ef85287bd3bae715c5ff5cb985ed0530828dc4bf738fd37550",
+            "863660ad320c7410c1d155afabc65b2ea2620aa26fb929ea06912a06157b05be"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 21,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 420,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "9f044f26ab6b9c6095b2dffe95ffdc74dcfe5a5c6ea804d178152f26ee046f20",
+            "a3e5e33ffececf5bcdd301b83b2ecd08268f9a0bfab5063dceb0b05b8e567186",
+            "0d6e3dc0ecf674ad00b2521574486432be97ebc87ed2cc87a117b3e100a3aa30"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 22,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 440,
+          "time_base": [
+            1,
+            1000
+          ]
+        },
+        {
+          "chroma_location": "Unspecified",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            10,
+            10,
+            10
+          ],
+          "component_sha256": [
+            "09abc70f554eaffb948434746850c14f39fca08d5b4f4d955ea7471e2a95d7e8",
+            "f21afaa3ce3870fa072081d663481df28a1abefc6a83279567c225fdbc03e49c",
+            "33efb92cc6780a1e583c388838420877d806e2a77ffde56c6d8a8df538a8acc4"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 20,
+          "has_alpha": false,
+          "index": 23,
+          "interlaced": false,
+          "pixel_format": "YUV420P10LE",
+          "pts": 460,
+          "time_base": [
+            1,
+            1000
+          ]
+        }
+      ],
+      "status": {
+        "decoder": "libdav1d",
+        "environment_disabled_hardware": true,
+        "fallback_reason": null,
+        "hardware_device": null,
+        "hardware_frame_context_observed": false,
+        "hardware_pixel_format": null,
+        "observed_hardware_device": null,
+        "videotoolbox_using_hardware": null
+      }
+    },
+    {
+      "input": "h264.ts",
+      "input_sha256": "531ae064353753355517dced80a08d88442a53185578b99e1e9eb7f9b81b4844",
+      "matches_independent_fixture_oracle": true,
+      "passed": true,
+      "pictures": [
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "cb5519bca95ddbd8b1a4d1aee5d14f807badce3034a1205e926544780c0753be",
+            "96caf40506553171d0c43e7f527eaed199af4805c225713a6d450641ae13dd74",
+            "84cbd32aa6b0775f4f04c68f6384adee8dea1889bdd1be76e6c668961304a7d0"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 0,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 129600,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "6897497fcb2b658be0e8a188529085ba53db4bb47e0dff6a0460e24d4e04f08e",
+            "3feac3f83304b5c2ecdb72c129f4d5f2f267c50c9efec62bb8917a9d2e97226a",
+            "d8e71cd9caec9e21f70df91c00b5e29201a62a93828020916ef9e81c41bcca98"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 1,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 131400,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "da7c5244e3ecac141a9bd379425428c0edb3b820c57d0f2b864653f7081c00ff",
+            "4c75a7b668b7783e96cd534e99ef39b09bae4d1f47e599726ea861a9bbb13f3d",
+            "8ce7b87f1df86b3d0b3b0f8f17bbcebdfcfbb73e9b8b2dedd7ea2dfc503404b9"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 2,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 133200,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "f7a47e01612cd9f820bd53f705e301b1e098dec62420845258182b0dbd0cbf28",
+            "88aff964abd8080287928a469d64347ad48e34db6d7a40ef35dc37723c04a3e2",
+            "99a4ed63405cc3a3371a6b8c9476d79f7e4ab24c6c52d4a980c009bf60831e26"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 3,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 135000,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "d51d0623b589bccde9f2a21519ca9a626c5410f3f40722c5fd8f9056b3427e28",
+            "895d17344b1ebb24badc8b992bdea41c2578ac11bcb0c27bee66633cf1cb1c6c",
+            "4d5fe5cec39d8a6cff3a1948f95660f640e02186579fd7f58c6cb393965c3ffe"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 4,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 136800,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "174cf1f42dfb770af4e7c0a1964077f58112129aa6474d9ef8a4a8c3f5745e49",
+            "e58235a4ea2cc5f677de06c3507aacb1dab99776478bc2a8434d18cdbb9bd043",
+            "a020fe3102e274b01a7814750250341aa2135c60e9c94f03b3d38fb8888d5412"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 5,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 138600,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "974f8f560eebc74ae648a1f1a560456436c9281c716d97efc01806c0e2635c62",
+            "ba7fa34c90fdd7c3532f38362aad31833991d498341112f3a6f6ba93fe3879a0",
+            "77d07b1360212a601a07103a759b80633770d2dd6fadd5244aa91a54f31f0392"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 6,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 140400,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "56e5783fc08ca6db3eefe778cc1b31d0bf6d19700757e190c0650ee4298e7ab7",
+            "7887dd3a3b19c9dc84f640cc13bf8cdd10d56a44927d8422204b9bfccc6b4cb7",
+            "a79b705121ddb389cd5eeceef9f436008450beda513540a6876495941f5dc382"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 7,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 142200,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "b34e4bae775ef502f72c2e14e8e278fc54b052e4b35b6b15575dce3b28d52f7a",
+            "35aa4c955fc9177ab4d08af7794e7e15f5d402f853b80e13d29dc9aae75664e6",
+            "3c71239b34281469eb246991305a216d560bcd3e6e7a95799d36af6a8692b6d3"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 8,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 144000,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "550ee78b78d32a35b6a28fe808bd1b72d66bf489ce9fee144dd54fd111589740",
+            "fb361913e1180f8de88f68449be94691a5ada649015e9ca6a8021fc3175f8a34",
+            "535a7bfbaf807ee245db31249bc81629077febdf2d6d76ffd0159b6e1946203d"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 9,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 145800,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "f9f2e208ff888c7c8a10c8a685623fb21d3191e39eda4497f1c8d33f5bf47f3a",
+            "aba2e643caf3e3b16def2aa42f3cf72bf6c780b6772389583f81bc7246d2909d",
+            "f508777be016df46ef956b88e3f95e11c370b3f7e00d476d7379cd5a49cb90ed"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 10,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 147600,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "e6036d57b4bf83402b02cdd98f67201fa159ec89000c4f671b67021210cb5b46",
+            "d92d26575dd665401ae89253661515169959871275509c025adc12c8688b26a5",
+            "1305a1481e0313e37946b2c9559a2962c482febbe5c597225cc09eb843096924"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 11,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 149400,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "b9185990ebb5f3661d92e28c6539dbf5bd63bfe1aec2dc5169e941ed51cff2ef",
+            "d398733ac59e7b0997bfdd9295fcc6431739a0a77296ccd32d5dfedb9f5e9d46",
+            "1c30f7b7fee3ff183da0e63ca053414d440a4fe6732f3b79befee686a92c48b9"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 12,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 151200,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "978b5917f3cfce3fbab3bfc1ffb3105dff994e179c04f85423f62af0163e34a2",
+            "ad1e35d056e977b226050f57f35edf3dea370450e8f53e4f3463e8e035e8f2aa",
+            "324ecd8e6848b9c28bb62875752f6bb22677ae62d9e8345dba627b06ed475f3e"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 13,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 153000,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "352b3dfdf11c0e528271ac3641741b4c1b5965ed1ee02f47c1076e50838d48dd",
+            "0f9752f835d93f6922bb8c47df77bd06098215b9f4ddc285ee31442934de0dcc",
+            "1ef98a186c0e8cf2ae02599c8df191ff6ae70881edd0654ef826065cb125370a"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 14,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 154800,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "0a2560537bc751b4f5f4edf65afe166b0f8f4ceeca560536f612296fb8860d49",
+            "150e2427a7e49ad30f42a9574c2a2828073a3bcc53c817c7d68b228b44df03a9",
+            "3fc15f19ab92cc33188cec31b7490ebf71dad218f0fc8a62aa62008b4e5a3c63"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 15,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 156600,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "f8f8a49614607b064b40d16a0034051ac74e1c06dfa7a86e3646ac9332c85077",
+            "fb69f1bd28da7eb4bc01bb9c16b5e3507f9fc685829b626801805806ad24b812",
+            "cb4ca0cfa1d6c43660a003cf59fed58bf6956937ec93405f3309134e84e15d18"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 16,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 158400,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "59849620123799cc3dbc0bb3c5460e3313cc432739df201fc23a7edcfd259628",
+            "cfdb61bf852309df08a3afa6d59869796a10cc03c80e3a53584d502de7a51a66",
+            "0a7d64bbd0ad11c6337204f894d3197d89efe39dfea0debc2cf8b01d98940af5"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 17,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 160200,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "73f440ea3266acd0039f166b71eb00d383fc8e1ad7d9392d563fdca1b571a67b",
+            "1a5420c5d153fb6248526cedfa4ba9981bdf92669483a224657cd999094320c5",
+            "e7918d7d2f0f45e978220966ef394747184b7fbb9dce045a596aed211590b0aa"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 18,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 162000,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "ea99108365c52bd88a2ab4b4c0dc07db0533b67d4259ee4de91b35caef677fb0",
+            "2bec332fc9574b7cd5d48c12142a05b5f487453298083bc0766058b842f5d586",
+            "e7bdcb6b9deb51ddb4de0965b87e45cd62d7a307e42d41a0c6078b90cd58852f"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 19,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 163800,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "b464a0f4fd09d6a68697ab7b73b77a168f6011eb14ae8c10afdc367fb9845eb2",
+            "003e85d39e6feb8a6e214e23c1a77e6250b0f9097be8499f114f9327bf27c263",
+            "96d04aa8e9ec8ea2b81b86481a2f2520696ce748292d462912b7537243127fc9"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 20,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 165600,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "74b40cd6e556cf8cb2bd97465b3a46a3c6f60f008f4d47fe5b0f56b7d8c75d06",
+            "9c77955eeb5e8ad7f5285cacfdde02a56af0c02777c0da000e55790e76c51d85",
+            "a50d3798d35d53f32576ec1008fbb46d96b5b65c68f40c326f4d092d2b5022e8"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 21,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 167400,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "87720d40a9bd7d382b933b4f8c4adb97483b36796666688711b2e2f71e966bdf",
+            "72ec68f421f134c1032e95c25dd46106d5da4ca4225aec1251b6a8383af0c1d5",
+            "bfcae4d6b5663f831da82b2edd3043ce0f196cd63446f9fd9364ff7b8eff64b7"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 22,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 169200,
+          "time_base": [
+            1,
+            90000
+          ]
+        },
+        {
+          "chroma_location": "Left",
+          "colour_primaries": "Unspecified",
+          "colour_range": "MPEG",
+          "colour_space": "BT709",
+          "colour_transfer": "Unspecified",
+          "component_depth": [
+            8,
+            8,
+            8
+          ],
+          "component_sha256": [
+            "426664d02d1e4213c5311429dc9fd8a697cb0f994844ed7041f2e05761a919f3",
+            "a6a22658363692d069079dcc709df387f59f7b6f26f514b5ad40ec748370222d",
+            "0ecf328f27b218b9899bfcdc473e2225eccf5859448e57452d0c0a47356aa1c2"
+          ],
+          "dimensions": [
+            160,
+            96
+          ],
+          "duration": 1800,
+          "has_alpha": false,
+          "index": 23,
+          "interlaced": false,
+          "pixel_format": "YUV420P",
+          "pts": 171000,
+          "time_base": [
+            1,
+            90000
+          ]
+        }
+      ],
+      "status": {
+        "decoder": "h264",
+        "environment_disabled_hardware": true,
+        "fallback_reason": null,
+        "hardware_device": null,
+        "hardware_frame_context_observed": false,
+        "hardware_pixel_format": null,
+        "observed_hardware_device": null,
+        "videotoolbox_using_hardware": null
+      }
+    }
+  ],
+  "dav1d_runtime_versions_from_native_log": [
+    "7161642"
+  ],
+  "git_revision": "e9c76054360cb24594fff47a9a92483c055354e3",
+  "mode": "Auto",
+  "native_log": "native.log",
+  "os": "windows",
+  "passed": true,
+  "reference_host": {
+    "cpu": [
+      {
+        "Name": "Intel(R) Core(TM) i5-14600K",
+        "NumberOfCores": 14,
+        "NumberOfLogicalProcessors": 20
+      }
+    ],
+    "gpu": [
+      {
+        "DriverVersion": "32.0.21045.5002",
+        "Name": "AMD Radeon RX 6800 XT"
+      }
+    ],
+    "memory_bytes": 34102353920,
+    "os": {
+      "BuildNumber": "26200",
+      "Caption": "Microsoft Windows 11 Pro",
+      "Version": "10.0.26200"
+    }
+  },
+  "runtime_native": {
+    "configuration": "--prefix=/ffbuild/prefix --pkg-config-flags=--static --pkg-config=pkg-config --cross-prefix=x86_64-w64-mingw32- --arch=x86_64 --target-os=mingw32 --enable-version3 --disable-debug --enable-shared --disable-static --disable-w32threads --enable-pthreads --enable-iconv --enable-zlib --enable-libxml2 --enable-libvmaf --enable-fontconfig --enable-libharfbuzz --enable-libfreetype --enable-libfribidi --enable-vulkan --enable-libshaderc --enable-libvorbis --disable-libxcb --disable-xlib --disable-libpulse --enable-gmp --enable-lzma --enable-opencl --enable-amf --enable-libaom --enable-libaribb24 --disable-avisynth --enable-chromaprint --enable-libdav1d --disable-libdavs2 --disable-libdvdread --disable-libdvdnav --disable-libfdk-aac --enable-ffnvcodec --enable-cuda-llvm --disable-frei0r --enable-libgme --enable-libkvazaar --enable-libaribcaption --enable-libass --enable-libbluray --enable-libjxl --enable-libmp3lame --enable-libopus --enable-libplacebo --enable-librist --enable-libssh --enable-libtheora --enable-libvpx --enable-libwebp --enable-libzmq --enable-lv2 --enable-libvpl --enable-openal --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenh264 --enable-libopenjpeg --enable-libopenmpt --enable-librav1e --disable-librubberband --enable-schannel --enable-sdl2 --enable-libsnappy --enable-libsoxr --enable-libsrt --enable-libsvtav1 --enable-libtwolame --enable-libuavs3d --disable-libdrm --enable-vaapi --disable-libvidstab --enable-libvvenc --disable-libx264 --disable-libx265 --disable-libxavs2 --disable-libxvid --enable-libzimg --enable-libzvbi --extra-cflags=-DLIBTWOLAME_STATIC --extra-cxxflags= --extra-libs=-lgomp --extra-ldflags=-pthread --extra-ldexeflags= --cc=x86_64-w64-mingw32-gcc --cxx=x86_64-w64-mingw32-g++ --ar=x86_64-w64-mingw32-gcc-ar --ranlib=x86_64-w64-mingw32-gcc-ranlib --nm=x86_64-w64-mingw32-gcc-nm --extra-version=20250831",
+    "licence": "LGPL version 3 or later",
+    "version": 4002661
+  },
+  "scope": "File decode correctness; no GPU upload, preview, NDI or performance gate evaluated",
+  "software_override_verified": true,
+  "source": {
+    "captured_unix_seconds": 1788709953,
+    "git_revision": "e9c76054360cb24594fff47a9a92483c055354e3",
+    "git_worktree": "D docs/testing/phase-1-golden-windows-x86_64/audit.json\n D docs/testing/phase-1-golden-windows-x86_64/render/audit.json\n?? docs/testing/phase-1-decode-windows-x86_64/",
+    "rustc_vV": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-pc-windows-msvc\nrelease: 1.98.1\nLLVM version: 22.1.8"
+  }
+}

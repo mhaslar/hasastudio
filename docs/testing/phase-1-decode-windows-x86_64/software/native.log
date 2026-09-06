@@ -1,0 +1,16 @@
+[h264 @ 000002567bc20480] Reinit context to 160x96, pix_fmt: yuv420p
+[h264 @ 000002567bc20480] Reinit context to 160x96, pix_fmt: yuv420p
+[AVIOContext @ 0000025679dd8780] Statistics: 32429 bytes read, 0 seeks
+[AVIOContext @ 000002567bd1e740] Statistics: 30101 bytes read, 0 seeks
+[AVIOContext @ 000002567be9df80] Statistics: 45159 bytes read, 0 seeks
+[libdav1d @ 000002567bd5c340] libdav1d 7161642
+[libdav1d @ 000002567bd5c340] libdav1d 7161642
+[AVIOContext @ 000002567be9df80] Statistics: 59520 bytes read, 0 seeks
+[AVIOContext @ 000002567be9df80] Statistics: 29530 bytes read, 0 seeks
+[libdav1d @ 000002567bd01900] libdav1d 7161642
+[libdav1d @ 000002567bd01900] libdav1d 7161642
+[AVIOContext @ 000002567be9df80] Statistics: 50308 bytes read, 0 seeks
+[h264 @ 000002567bd00340] Reinit context to 160x96, pix_fmt: yuv420p
+[h264 @ 000002567be8c700] Reinit context to 160x96, pix_fmt: yuv420p
+[AVIOContext @ 000002567be9df80] Statistics: 110544 bytes read, 2 seeks
+[2m2026-09-06T15:52:31.937454Z[0m [32m INFO[0m [2mrezie_decode_check[0m[2m:[0m decoder report written [3mpassed[0m[2m=[0mtrue [3moutput[0m[2m=[0mdocs/testing/phase-1-decode-windows-x86_64/software\report.json
