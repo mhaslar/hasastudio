@@ -34,16 +34,21 @@ foreach ($rezieCandidate in $rezieCandidates) {
 if (-not $rezieSelected) { throw 'bindgen 0.70.1 requires pre-22 libclang. Install LLVM 21.1.8 and set LIBCLANG_PATH to its bin directory; see ADR 0035.' }
 $env:LIBCLANG_PATH = $rezieSelected
 $env:CLANG_PATH = Join-Path $rezieSelected 'clang.exe'
-$env:PATH = "$rezieSelected;$env:PATH"
+$rezieMsvcBin = Join-Path $env:VCToolsInstallDir 'bin\Hostx64\x64'
+$env:CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER = Join-Path $rezieMsvcBin 'link.exe'
+if (-not (Test-Path $env:CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER)) { throw 'Selected x64 MSVC linker does not exist.' }
+$env:PATH = "$rezieMsvcBin;$rezieSelected;$env:PATH"
 & $env:CLANG_PATH --version
 if ($LASTEXITCODE -ne 0) { throw 'Selected clang executable failed.' }
 '#include <stdint.h>' | & $env:CLANG_PATH --target=x86_64-pc-windows-msvc -x c -fsyntax-only -
 if ($LASTEXITCODE -ne 0) { throw 'Clang cannot parse standard C headers after MSVC setup; check MSVC and Windows SDK installation.' }
 if ($env:GITHUB_ENV) {
     # Export only compiler setup, never credentials or the complete environment.
-    foreach ($rezieKey in @('INCLUDE', 'LIB', 'LIBPATH', 'VCINSTALLDIR', 'VCToolsInstallDir', 'WindowsSdkDir', 'WindowsSDKVersion', 'UniversalCRTSdkDir', 'UCRTVersion', 'LIBCLANG_PATH', 'CLANG_PATH')) {
+    foreach ($rezieKey in @('INCLUDE', 'LIB', 'LIBPATH', 'VCINSTALLDIR', 'VCToolsInstallDir', 'WindowsSdkDir', 'WindowsSDKVersion', 'UniversalCRTSdkDir', 'UCRTVersion', 'LIBCLANG_PATH', 'CLANG_PATH', 'CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER')) {
         $rezieValue = [Environment]::GetEnvironmentVariable($rezieKey)
         if ($rezieValue) { "$rezieKey=$rezieValue" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append }
     }
-    $env:PATH -split ';' | Where-Object { $_ } | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+    # Actions prepends these in reverse order. Export only the required tool
+    # directories, with MSVC first in the resulting PATH; never replay PATH.
+    @($rezieSelected, $rezieMsvcBin) | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 }

@@ -85,6 +85,14 @@ pre-22 library selected. The script records its version, checks standard C
 headers, and exports compiler variables for later steps. It downloads nothing
 and changes no machine-wide settings. Hosted pre-22 LLVM can remain in use.
 
+The first full matrix (`34044170230`) selected actual libclang 20.1.8 and
+passed the header probe on Windows. A mistake in exporting the entire PATH
+through GITHUB_PATH reversed tool precedence and selected Git's `link.exe`
+instead of MSVC during the next build step. Correct this by exporting only
+LLVM/MSVC tool directories in Actions prepend order and setting the explicit
+Cargo x64 MSVC linker path. This CI setup defect requires an exceptional
+second full run; it is not a decoder failure or reason to change native pins.
+
 ## Revisit when
 
 The FFmpeg 7 binding line accepts bindgen with the upstream fix, or a planned
