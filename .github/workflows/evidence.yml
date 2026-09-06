@@ -1,0 +1,27 @@
+name: evidence-retention
+on:
+  push:
+    paths: ['docs/testing/**', 'docs/benchmarks/**', 'tools/check-evidence-retention.py', '.github/workflows/evidence.yml']
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  retain:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Reject evidence loss, including documentation-only changes
+        shell: python
+        env:
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          import os, subprocess, sys
+          base = os.environ.get('PR_BASE') or os.environ.get('BEFORE')
+          if not base or not base.strip('0'):
+              base = subprocess.check_output(['git', 'merge-base', 'HEAD', 'origin/main'], text=True).strip()
+          subprocess.run([sys.executable, 'tools/check-evidence-retention.py', '--base', base, '--head', 'HEAD'], check=True)

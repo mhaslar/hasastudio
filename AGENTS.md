@@ -121,6 +121,7 @@ A phase is complete when **all** of these hold:
 - [ ] Every acceptance criterion in `docs/SPEC.md` §13 passes on its tagged target
 - [ ] CI green on Windows, macOS, and Linux
 - [ ] At most one ci-full run per phase slice under normal circumstances. If another is needed, stop and explain what changed or what is wrong with the workflow.
+- [ ] Before opening a PR with platform-specific CI/build/packaging changes, run `ci-platform` manually on each affected Windows/macOS branch target. It calls the same job implementation as ci-full; a preflight never replaces full-gate (ADR 0036).
 - [ ] No `todo!()` / `unimplemented!()` outside deferred feature flags
 - [ ] ADRs written for every implementer's-choice decision taken
 - [ ] `cargo xtask bench` run on Windows 11 / RX 6800 XT, results committed to `docs/benchmarks/`; a manual run is valid and runner automation does not block Phase 0
@@ -156,8 +157,12 @@ and revalidate the PR; explain this exceptional additional run.
 `ci-fast` performs Ubuntu checks on every code push, including main; `ci-full`
 gates its three-platform matrix behind that fast check only for PRs targeting
 main or explicit workflow_dispatch. It has no push trigger. Documentation-only
-pushes do not run workflows; documentation-only PRs emit a lightweight required
-gate and skip every build (ADR 0026). Use nextest plus the separate
+pushes skip build workflows; evidence changes still run the cheap retention
+check. Documentation-only PRs emit a lightweight required gate, including
+retention, and skip every build (ADRs 0026/0036). `ci-platform` is a manual
+single-platform preflight using the same reusable job as ci-full. Select the
+branch and exactly one hosted target; it has no automatic trigger and emits
+no full-gate. Use nextest plus the separate
 compile-fail doctest, caching and ref-keyed cancellation; no hosted latency gate.
 
 The `reference` workflow may run only on trusted main via push, schedule or
@@ -167,6 +172,12 @@ run on the production machine; do not approve workflow changes introducing
 self-hosted PR execution. Register the reference runner to this repository
 only, never an account or organization. Keep reference caches separate from
 hosted PR caches. All normative goldens, benchmarks and soaks run there.
+
+Preserve committed evidence paths under `docs/testing/` and `docs/benchmarks/`.
+Add each new run under a new name; do not replace an old directory with a new
+export. Retain failed/superseded runs with explanatory notes. Before committing
+an evidence upload, inspect `git diff --stat` and staged deletions. CI rejects
+deleted evidence paths, including renames that would break historical links.
 
 
 ---
